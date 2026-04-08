@@ -2881,6 +2881,26 @@ const signalTrack = [...signals, ...signals];
 		}
 	}
 
+	@keyframes mobile-headline-drift {
+		0%,
+		100% {
+			transform: translate3d(0, 0, 0);
+		}
+		50% {
+			transform: translate3d(1.2px, -1px, 0);
+		}
+	}
+
+	@keyframes mobile-card-wobble {
+		0%,
+		100% {
+			transform: rotate(var(--card-tilt, 0deg)) translate3d(0, 0, 0);
+		}
+		50% {
+			transform: rotate(calc(var(--card-tilt, 0deg) * -1)) translate3d(0, -2px, 0);
+		}
+	}
+
 	@media (max-width: 920px) {
 		.shell::before,
 		.shell::after {
@@ -2942,9 +2962,11 @@ const signalTrack = [...signals, ...signals];
 		}
 
 		.headline {
-			font-size: clamp(2.2rem, 12.6vw, 4.95rem);
-			line-height: 0.84;
+			font-size: clamp(1.94rem, 10.8vw, 3.85rem);
+			line-height: 0.88;
 			letter-spacing: 0.02em;
+			max-width: 100%;
+			overflow: hidden;
 		}
 
 		.headline-line {
@@ -2962,9 +2984,16 @@ const signalTrack = [...signals, ...signals];
 		}
 
 		.glitch-line {
+			display: block !important;
+			max-width: 100%;
+			white-space: normal;
+			overflow-wrap: anywhere;
 			text-shadow:
 				0 0 22px rgb(127 255 231 / 0.32),
 				0 0 36px rgb(157 139 255 / 0.28);
+			animation:
+				headline-rainbow 14s linear infinite,
+				mobile-headline-drift 8s var(--ease-organic) infinite !important;
 		}
 
 		.glitch-line::before,
@@ -2991,6 +3020,10 @@ const signalTrack = [...signals, ...signals];
 			letter-spacing: 0.09em;
 		}
 
+		.panel-hero {
+			overflow: hidden;
+		}
+
 		.logo-stage,
 		.logo-stage::before,
 		.logo-stage::after,
@@ -2998,11 +3031,7 @@ const signalTrack = [...signals, ...signals];
 		.logo-core::before,
 		.logo-orbit,
 		.logo-grid,
-		.logo-flare,
-		.glitch-line,
-		.hero-copy,
-		.value-intro,
-		.global-signal-track {
+		.logo-flare {
 			animation: none !important;
 		}
 
@@ -3022,6 +3051,7 @@ const signalTrack = [...signals, ...signals];
 			padding: 0.84rem 0.72rem 0.92rem 0.92rem;
 			font-size: clamp(0.99rem, 4.2vw, 1.14rem);
 			line-height: 1.45;
+			animation: hero-breathe 9.5s var(--ease-organic) infinite;
 		}
 
 		.project-preview-bg {
@@ -3036,6 +3066,7 @@ const signalTrack = [...signals, ...signals];
 		.project-frame {
 			padding: 1rem 0.95rem 1.02rem;
 			border-radius: 18px;
+			animation: mobile-card-wobble 9.2s var(--ease-organic) infinite;
 		}
 
 		.project-frame,
@@ -3053,12 +3084,22 @@ const signalTrack = [...signals, ...signals];
 
 		.project-frame:nth-child(odd),
 		.project-frame:nth-child(odd):hover {
+			--card-tilt: -0.78deg;
 			transform: rotate(-0.78deg);
 		}
 
 		.project-frame:nth-child(even),
 		.project-frame:nth-child(even):hover {
+			--card-tilt: 0.78deg;
 			transform: rotate(0.78deg);
+		}
+
+		.project-frame:nth-child(2) {
+			animation-delay: -2.7s;
+		}
+
+		.project-frame:nth-child(3) {
+			animation-delay: -5.1s;
 		}
 
 		.project-frame:active {
@@ -3093,6 +3134,7 @@ const signalTrack = [...signals, ...signals];
 		.value-intro {
 			padding: 0.98rem 0.9rem;
 			border-radius: 18px;
+			animation: intro-float 10.8s var(--ease-organic) infinite;
 		}
 
 		.value-title {
@@ -3160,7 +3202,7 @@ const signalTrack = [...signals, ...signals];
 		.global-signal-track {
 			gap: 0.5rem;
 			padding: 0.5rem 0.62rem;
-			animation: none !important;
+			animation: ticker 34s linear infinite !important;
 		}
 
 		.signal-chip {
