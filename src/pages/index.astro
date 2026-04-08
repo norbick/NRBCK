@@ -725,26 +725,28 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				musicToggle.disabled = true;
 				musicToggle.classList.add('is-disabled');
 			} else {
-				const progression = [
-					[48, 55, 59, 64],
-					[45, 52, 57, 60],
-					[41, 48, 52, 57],
-					[43, 50, 55, 59],
+				const chordProgression = [
+					{ root: 52, notes: [52, 55, 59, 62, 66] }, // Em9
+					{ root: 48, notes: [48, 52, 55, 59, 62] }, // Cmaj9
+					{ root: 55, notes: [55, 59, 62, 66, 69] }, // Gmaj9
+					{ root: 50, notes: [50, 54, 57, 62, 64] }, // Dadd9
 				];
-				const bpm = 56;
-				const barSeconds = (60 / bpm) * 4;
-				const scheduleAhead = 0.5;
+				const motifPattern = [4, null, 2, null, 1, null, 2, null, 3, null, 2, null, 1, null, 0, null];
+				const bpm = 72;
+				const stepSeconds = (60 / bpm) / 2;
+				const stepsPerBar = 16;
+				const barSeconds = stepSeconds * stepsPerBar;
+				const scheduleAhead = 0.28;
 				let context = null;
 				let master = null;
 				let padBus = null;
 				let padFilter = null;
 				let bassOsc = null;
-				let shimmerOsc = null;
-				let shimmerGain = null;
+				let fxSend = null;
 				let padVoices = [];
 				let schedulerTimer = 0;
-				let nextBarAt = 0;
-				let barIndex = 0;
+				let nextStepAt = 0;
+				let stepIndex = 0;
 				let isPlaying = false;
 
 				const midiToFreq = (midi) => 440 * Math.pow(2, (midi - 69) / 12);
@@ -756,15 +758,15 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 				const createPadVoice = (detune) => {
 					const oscA = context.createOscillator();
-					oscA.type = 'sine';
+					oscA.type = 'sawtooth';
 					oscA.detune.value = detune;
 					const oscB = context.createOscillator();
 					oscB.type = 'triangle';
-					oscB.detune.value = detune * 0.62;
+					oscB.detune.value = detune * 0.7;
 					const gainA = context.createGain();
-					gainA.gain.value = 0.017;
+					gainA.gain.value = 0.012;
 					const gainB = context.createGain();
-					gainB.gain.value = 0.006;
+					gainB.gain.value = 0.007;
 					oscA.connect(gainA);
 					oscB.connect(gainB);
 					gainA.connect(padFilter);
@@ -780,143 +782,185 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 					master = context.createGain();
 					master.gain.value = 0.0001;
-					const masterCut = context.createBiquadFilter();
-					masterCut.type = 'highpass';
-					masterCut.frequency.value = 34;
+					const masterCutLow = context.createBiquadFilter();
+					masterCutLow.type = 'highpass';
+					masterCutLow.frequency.value = 34;
 					const masterTone = context.createBiquadFilter();
 					masterTone.type = 'lowpass';
-					masterTone.frequency.value = 2900;
-					masterTone.Q.value = 0.22;
+					masterTone.frequency.value = 3600;
+					masterTone.Q.value = 0.18;
 					const compressor = context.createDynamicsCompressor();
-					compressor.threshold.value = -22;
-					compressor.knee.value = 14;
-					compressor.ratio.value = 2.4;
-					compressor.attack.value = 0.06;
-					compressor.release.value = 0.5;
-					master.connect(masterCut);
-					masterCut.connect(masterTone);
+					compressor.threshold.value = -24;
+					compressor.knee.value = 18;
+					compressor.ratio.value = 2.1;
+					compressor.attack.value = 0.05;
+					compressor.release.value = 0.44;
+					master.connect(masterCutLow);
+					masterCutLow.connect(masterTone);
 					masterTone.connect(compressor);
 					compressor.connect(context.destination);
 
 					padFilter = context.createBiquadFilter();
 					padFilter.type = 'lowpass';
-					padFilter.frequency.value = 1040;
-					padFilter.Q.value = 0.28;
+					padFilter.frequency.value = 1240;
+					padFilter.Q.value = 0.42;
 
 					padBus = context.createGain();
 					padBus.gain.value = 0.0001;
 					padFilter.connect(padBus);
 					padBus.connect(master);
 
-					padVoices = [createPadVoice(-8), createPadVoice(-2), createPadVoice(3), createPadVoice(9)];
+					padVoices = [createPadVoice(-10), createPadVoice(-4), createPadVoice(0), createPadVoice(4), createPadVoice(10)];
 
 					bassOsc = context.createOscillator();
 					bassOsc.type = 'triangle';
 					const bassFilter = context.createBiquadFilter();
 					bassFilter.type = 'lowpass';
-					bassFilter.frequency.value = 180;
+					bassFilter.frequency.value = 150;
 					const bassGain = context.createGain();
-					bassGain.gain.value = 0.011;
+					bassGain.gain.value = 0.008;
 					bassOsc.connect(bassFilter);
 					bassFilter.connect(bassGain);
 					bassGain.connect(master);
 					bassOsc.start();
 
-					shimmerOsc = context.createOscillator();
-					shimmerOsc.type = 'sine';
-					const shimmerFilter = context.createBiquadFilter();
-					shimmerFilter.type = 'highpass';
-					shimmerFilter.frequency.value = 880;
-					shimmerGain = context.createGain();
-					shimmerGain.gain.value = 0.0001;
-					shimmerOsc.connect(shimmerFilter);
-					shimmerFilter.connect(shimmerGain);
-					shimmerGain.connect(master);
-					shimmerOsc.start();
-
-					const delay = context.createDelay(1.2);
-					delay.delayTime.value = 0.42;
+					const delay = context.createDelay(1.3);
+					delay.delayTime.value = stepSeconds * 3;
 					const feedback = context.createGain();
-					feedback.gain.value = 0.16;
+					feedback.gain.value = 0.18;
 					const delayFilter = context.createBiquadFilter();
 					delayFilter.type = 'lowpass';
-					delayFilter.frequency.value = 1200;
-					const spaceSend = context.createGain();
-					spaceSend.gain.value = 0.22;
-					padBus.connect(spaceSend);
-					shimmerGain.connect(spaceSend);
-					spaceSend.connect(delay);
+					delayFilter.frequency.value = 1700;
+					fxSend = context.createGain();
+					fxSend.gain.value = 0.2;
+					fxSend.connect(delay);
+					padBus.connect(fxSend);
 					delay.connect(delayFilter);
 					delayFilter.connect(feedback);
 					feedback.connect(delay);
 					delayFilter.connect(master);
 
+					const chorusL = context.createDelay(0.06);
+					const chorusR = context.createDelay(0.06);
+					chorusL.delayTime.value = 0.016;
+					chorusR.delayTime.value = 0.023;
+					const chorusLfo = context.createOscillator();
+					chorusLfo.type = 'sine';
+					chorusLfo.frequency.value = 0.19;
+					const chorusDepthL = context.createGain();
+					chorusDepthL.gain.value = 0.0022;
+					const chorusDepthR = context.createGain();
+					chorusDepthR.gain.value = -0.0018;
+					chorusLfo.connect(chorusDepthL);
+					chorusLfo.connect(chorusDepthR);
+					chorusDepthL.connect(chorusL.delayTime);
+					chorusDepthR.connect(chorusR.delayTime);
+					chorusLfo.start();
+					padBus.connect(chorusL);
+					padBus.connect(chorusR);
+					if (context.createStereoPanner) {
+						const pL = context.createStereoPanner();
+						const pR = context.createStereoPanner();
+						pL.pan.value = -0.42;
+						pR.pan.value = 0.42;
+						chorusL.connect(pL);
+						chorusR.connect(pR);
+						pL.connect(master);
+						pR.connect(master);
+					} else {
+						chorusL.connect(master);
+						chorusR.connect(master);
+					}
+
 					const motion = context.createOscillator();
 					motion.type = 'sine';
-					motion.frequency.value = 0.045;
+					motion.frequency.value = 0.07;
 					const motionDepth = context.createGain();
-					motionDepth.gain.value = 44;
+					motionDepth.gain.value = 90;
 					motion.connect(motionDepth);
 					motionDepth.connect(padFilter.frequency);
 					motion.start();
-
-					const flutter = context.createOscillator();
-					flutter.type = 'sine';
-					flutter.frequency.value = 0.11;
-					const flutterDepth = context.createGain();
-					flutterDepth.gain.value = 0.0038;
-					flutter.connect(flutterDepth);
-					flutterDepth.connect(master.gain);
-					flutter.start();
 				};
 
 				const scheduleChord = (time, chord) => {
 					if (!context || !padVoices.length || !padBus || !padFilter || !bassOsc) return;
+					const spread = [chord.notes[0] - 12, chord.notes[1], chord.notes[2], chord.notes[3], chord.notes[4] + 12];
 
 					padVoices.forEach((voice, index) => {
-						const midi = chord[index % chord.length];
-						const freq = midiToFreq(midi);
-						voice.oscA.frequency.setTargetAtTime(freq, time, 1.6);
-						voice.oscB.frequency.setTargetAtTime(freq * 1.0018, time, 1.9);
+						const freq = midiToFreq(spread[index % spread.length]);
+						voice.oscA.frequency.setTargetAtTime(freq, time, 1.1);
+						voice.oscB.frequency.setTargetAtTime(freq * 1.0015, time, 1.25);
 					});
 
-					bassOsc.frequency.setTargetAtTime(midiToFreq(chord[0] - 24), time, 1.3);
+					bassOsc.frequency.setTargetAtTime(midiToFreq(chord.root - 24), time, 0.68);
 
-					padFilter.frequency.setTargetAtTime(880, time, 1.2);
-					padFilter.frequency.setTargetAtTime(1060, time + barSeconds * 0.72, 2.2);
+					padFilter.frequency.setTargetAtTime(1100, time, 0.95);
+					padFilter.frequency.setTargetAtTime(1320, time + barSeconds * 0.62, 1.9);
 
 					padBus.gain.cancelScheduledValues(time);
 					padBus.gain.setValueAtTime(Math.max(padBus.gain.value, 0.0001), time);
-					padBus.gain.linearRampToValueAtTime(0.054, time + 1.7);
-					padBus.gain.linearRampToValueAtTime(0.042, time + barSeconds * 0.92);
+					padBus.gain.linearRampToValueAtTime(0.048, time + 0.9);
+					padBus.gain.linearRampToValueAtTime(0.036, time + barSeconds * 0.92);
 				};
 
-				const scheduleShimmer = (time, chord, cycle) => {
-					if (!shimmerOsc || !shimmerGain) return;
-					const topNote = chord[Math.max(0, chord.length - 1)];
-					const accent = cycle % 4 === 2 ? 2 : 0;
-					const shimmerNote = topNote + 24 + accent;
-					shimmerOsc.frequency.setValueAtTime(midiToFreq(shimmerNote), time);
-					shimmerGain.gain.cancelScheduledValues(time);
-					shimmerGain.gain.setValueAtTime(0.0001, time);
-					shimmerGain.gain.linearRampToValueAtTime(0.0068, time + 0.38);
-					shimmerGain.gain.exponentialRampToValueAtTime(0.00012, time + barSeconds * 0.86);
+				const triggerRetroPluck = (time, midi, velocity) => {
+					if (!context || !master || !fxSend) return;
+
+					const osc = context.createOscillator();
+					osc.type = 'square';
+					osc.frequency.setValueAtTime(midiToFreq(midi), time);
+
+					const tone = context.createBiquadFilter();
+					tone.type = 'lowpass';
+					tone.frequency.setValueAtTime(1700, time);
+					tone.Q.value = 0.7;
+					tone.frequency.exponentialRampToValueAtTime(760, time + 0.32);
+
+					const env = context.createGain();
+					env.gain.setValueAtTime(0.0001, time);
+					env.gain.linearRampToValueAtTime(0.006 * velocity, time + 0.02);
+					env.gain.exponentialRampToValueAtTime(0.0001, time + 0.46);
+
+					const dryTap = context.createGain();
+					dryTap.gain.value = 1;
+					const wetTap = context.createGain();
+					wetTap.gain.value = 0.9;
+
+					osc.connect(tone);
+					tone.connect(env);
+					env.connect(dryTap);
+					env.connect(wetTap);
+					dryTap.connect(master);
+					wetTap.connect(fxSend);
+
+					osc.start(time);
+					osc.stop(time + 0.52);
+				};
+
+				const scheduleMotif = (time, chord, stepInBar) => {
+					const toneIndex = motifPattern[stepInBar];
+					if (toneIndex === null || toneIndex === undefined) return;
+					const baseNote = chord.notes[Math.max(0, Math.min(chord.notes.length - 1, toneIndex))];
+					const octaveLift = stepInBar >= 8 ? 12 : 0;
+					const note = baseNote + 12 + octaveLift;
+					const velocity = stepInBar % 4 === 0 ? 1 : 0.74;
+					triggerRetroPluck(time, note, velocity);
 				};
 
 				const scheduler = () => {
 					if (!context || !isPlaying) return;
 
-					while (nextBarAt < context.currentTime + scheduleAhead) {
-						const chord = progression[barIndex % progression.length];
-						scheduleChord(nextBarAt, chord);
-						if (barIndex % 2 === 1) {
-							scheduleShimmer(nextBarAt + barSeconds * 0.34, chord, barIndex);
-						}
-						barIndex += 1;
-						nextBarAt += barSeconds;
+					while (nextStepAt < context.currentTime + scheduleAhead) {
+						const currentBar = Math.floor(stepIndex / stepsPerBar);
+						const stepInBar = stepIndex % stepsPerBar;
+						const chord = chordProgression[currentBar % chordProgression.length];
+						if (stepInBar === 0) scheduleChord(nextStepAt, chord);
+						scheduleMotif(nextStepAt, chord, stepInBar);
+						stepIndex += 1;
+						nextStepAt += stepSeconds;
 					}
 
-					schedulerTimer = window.setTimeout(scheduler, 120);
+					schedulerTimer = window.setTimeout(scheduler, 42);
 				};
 
 				const stopMusic = () => {
@@ -936,12 +980,12 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					const now = context.currentTime;
 					master.gain.cancelScheduledValues(now);
 					master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), now);
-					master.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+					master.gain.exponentialRampToValueAtTime(0.0001, now + 1.05);
 
 					window.setTimeout(() => {
 						if (!context || isPlaying || context.state !== 'running') return;
 						context.suspend();
-					}, 1280);
+					}, 1120);
 				};
 
 				const startMusic = async () => {
@@ -953,12 +997,12 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 					isPlaying = true;
 					setToggleState(true);
-					nextBarAt = context.currentTime + 0.08;
-					barIndex = 0;
+					nextStepAt = context.currentTime + 0.1;
+					stepIndex = 0;
 
 					master.gain.cancelScheduledValues(context.currentTime);
 					master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), context.currentTime);
-					master.gain.linearRampToValueAtTime(0.24, context.currentTime + 2.4);
+					master.gain.linearRampToValueAtTime(0.2, context.currentTime + 2.2);
 
 					if (schedulerTimer) clearTimeout(schedulerTimer);
 					scheduler();
