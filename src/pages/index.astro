@@ -28,10 +28,29 @@ const labFrames = [
 	{ title: 'Visual Systems', text: 'Brand energy, typography tension, contrast control.', tone: 'tone-lime' },
 	{ title: 'Interaction Rhythm', text: 'Motion timing, scroll behavior, kinetic composition.', tone: 'tone-amber' },
 	{ title: 'Fast Iteration', text: 'From sketch to deploy in very short loops.', tone: 'tone-cyan' },
-	{ title: 'Signal Layering', text: 'Depth from overlays, scanlines, and moving rails.', tone: 'tone-pink' },
+	{ title: 'Signal Layering', text: 'Depth from overlays, scanlines and moving rails.', tone: 'tone-pink' },
 ];
 
-const signals = ['GLITCH MODE', 'KINETIC UI', 'NRBCK', 'ASTRO BUILD', 'SIGNAL ACTIVE', 'NO SAFE LAYOUT'];
+const signals = [
+	'GLITCH MODE',
+	'KINETIC UI',
+	'NRBCK',
+	'ASTRO BUILD',
+	'SIGNAL ACTIVE',
+	'NO SAFE LAYOUT',
+	'MOTION RHYTHM',
+	'CREATIVE ENGINEERING',
+	'WEB DESIGN LAB',
+	'INTERACTION DIRECTION',
+	'BRAND ENERGY',
+	'UI + CODE',
+	'FAST ITERATION',
+	'VISUAL TENSION',
+	'DEPLOY LOOP',
+	'PORTFOLIO FEED',
+];
+
+const signalTrack = [...signals, ...signals];
 
 const bendPresets = [
 	{ rot: -18, skew: -6.2, hoverRot: -25, hoverSkew: -7.8, ty: -18, tyHover: -26 },
@@ -46,8 +65,7 @@ const bendPresets = [
 	{ rot: 15, skew: -6.3, hoverRot: 23, hoverSkew: -8.1, ty: -20, tyHover: -28 },
 ];
 
-const hash = (value: string) =>
-	[...value].reduce((acc, char, index) => acc + char.charCodeAt(0) * (index + 1), 0);
+const hash = (value: string) => [...value].reduce((acc, char, index) => acc + char.charCodeAt(0) * (index + 1), 0);
 
 const withTwist = <T extends { name?: string; title?: string }>(items: T[]) =>
 	items.map((item, index) => {
@@ -102,14 +120,6 @@ const framePanels = withTwist(labFrames);
 				</div>
 			</article>
 
-			<article class="panel panel-signal reveal reveal-2" aria-label="Signal rail">
-				<div class="signal-track" aria-hidden="true">
-					{[...signals, ...signals, ...signals].map((item, index) => (
-						<span>{item} {String(index + 1).padStart(2, '0')}</span>
-					))}
-				</div>
-			</article>
-
 			{projectPanels.map((project) => (
 				<article id={project.id === '01' ? 'projects' : undefined} class={`panel panel-project ${project.theme}`}>
 					<div
@@ -144,6 +154,14 @@ const framePanels = withTwist(labFrames);
 				</div>
 			</article>
 		</section>
+
+		<aside class="global-signal" aria-label="Signal rail">
+			<div class="global-signal-track" aria-hidden="true">
+				{signalTrack.map((item) => (
+					<span>{item}</span>
+				))}
+			</div>
+		</aside>
 	</main>
 
 	<script is:inline>
@@ -154,6 +172,7 @@ const framePanels = withTwist(labFrames);
 		if (rail) {
 			const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 			let target = rail.scrollLeft;
+			let current = rail.scrollLeft;
 			let raf = 0;
 
 			const updateHint = () => {
@@ -163,12 +182,14 @@ const framePanels = withTwist(labFrames);
 			};
 
 			const animate = () => {
-				const diff = target - rail.scrollLeft;
-				rail.scrollLeft += diff * 0.24;
+				const diff = target - current;
+				current += diff * 0.14;
+				rail.scrollLeft = current;
 				updateHint();
-				if (Math.abs(diff) > 0.6) raf = requestAnimationFrame(animate);
+				if (Math.abs(diff) > 0.35) raf = requestAnimationFrame(animate);
 				else {
-					rail.scrollLeft = target;
+					current = target;
+					rail.scrollLeft = current;
 					raf = 0;
 				}
 			};
@@ -183,18 +204,19 @@ const framePanels = withTwist(labFrames);
 				const source = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
 				if (source === 0) return;
 				event.preventDefault();
-				moveBy(source * 2.2);
+				const normalized = Math.sign(source) * Math.min(Math.abs(source), 96);
+				moveBy(normalized * 2.8);
 			};
 
 			const onKey = (event) => {
 				if (!desktop.matches) return;
 				if (event.key === 'ArrowDown' || event.key === 'PageDown') {
 					event.preventDefault();
-					moveBy(window.innerWidth * 0.8);
+					moveBy(window.innerWidth * 0.84);
 				}
 				if (event.key === 'ArrowUp' || event.key === 'PageUp') {
 					event.preventDefault();
-					moveBy(-window.innerWidth * 0.8);
+					moveBy(-window.innerWidth * 0.84);
 				}
 			};
 
@@ -206,6 +228,7 @@ const framePanels = withTwist(labFrames);
 					}
 					rail.scrollLeft = 0;
 					target = 0;
+					current = 0;
 				}
 				updateHint();
 			};
@@ -267,7 +290,7 @@ const framePanels = withTwist(labFrames);
 			rgb(0 0 0 / 0) 2px,
 			rgb(0 0 0 / 0) 4px
 		);
-		animation: scan-shift 10s linear infinite;
+		animation: scan-shift 12s linear infinite;
 	}
 
 	.vignette {
@@ -281,7 +304,7 @@ const framePanels = withTwist(labFrames);
 	.scroll-hint {
 		position: fixed;
 		right: 1rem;
-		bottom: 1rem;
+		bottom: 3.5rem;
 		z-index: 9;
 		display: inline-flex;
 		align-items: center;
@@ -319,7 +342,7 @@ const framePanels = withTwist(labFrames);
 		margin-left: -0.09rem;
 		border-radius: 999px;
 		background: var(--ink-soft);
-		animation: wheel-dot 1.7s ease infinite;
+		animation: wheel-dot 2s ease infinite;
 	}
 
 	.hint-text {
@@ -332,7 +355,7 @@ const framePanels = withTwist(labFrames);
 
 	.arrow {
 		font-size: 0.95rem;
-		animation: arrow-nudge 1.6s ease infinite;
+		animation: arrow-nudge 2s ease infinite;
 	}
 
 	.rail {
@@ -343,8 +366,8 @@ const framePanels = withTwist(labFrames);
 		overflow-x: auto;
 		overflow-y: hidden;
 		scroll-snap-type: none;
-		gap: 1rem;
-		padding: 1rem;
+		gap: 1.2rem;
+		padding: 1rem 1rem 4.2rem;
 		scrollbar-width: none;
 	}
 
@@ -354,18 +377,8 @@ const framePanels = withTwist(labFrames);
 
 	.panel {
 		flex: 0 0 calc(100vw - 2rem);
-		height: calc(100vh - 2rem);
-		border-radius: 24px;
-		border: 1px solid var(--line);
+		height: calc(100vh - 5.2rem);
 		padding: clamp(0.9rem, 2vw, 1.6rem);
-		background: rgb(4 12 26 / 0.74);
-		backdrop-filter: blur(4px);
-		box-shadow: 0 24px 42px rgb(0 0 0 / 0.42);
-		overflow: hidden;
-	}
-
-	.panel-project,
-	.panel-lab {
 		overflow: visible;
 	}
 
@@ -438,7 +451,8 @@ const framePanels = withTwist(labFrames);
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
-		opacity: 0.86;
+		opacity: 0.72;
+		will-change: transform;
 	}
 
 	.line-top {
@@ -451,30 +465,22 @@ const framePanels = withTwist(labFrames);
 
 	.line-top::before {
 		color: var(--pink);
-		transform: translate(2px, 0);
-		clip-path: polygon(0 0, 100% 0, 100% 42%, 0 50%);
-		animation: glitch-slow-a 6.2s infinite steps(1, end);
+		animation: glitch-smooth-a 14s linear infinite;
 	}
 
 	.line-top::after {
 		color: var(--acid);
-		transform: translate(-2px, 0);
-		clip-path: polygon(0 58%, 100% 50%, 100% 100%, 0 100%);
-		animation: glitch-slow-b 5.4s infinite steps(1, end);
+		animation: glitch-smooth-b 16s linear infinite;
 	}
 
 	.line-bottom::before {
 		color: var(--amber);
-		transform: translate(2px, 0);
-		clip-path: polygon(0 0, 100% 0, 100% 46%, 0 54%);
-		animation: glitch-slow-c 7.1s infinite steps(1, end);
+		animation: glitch-smooth-c 15s linear infinite;
 	}
 
 	.line-bottom::after {
 		color: var(--pink);
-		transform: translate(-2px, 0);
-		clip-path: polygon(0 60%, 100% 52%, 100% 100%, 0 100%);
-		animation: glitch-slow-d 5.8s infinite steps(1, end);
+		animation: glitch-smooth-d 13.5s linear infinite;
 	}
 
 	.hero-bottom {
@@ -503,32 +509,6 @@ const framePanels = withTwist(labFrames);
 		font-weight: 700;
 		color: var(--ink);
 		background: linear-gradient(125deg, var(--pink), var(--amber));
-	}
-
-	.panel-signal {
-		display: flex;
-		align-items: center;
-		padding: 0;
-	}
-
-	.signal-track {
-		display: flex;
-		width: max-content;
-		gap: 0.65rem;
-		padding: 0.9rem 0.7rem;
-		animation: ticker 20s linear infinite;
-	}
-
-	.signal-track span {
-		font-family: 'IBM Plex Mono', 'Consolas', monospace;
-		font-size: 0.76rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		padding: 0.38rem 0.63rem;
-		border: 1px solid var(--line);
-		border-radius: 999px;
-		color: var(--ink-soft);
-		background: rgb(255 255 255 / 0.04);
 	}
 
 	.panel-project {
@@ -698,6 +678,39 @@ const framePanels = withTwist(labFrames);
 		color: var(--pink);
 	}
 
+	.global-signal {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 10;
+		overflow: hidden;
+		border-top: 1px solid var(--line);
+		background: rgb(4 12 24 / 0.88);
+		backdrop-filter: blur(4px);
+	}
+
+	.global-signal-track {
+		display: flex;
+		width: max-content;
+		gap: 0.65rem;
+		padding: 0.58rem 0.7rem;
+		will-change: transform;
+		animation: ticker 30s linear infinite;
+	}
+
+	.global-signal-track span {
+		font-family: 'IBM Plex Mono', 'Consolas', monospace;
+		font-size: 0.7rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding: 0.28rem 0.52rem;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		color: var(--ink-soft);
+		background: rgb(255 255 255 / 0.04);
+	}
+
 	.reveal {
 		opacity: 0;
 		transform: translateY(16px);
@@ -725,7 +738,7 @@ const framePanels = withTwist(labFrames);
 
 	@keyframes ticker {
 		to {
-			transform: translateX(-33.333%);
+			transform: translate3d(-50%, 0, 0);
 		}
 	}
 
@@ -762,70 +775,67 @@ const framePanels = withTwist(labFrames);
 		}
 	}
 
-	@keyframes glitch-slow-a {
+	@keyframes glitch-smooth-a {
 		0%,
 		100% {
-			transform: translate(2px, 0);
-		}
-		18% {
-			transform: translate(-2px, -1px);
-		}
-		41% {
-			transform: translate(3px, 1px);
-		}
-		67% {
-			transform: translate(-3px, 0);
-		}
-		83% {
-			transform: translate(1px, -1px);
-		}
-	}
-
-	@keyframes glitch-slow-b {
-		0%,
-		100% {
-			transform: translate(-2px, 0);
-		}
-		22% {
-			transform: translate(2px, 1px);
-		}
-		49% {
-			transform: translate(-3px, -1px);
-		}
-		74% {
-			transform: translate(2px, 0);
-		}
-	}
-
-	@keyframes glitch-slow-c {
-		0%,
-		100% {
-			transform: translate(2px, 0);
-		}
-		20% {
-			transform: translate(-2px, 1px);
-		}
-		46% {
-			transform: translate(3px, -1px);
-		}
-		71% {
-			transform: translate(-3px, 0);
-		}
-	}
-
-	@keyframes glitch-slow-d {
-		0%,
-		100% {
-			transform: translate(-2px, 0);
+			transform: translate3d(0.5px, 0, 0);
 		}
 		25% {
-			transform: translate(2px, -1px);
+			transform: translate3d(-0.7px, -0.3px, 0);
 		}
 		55% {
-			transform: translate(-3px, 1px);
+			transform: translate3d(0.9px, 0.4px, 0);
 		}
-		79% {
-			transform: translate(2px, 0);
+		80% {
+			transform: translate3d(-0.6px, 0, 0);
+		}
+	}
+
+	@keyframes glitch-smooth-b {
+		0%,
+		100% {
+			transform: translate3d(-0.5px, 0, 0);
+		}
+		30% {
+			transform: translate3d(0.7px, 0.3px, 0);
+		}
+		62% {
+			transform: translate3d(-0.9px, -0.3px, 0);
+		}
+		84% {
+			transform: translate3d(0.6px, 0, 0);
+		}
+	}
+
+	@keyframes glitch-smooth-c {
+		0%,
+		100% {
+			transform: translate3d(0.5px, 0, 0);
+		}
+		28% {
+			transform: translate3d(-0.8px, 0.3px, 0);
+		}
+		58% {
+			transform: translate3d(0.9px, -0.3px, 0);
+		}
+		82% {
+			transform: translate3d(-0.6px, 0, 0);
+		}
+	}
+
+	@keyframes glitch-smooth-d {
+		0%,
+		100% {
+			transform: translate3d(-0.5px, 0, 0);
+		}
+		24% {
+			transform: translate3d(0.6px, -0.3px, 0);
+		}
+		50% {
+			transform: translate3d(-0.8px, 0.3px, 0);
+		}
+		78% {
+			transform: translate3d(0.5px, 0, 0);
 		}
 	}
 
@@ -842,13 +852,14 @@ const framePanels = withTwist(labFrames);
 			display: block;
 			height: auto;
 			overflow: visible;
-			padding: 0.8rem;
+			padding: 0.8rem 0.8rem 4.2rem;
 		}
 
 		.panel {
 			height: auto;
-			min-height: 68vh;
+			min-height: 64vh;
 			margin-bottom: 0.8rem;
+			padding: 0.4rem;
 		}
 
 		.hero-bottom {
@@ -872,4 +883,5 @@ const framePanels = withTwist(labFrames);
 		}
 	}
 </style>
+
 
