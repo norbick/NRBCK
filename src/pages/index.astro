@@ -620,6 +620,13 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 				return '';
 			};
 
+			const openEmailFallback = (subject, body) => {
+				const gmailCompose = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+					recipient,
+				)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+				window.location.href = gmailCompose;
+			};
+
 			contactForm.addEventListener('submit', async (event) => {
 				event.preventDefault();
 				if (isSending) return;
@@ -680,6 +687,7 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 								: 'Check norbick@gmail.com and click the "Activate Form" email from FormSubmit. This is a one-time activation.',
 							'info',
 						);
+						openEmailFallback(subject, body);
 						return;
 					}
 
@@ -690,6 +698,7 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 								: 'This form works only from a web server (localhost/GitHub Pages), not from a locally opened file.',
 							'info',
 						);
+						openEmailFallback(subject, body);
 						return;
 					}
 
@@ -705,12 +714,11 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 					);
 					contactForm.reset();
 				} catch {
-					const mailto = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-					window.location.href = mailto;
+					openEmailFallback(subject, body);
 					setStatus(
 						isPolish
-							? 'Nie udało się wysłać bezpośrednio, więc otworzyłem maila jako plan B.'
-							: 'Direct send failed, so I opened your email app as a backup.',
+							? 'Nie udało się wysłać bezpośrednio, więc otworzyłem gotowego maila jako plan B.'
+							: 'Direct send failed, so I opened a prefilled email as backup.',
 						'fallback',
 					);
 				} finally {
