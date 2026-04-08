@@ -612,6 +612,14 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 				contactStatus.setAttribute('data-state', state);
 			};
 
+			const detectProviderError = (message) => {
+				const providerMessage = String(message || '').toLowerCase();
+				if (!providerMessage) return '';
+				if (providerMessage.includes('needs activation') || providerMessage.includes('activate form')) return 'activation';
+				if (providerMessage.includes('open this page through a web server')) return 'web-server';
+				return '';
+			};
+
 			contactForm.addEventListener('submit', async (event) => {
 				event.preventDefault();
 				if (isSending) return;
@@ -664,6 +672,27 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 					});
 
 					const result = await response.json().catch(() => null);
+					const providerError = detectProviderError(result && typeof result.message === 'string' ? result.message : '');
+					if (providerError === 'activation') {
+						setStatus(
+							isPolish
+								? 'Sprawdź skrzynkę norbick@gmail.com i kliknij link "Activate Form" od FormSubmit. To jednorazowa aktywacja.'
+								: 'Check norbick@gmail.com and click the "Activate Form" email from FormSubmit. This is a one-time activation.',
+							'info',
+						);
+						return;
+					}
+
+					if (providerError === 'web-server') {
+						setStatus(
+							isPolish
+								? 'Formularz działa tylko z serwera (localhost/GitHub Pages), nie z pliku otwartego lokalnie.'
+								: 'This form works only from a web server (localhost/GitHub Pages), not from a locally opened file.',
+							'info',
+						);
+						return;
+					}
+
 					if (!response.ok || (result && (result.success === false || result.success === 'false'))) {
 						throw new Error('submit-failed');
 					}
@@ -1755,6 +1784,10 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 
 	.contact-status[data-state='fallback'] {
 		color: #ffd992;
+	}
+
+	.contact-status[data-state='info'] {
+		color: #bde8ff;
 	}
 	.global-signal {
 		position: fixed;
