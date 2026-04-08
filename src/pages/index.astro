@@ -117,6 +117,8 @@ const signals: Localized[] = [
 ];
 
 const signalTrack = [...signals, ...signals];
+const contactRecipient = import.meta.env.PUBLIC_CONTACT_RECIPIENT || 'norbick@gmail.com';
+const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 ---
 
 <Layout title="NRBCK | Portfolio" description="Portfolio NRBCK: design i frontend.">
@@ -301,18 +303,22 @@ const signalTrack = [...signals, ...signals];
 							<span data-l10n="en">Have an idea for a website, WordPress theme, or web app? Tell me what you need.</span>
 						</h3>
 						<p class="contact-copy t-block">
-							<span data-l10n="pl">To wersja testowa: formularz otworzy maila z gotową treścią.</span>
-							<span data-l10n="en">This is a demo version: the form opens your email app with a prefilled message.</span>
+							<span data-l10n="pl">Formularz działa normalnie. Napisz, a odpiszę na maila.</span>
+							<span data-l10n="en">The form is live. Send a message and I will reply by email.</span>
 						</p>
 					</div>
 
-					<form class="contact-form ghost-frame" id="contact-form" novalidate>
+					<form class="contact-form ghost-frame" id="contact-form" novalidate data-endpoint={contactEndpoint} data-recipient={contactRecipient}>
+						<input class="contact-honeypot" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+						<input type="hidden" name="_captcha" value="false" />
+						<input type="hidden" name="_template" value="table" />
+
 						<label class="field">
 							<span class="field-label t-inline">
 								<span data-l10n="pl">Imię</span>
 								<span data-l10n="en">Name</span>
 							</span>
-							<input type="text" name="name" required data-ph-pl="Jak masz na imię?" data-ph-en="What's your name?" />
+							<input type="text" name="name" required autocomplete="name" data-ph-pl="Jak masz na imię?" data-ph-en="What's your name?" />
 						</label>
 
 						<label class="field">
@@ -320,7 +326,7 @@ const signalTrack = [...signals, ...signals];
 								<span data-l10n="pl">E-mail</span>
 								<span data-l10n="en">Email</span>
 							</span>
-							<input type="email" name="email" required data-ph-pl="Na jaki adres mam odpisać?" data-ph-en="Where should I reply?" />
+							<input type="email" name="email" required autocomplete="email" data-ph-pl="Na jaki adres mam odpisać?" data-ph-en="Where should I reply?" />
 						</label>
 
 						<label class="field">
@@ -590,32 +596,99 @@ const signalTrack = [...signals, ...signals];
 		const contactForm = document.getElementById('contact-form');
 		const contactStatus = document.getElementById('contact-status');
 
-		if (contactForm && contactStatus) {
-			contactForm.addEventListener('submit', (event) => {
+		if (contactForm instanceof HTMLFormElement && contactStatus instanceof HTMLElement) {
+			const submitButton = contactForm.querySelector('button[type="submit"]');
+			const endpoint = contactForm.dataset.endpoint || '';
+			const recipient = contactForm.dataset.recipient || 'norbick@gmail.com';
+			const timelineLabels = {
+				asap: isPolish ? 'Jak najszybciej' : 'ASAP',
+				'this-month': isPolish ? 'W tym miesiącu' : 'This month',
+				'next-month': isPolish ? 'W przyszłym miesiącu' : 'Next month',
+			};
+			let isSending = false;
+
+			const setStatus = (message, state) => {
+				contactStatus.textContent = message;
+				contactStatus.setAttribute('data-state', state);
+			};
+
+			contactForm.addEventListener('submit', async (event) => {
 				event.preventDefault();
-				const formData = new FormData(/** @type {HTMLFormElement} */ (contactForm));
-				const name = String(formData.get('name') || '');
-				const email = String(formData.get('email') || '');
-				const message = String(formData.get('message') || '');
-				const timeline = String(formData.get('timeline') || '');
+				if (isSending) return;
+
+				const formData = new FormData(contactForm);
+				const name = String(formData.get('name') || '').trim();
+				const email = String(formData.get('email') || '').trim();
+				const message = String(formData.get('message') || '').trim();
+				const timeline = String(formData.get('timeline') || '').trim();
+				const hasValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
 
 				if (!name || !email || !message || !timeline) {
-					contactStatus.textContent = isPolish
-						? 'Uzupełnij proszę wszystkie pola.'
-						: 'Please fill in all fields.';
+					setStatus(isPolish ? 'Uzupełnij proszę wszystkie pola.' : 'Please fill in all fields.', 'error');
 					return;
 				}
 
+				if (!hasValidEmail) {
+					setStatus(isPolish ? 'Podaj poprawny adres e-mail.' : 'Please enter a valid email address.', 'error');
+					return;
+				}
+
+				const timelineLabel = timelineLabels[timeline] || timeline;
 				const subject = isPolish ? `Nowe zapytanie od ${name}` : `New inquiry from ${name}`;
 				const body = isPolish
-					? `Imię: ${name}\nE-mail: ${email}\nTermin: ${timeline}\n\nOpis projektu:\n${message}`
-					: `Name: ${name}\nEmail: ${email}\nTimeline: ${timeline}\n\nProject details:\n${message}`;
+					? `Imię: ${name}\nE-mail: ${email}\nTermin: ${timelineLabel}\n\nOpis projektu:\n${message}`
+					: `Name: ${name}\nEmail: ${email}\nTimeline: ${timelineLabel}\n\nProject details:\n${message}`;
 
-				const mailto = `mailto:norbick@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-				window.location.href = mailto;
-				contactStatus.textContent = isPolish
-					? 'Super, otwieram Twoją aplikację mailową.'
-					: 'Great, opening your email app now.';
+				formData.set('timeline', timelineLabel);
+				formData.set('_subject', subject);
+				formData.set('_replyto', email);
+				formData.set('_captcha', 'false');
+				formData.set('_template', 'table');
+
+				isSending = true;
+				contactForm.setAttribute('aria-busy', 'true');
+				if (submitButton instanceof HTMLButtonElement) submitButton.disabled = true;
+				setStatus(isPolish ? 'Wysyłam wiadomość...' : 'Sending your message...', 'pending');
+
+				try {
+					if (!endpoint) throw new Error('missing-endpoint');
+
+					const payload = Object.fromEntries(formData.entries());
+					const response = await fetch(endpoint, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							Accept: 'application/json',
+						},
+						body: JSON.stringify(payload),
+					});
+
+					const result = await response.json().catch(() => null);
+					if (!response.ok || (result && (result.success === false || result.success === 'false'))) {
+						throw new Error('submit-failed');
+					}
+
+					setStatus(
+						isPolish
+							? 'Dzięki! Wiadomość wysłana. Odpowiem najszybciej, jak się da.'
+							: 'Thanks! Your message has been sent. I will reply as soon as I can.',
+						'success',
+					);
+					contactForm.reset();
+				} catch {
+					const mailto = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+					window.location.href = mailto;
+					setStatus(
+						isPolish
+							? 'Nie udało się wysłać bezpośrednio, więc otworzyłem maila jako plan B.'
+							: 'Direct send failed, so I opened your email app as a backup.',
+						'fallback',
+					);
+				} finally {
+					isSending = false;
+					contactForm.removeAttribute('aria-busy');
+					if (submitButton instanceof HTMLButtonElement) submitButton.disabled = false;
+				}
 			});
 		}
 	</script>
@@ -1645,11 +1718,43 @@ const signalTrack = [...signals, ...signals];
 		box-shadow: 0 10px 22px rgb(72 170 255 / 0.34);
 	}
 
+	.contact-submit:disabled {
+		opacity: 0.74;
+		cursor: wait;
+		transform: none;
+		box-shadow: none;
+	}
+
+	.contact-honeypot {
+		position: absolute;
+		left: -200vw;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+		pointer-events: none;
+	}
+
 	.contact-status {
 		margin: 0.2rem 0 0;
 		min-height: 1.2rem;
 		font-size: 0.82rem;
 		color: var(--ink-soft);
+	}
+
+	.contact-status[data-state='pending'] {
+		color: #abd7ff;
+	}
+
+	.contact-status[data-state='success'] {
+		color: #a5ffd8;
+	}
+
+	.contact-status[data-state='error'] {
+		color: #ff9fb2;
+	}
+
+	.contact-status[data-state='fallback'] {
+		color: #ffd992;
 	}
 	.global-signal {
 		position: fixed;
