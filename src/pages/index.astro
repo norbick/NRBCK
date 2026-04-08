@@ -2891,72 +2891,230 @@ const signalTrack = [...signals, ...signals];
 	@media (max-width: 920px) {
 		:global(body) {
 			overflow: auto;
+			background:
+				radial-gradient(92rem 64rem at 8% 10%, rgb(255 74 169 / 0.28), transparent 62%),
+				radial-gradient(90rem 64rem at 92% 12%, rgb(74 244 255 / 0.22), transparent 66%),
+				linear-gradient(168deg, #05000f 0%, #0b0622 48%, #150a33 100%);
 		}
 
 		.scroll-hint {
 			display: none;
 		}
 
+		.shell::before {
+			opacity: 0.36;
+			inset: -24vh -34vw;
+			transform: perspective(760px) rotateX(74deg) translateY(43vh) scale(1.62);
+		}
+
+		.shell::after {
+			width: min(128vw, 38rem);
+			bottom: 8vh;
+			opacity: calc(0.34 + (var(--scroll-progress) * 0.18));
+		}
+
 		.rail {
 			display: block;
 			height: auto;
 			overflow: visible;
-			padding: 0.8rem 0.8rem 4.2rem;
+			padding: 0.92rem 0.72rem 4.6rem;
 		}
 
 		.panel {
 			height: auto;
-			min-height: 64vh;
-			margin-bottom: 0.8rem;
-			padding: 0.4rem;
+			min-height: 68vh;
+			margin-bottom: 1rem;
+			padding: 0.62rem;
+			border-radius: 20px;
+			background: linear-gradient(150deg, rgb(21 12 49 / 0.6), rgb(8 11 30 / 0.42));
+			box-shadow:
+				inset 0 0 0 1px rgb(193 162 255 / 0.18),
+				0 16px 36px rgb(4 1 14 / 0.38);
 		}
 
 		.headline {
-			font-size: clamp(2rem, 10.5vw, 4rem);
-			line-height: 0.86;
+			font-size: clamp(2.2rem, 12.6vw, 4.95rem);
+			line-height: 0.84;
+			letter-spacing: 0.02em;
 		}
 
 		.headline-line {
-			flex-wrap: wrap;
+			display: block;
 			white-space: normal;
 		}
 
 		.headline-line + .headline-line {
-			margin-top: -0.08em;
+			margin-top: 0.03em;
+		}
+
+		.headline-muted {
+			display: inline-block;
+			margin-right: 0.14em;
+		}
+
+		.glitch-line {
+			text-shadow:
+				0 0 22px rgb(127 255 231 / 0.32),
+				0 0 36px rgb(157 139 255 / 0.28);
 		}
 
 		.hero-bottom {
 			grid-template-columns: 1fr;
+			gap: 0.72rem;
 		}
 
 		.hero-logo-void {
-			min-height: clamp(7rem, 22vh, 10rem);
+			min-height: clamp(8.8rem, 26vh, 12.4rem);
 		}
 
 		.logo-stage {
-			width: min(96%, 31rem);
+			width: min(108%, 28rem);
 		}
 
 		.logo-depth,
 		.logo-face {
-			font-size: clamp(2.1rem, 12vw, 4.2rem);
+			font-size: clamp(1.96rem, 11.6vw, 4rem);
 			letter-spacing: 0.09em;
+		}
+
+		.hero-copy {
+			padding: 0.84rem 0.72rem 0.92rem 0.92rem;
+			font-size: clamp(0.99rem, 4.2vw, 1.14rem);
+			line-height: 1.45;
+		}
+
+		.project-preview-bg {
+			display: none;
 		}
 
 		.project-grid {
 			grid-template-columns: 1fr;
+			gap: 0.82rem;
+		}
+
+		.project-frame {
+			padding: 1rem 0.95rem 1.02rem;
+			border-radius: 18px;
+		}
+
+		.project-frame:hover {
+			transform: none;
+		}
+
+		.project-frame:nth-child(odd),
+		.project-frame:nth-child(odd):hover {
+			transform: rotate(-0.78deg);
+		}
+
+		.project-frame:nth-child(even),
+		.project-frame:nth-child(even):hover {
+			transform: rotate(0.78deg);
+		}
+
+		.project-frame:active {
+			transform: scale(0.988);
+		}
+
+		.project-id {
+			font-size: clamp(1.54rem, 8.8vw, 2.24rem);
+		}
+
+		.project-title {
+			font-size: clamp(1.42rem, 8vw, 2.08rem);
+		}
+
+		.project-copy {
+			font-size: clamp(0.95rem, 4vw, 1.04rem);
+			line-height: 1.5;
+		}
+
+		.project-link {
+			width: 100%;
+			justify-content: center;
+			padding: 0.72rem 0.92rem;
+			font-size: 0.84rem;
 		}
 
 		.value-shell {
 			grid-template-columns: 1fr;
+			gap: 0.82rem;
+		}
+
+		.value-intro {
+			padding: 0.98rem 0.9rem;
+			border-radius: 18px;
+		}
+
+		.value-title {
+			font-size: clamp(1.56rem, 8.8vw, 2.44rem);
+			line-height: 0.94;
+		}
+
+		.value-copy {
+			font-size: clamp(0.96rem, 4vw, 1.06rem);
+			line-height: 1.5;
 		}
 
 		.selling-grid {
 			grid-template-columns: 1fr;
+			gap: 0.62rem;
+		}
+
+		.selling-card {
+			padding: 0.9rem 0.84rem;
+			border-radius: 14px;
+			transform: none;
+		}
+
+		.selling-card:hover {
+			transform: none;
+		}
+
+		.selling-copy {
+			font-size: clamp(0.95rem, 3.95vw, 1.02rem);
+			line-height: 1.44;
 		}
 
 		.contact-shell {
 			grid-template-columns: 1fr;
+			gap: 0.84rem;
+		}
+
+		.contact-intro,
+		.contact-form {
+			padding: 0.96rem 0.9rem;
+			border-radius: 18px;
+		}
+
+		.contact-title {
+			font-size: clamp(1.2rem, 6.4vw, 1.9rem);
+		}
+
+		.field input,
+		.field textarea,
+		.field select {
+			padding: 0.68rem 0;
+		}
+
+		.contact-submit {
+			width: 100%;
+			justify-content: center;
+			padding: 0.76rem 0.9rem;
+		}
+
+		.global-signal {
+			background: linear-gradient(90deg, rgb(20 11 46 / 0.96), rgb(8 18 46 / 0.95));
+		}
+
+		.global-signal-track {
+			gap: 0.5rem;
+			padding: 0.5rem 0.62rem;
+			animation-duration: 22s;
+		}
+
+		.signal-chip {
+			font-size: 0.62rem;
+			padding: 0.24rem 0.44rem;
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {
