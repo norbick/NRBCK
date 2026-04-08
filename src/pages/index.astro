@@ -5,8 +5,9 @@ type Localized = { pl: string; en: string };
 
 type Project = {
 	id: string;
+	previewId: string;
 	name: string;
-	repo: string;
+	live: string;
 	theme: string;
 	role: Localized;
 	blurb: Localized;
@@ -17,37 +18,39 @@ type Project = {
 const projects: Project[] = [
 	{
 		id: '01',
+		previewId: 'm2',
 		name: 'm2_stage',
-		repo: 'https://github.com/norbick/m2_stage',
+		live: 'https://m2-events.pl',
 		theme: 'theme-blue',
-		role: { pl: 'Strona dla projektu eventowego', en: 'Website for an event project' },
+		role: { pl: 'Oficjalna strona M2 Events', en: 'Official M2 Events website' },
 		blurb: {
-			pl: 'Strona, na której od razu wiadomo, co to za wydarzenie, kiedy się odbywa i jak można do niego dołączyć.',
-			en: 'A website that makes it clear right away what the event is, when it happens, and how to join.',
+			pl: 'Strona dla marki techniki eventowej: nagłośnienie, oświetlenie i scena. Priorytetem była czytelna oferta, mocne realizacje i prosty kontakt.',
+			en: 'A website for an event-tech brand focused on sound, lighting, and stage support. The goal was a clear offer, strong case studies, and easy contact.',
 		},
 		tags: [
-			{ pl: 'Czytelny układ', en: 'Clear layout' },
-			{ pl: 'Szybkie wdrożenie', en: 'Fast launch' },
-			{ pl: 'Jasny przekaz', en: 'Straightforward message' },
+			{ pl: 'Oferta usług', en: 'Service offer' },
+			{ pl: 'Realizacje eventów', en: 'Event case studies' },
+			{ pl: 'Kontakt leadowy', en: 'Lead-focused contact' },
 		],
-		cta: { pl: 'Zobacz repozytorium', en: 'View repository' },
+		cta: { pl: 'Otwórz m2-events.pl', en: 'Open m2-events.pl' },
 	},
 	{
 		id: '02',
+		previewId: 'looloot',
 		name: 'LooLoot',
-		repo: 'https://github.com/norbick/LooLoot',
+		live: 'https://looloot.norbick.workers.dev/',
 		theme: 'theme-orange',
-		role: { pl: 'Projekt strony pod produkt cyfrowy', en: 'Website concept for a digital product' },
+		role: { pl: 'Aplikacja webowa / PWA', en: 'Web app / PWA product' },
 		blurb: {
-			pl: 'Mocny styl, prosty układ i szybka droga od pierwszego wrażenia do kliknięcia tam, gdzie trzeba.',
-			en: 'A bold style, a simple layout, and a quick path from first impression to the right click.',
+			pl: 'Interaktywna aplikacja do śledzenia sesji pracy, czasu i progresu. Projekt skupiony na szybkim flow, statystykach i mobilnym UX.',
+			en: 'An interactive app for tracking work sessions, time, and progress. Designed around fast flow, clear stats, and mobile UX.',
 		},
 		tags: [
-			{ pl: 'Wyrazisty styl', en: 'Bold style' },
-			{ pl: 'Prosta nawigacja', en: 'Simple navigation' },
-			{ pl: 'Jasne CTA', en: 'Clear CTA' },
+			{ pl: 'Timer i sesje', en: 'Timer and sessions' },
+			{ pl: 'Statystyki i streaki', en: 'Stats and streaks' },
+			{ pl: 'PWA / mobile first', en: 'PWA / mobile first' },
 		],
-		cta: { pl: 'Zobacz repozytorium', en: 'View repository' },
+		cta: { pl: 'Otwórz LooLoot', en: 'Open LooLoot' },
 	},
 ];
 
@@ -115,6 +118,20 @@ const signalTrack = [...signals, ...signals];
 		<div class="scroll-brighten" aria-hidden="true"></div>
 		<div class="scanlines" aria-hidden="true"></div>
 		<div class="vignette" aria-hidden="true"></div>
+		<div class="project-preview-bg" id="project-preview-bg" aria-hidden="true">
+			{projects.map((project) => (
+				<iframe
+					class="project-preview-frame"
+					data-preview-id={project.previewId}
+					src={project.live}
+					title={`${project.name} preview`}
+					loading="eager"
+					referrerpolicy="no-referrer"
+					tabindex="-1"
+				></iframe>
+			))}
+			<div class="project-preview-overlay"></div>
+		</div>
 
 		<div class="scroll-hint" id="scroll-hint" aria-hidden="true">
 			<svg class="hint-ring" viewBox="0 0 180 180" aria-hidden="true">
@@ -191,7 +208,7 @@ const signalTrack = [...signals, ...signals];
 			<article id="projects" class="panel panel-projects reveal reveal-2">
 				<div class="project-grid">
 					{projects.map((project) => (
-						<article class={`project-frame ghost-frame ${project.theme}`}>
+						<article class={`project-frame ghost-frame ${project.theme}`} data-preview-target={project.previewId}>
 							<p class="project-id">{project.id}</p>
 							<p class="project-role t-inline">
 								<span data-l10n="pl">{project.role.pl}</span>
@@ -210,7 +227,7 @@ const signalTrack = [...signals, ...signals];
 									</li>
 								))}
 							</ul>
-							<a class="project-link t-inline" href={project.repo} target="_blank" rel="noreferrer">
+							<a class="project-link t-inline" href={project.live} target="_blank" rel="noreferrer">
 								<span data-l10n="pl">{project.cta.pl}</span>
 								<span data-l10n="en">{project.cta.en}</span>
 							</a>
@@ -353,6 +370,43 @@ const signalTrack = [...signals, ...signals];
 		const hint = document.getElementById('scroll-hint');
 		const brighten = document.querySelector('.scroll-brighten');
 		const desktop = window.matchMedia('(min-width: 921px)');
+		const previewBg = document.getElementById('project-preview-bg');
+		const previewFrames = Array.from(document.querySelectorAll('.project-preview-frame'));
+		const projectCards = Array.from(document.querySelectorAll('.project-frame[data-preview-target]'));
+
+		if (previewBg instanceof HTMLElement && previewFrames.length > 0 && projectCards.length > 0) {
+			const setPreview = (previewId) => {
+				const isActive = Boolean(previewId) && desktop.matches;
+				previewBg.classList.toggle('is-active', isActive);
+				previewFrames.forEach((frame) => {
+					const iframe = /** @type {HTMLElement} */ (frame);
+					iframe.classList.toggle('is-active', isActive && iframe.dataset.previewId === previewId);
+				});
+			};
+
+			projectCards.forEach((card) => {
+				const element = /** @type {HTMLElement} */ (card);
+				const previewId = element.dataset.previewTarget || '';
+				element.addEventListener('pointerenter', () => setPreview(previewId));
+				element.addEventListener('focusin', () => setPreview(previewId));
+			});
+
+			const clearPreview = () => setPreview('');
+			const grid = document.querySelector('.project-grid');
+			if (grid instanceof HTMLElement) {
+				grid.addEventListener('pointerleave', clearPreview);
+				grid.addEventListener('focusout', () => {
+					setTimeout(() => {
+						const active = document.activeElement;
+						if (!(active instanceof HTMLElement) || !grid.contains(active)) clearPreview();
+					}, 0);
+				});
+			}
+
+			desktop.addEventListener('change', () => {
+				if (!desktop.matches) clearPreview();
+			});
+		}
 
 		if (rail) {
 			const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -2152,6 +2206,47 @@ const signalTrack = [...signals, ...signals];
 		animation: retro-horizon-float 13s var(--ease-organic) infinite;
 	}
 
+	.project-preview-bg {
+		position: fixed;
+		inset: 0;
+		z-index: 1;
+		opacity: 0;
+		pointer-events: none;
+		overflow: hidden;
+		transition: opacity 420ms var(--ease-organic);
+	}
+
+	.project-preview-bg.is-active {
+		opacity: 1;
+	}
+
+	.project-preview-frame {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+		opacity: 0;
+		transform: scale(1.035);
+		transform-origin: center center;
+		filter: saturate(1.06) contrast(1.04);
+		transition: opacity 460ms var(--ease-organic), transform 520ms var(--ease-organic);
+	}
+
+	.project-preview-frame.is-active {
+		opacity: 0.9;
+		transform: scale(1);
+	}
+
+	.project-preview-overlay {
+		position: absolute;
+		inset: 0;
+		background:
+			radial-gradient(74rem 48rem at 16% 16%, rgb(255 78 199 / 0.2), transparent 68%),
+			radial-gradient(80rem 52rem at 86% 76%, rgb(74 244 255 / 0.18), transparent 70%),
+			linear-gradient(145deg, rgb(4 2 14 / 0.58), rgb(7 13 36 / 0.46));
+	}
+
 	.orb {
 		filter: blur(78px) saturate(1.2);
 		opacity: 0.32;
@@ -2750,6 +2845,10 @@ const signalTrack = [...signals, ...signals];
 		.shell::after {
 			opacity: 0.24;
 			transform: none;
+		}
+
+		.project-preview-bg {
+			display: none;
 		}
 
 		.panel {
