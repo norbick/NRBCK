@@ -2420,26 +2420,25 @@ const signalTrack = [...signals, ...signals];
 
 	.hero-copy {
 		padding: 0.72rem 0.42rem 0.86rem 1.26rem;
-		background: linear-gradient(126deg, rgb(18 16 44 / 0.5), rgb(8 18 42 / 0.24));
+		border: 1.5px solid transparent;
 		border-radius: 12px;
-		box-shadow: inset 0 0 0 1px rgb(188 162 255 / 0.2);
+		background:
+			linear-gradient(126deg, rgb(18 16 44 / 0.5), rgb(8 18 42 / 0.24)) padding-box,
+			linear-gradient(112deg, #7fffe7, #ffe87a, #ff64cf, #9d8bff, #7fffe7) border-box;
+		background-size: 100% 100%, 240% 240%;
+		background-position: 0 0, 0% 50%;
+		box-shadow: 0 8px 20px rgb(6 2 20 / 0.36);
+		animation:
+			hero-breathe 6.2s var(--ease-organic) infinite,
+			hero-frame-rainbow 9.2s linear infinite;
 	}
 
 	.hero-copy::before {
-		left: 0.56rem;
-		top: 0.66rem;
-		width: 0.44rem;
-		height: 0.44rem;
-		border: 1px solid rgb(153 245 255 / 0.8);
-		background: radial-gradient(circle at 34% 30%, #eefeff 0 32%, #8af8ff 62%, #7b8dff 100%);
-		box-shadow:
-			0 0 0 2px rgb(17 18 47 / 0.9),
-			0 0 10px rgb(123 246 255 / 0.45);
+		content: none;
 	}
 
 	.hero-copy::after {
-		left: 1.24rem;
-		background: linear-gradient(90deg, rgb(127 255 231 / 0.9), rgb(255 100 207 / 0.45), transparent 86%);
+		content: none;
 	}
 
 	.hero-spark {
@@ -2722,6 +2721,15 @@ const signalTrack = [...signals, ...signals];
 		50% {
 			transform: scaleX(1.02);
 			opacity: 1;
+		}
+	}
+
+	@keyframes hero-frame-rainbow {
+		0% {
+			background-position: 0 0, 0% 50%;
+		}
+		100% {
+			background-position: 0 0, 220% 50%;
 		}
 	}
 
