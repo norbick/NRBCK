@@ -526,7 +526,7 @@ const signalTrack = [...signals, ...signals];
 </Layout>
 
 <style>
-	@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@500;600&family=Sora:wght@400;600;700&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@500;600&family=Orbitron:wght@700;900&family=Sora:wght@400;600;700&display=swap');
 
 	:root {
 		--bg-0: #03050d;
@@ -822,24 +822,26 @@ const signalTrack = [...signals, ...signals];
 
 	.panel-hero {
 		display: grid;
-		grid-template-rows: auto minmax(clamp(7rem, 18vh, 14rem), 1fr) auto;
+		grid-template-rows: auto minmax(clamp(8rem, 22vh, 16rem), 1fr) auto;
 		align-content: stretch;
-		gap: clamp(0.35rem, 1.2vh, 1.2rem);
+		gap: clamp(0.4rem, 1.4vh, 1.4rem);
 	}
+
 	.hero-logo-void {
 		position: relative;
 		display: grid;
 		place-items: center;
 		align-self: center;
-		min-height: clamp(8rem, 20vh, 14rem);
-		perspective: 1400px;
+		min-height: clamp(9rem, 22vh, 16rem);
+		perspective: 1700px;
 	}
 
 	.logo-stage {
 		position: relative;
-		width: clamp(19rem, 54vw, 52rem);
-		aspect-ratio: 4.8 / 1.32;
+		width: clamp(22rem, 60vw, 58rem);
+		aspect-ratio: 5.2 / 1.55;
 		transform-style: preserve-3d;
+		isolation: isolate;
 		--logo-tilt-x: 0deg;
 		--logo-tilt-y: 0deg;
 		--logo-shift-x: 0px;
@@ -849,29 +851,83 @@ const signalTrack = [...signals, ...signals];
 			rotateX(var(--logo-tilt-x))
 			rotateY(var(--logo-tilt-y));
 		transition: transform var(--dur-sm) var(--ease-organic);
-		animation: logo-stage-float 9.8s var(--ease-organic) infinite;
+		animation: logo-stage-float 8.8s var(--ease-organic) infinite;
+	}
+
+	.logo-stage::before {
+		content: '';
+		position: absolute;
+		inset: 8% 6%;
+		border-radius: 999px;
+		background:
+			conic-gradient(
+				from 20deg,
+				rgb(120 230 255 / 0.32),
+				rgb(255 165 108 / 0.26),
+				rgb(199 160 255 / 0.3),
+				rgb(120 230 255 / 0.32)
+			);
+		filter: blur(20px) saturate(1.26);
+		opacity: 0.88;
+		transform: translateZ(-64px) scale(0.98);
+		animation: logo-aura-spin 9.6s linear infinite;
+		pointer-events: none;
+		z-index: -2;
+	}
+
+	.logo-stage::after {
+		content: '';
+		position: absolute;
+		left: 6%;
+		right: 6%;
+		bottom: 9%;
+		height: 34%;
+		background:
+			repeating-linear-gradient(90deg, rgb(161 192 255 / 0.14) 0 1px, transparent 1px 15px),
+			repeating-linear-gradient(0deg, rgb(161 192 255 / 0.16) 0 1px, transparent 1px 11px);
+		transform: rotateX(73deg) translateZ(-44px);
+		mask-image: linear-gradient(to top, #000 0%, rgb(0 0 0 / 0.16) 84%, transparent 100%);
+		opacity: 0.64;
+		animation: logo-floor-drift 5.8s var(--ease-organic) infinite;
+		pointer-events: none;
+		z-index: -1;
 	}
 
 	.logo-core {
 		position: absolute;
-		inset: 18% 3% 18% 3%;
+		inset: 17% 3% 17% 3%;
 		display: grid;
 		place-items: center;
 		transform-style: preserve-3d;
-		animation: logo-core-spin 10.5s var(--ease-organic) infinite;
+		animation: logo-core-spin 7.8s var(--ease-organic) infinite;
 		filter:
-			drop-shadow(0 0 20px rgb(113 232 255 / 0.22))
-			drop-shadow(0 0 32px rgb(255 130 86 / 0.16));
+			drop-shadow(0 0 18px rgb(125 232 255 / 0.24))
+			drop-shadow(0 0 32px rgb(255 140 96 / 0.16));
+	}
+
+	.logo-core::before {
+		content: 'NRBCK';
+		position: absolute;
+		font-family: 'Orbitron', 'IBM Plex Mono', monospace;
+		font-size: clamp(2.25rem, 8vw, 6.4rem);
+		letter-spacing: 0.12em;
+		color: rgb(133 240 255 / 0.34);
+		transform: translateZ(22px);
+		mix-blend-mode: screen;
+		clip-path: inset(0 0 72% 0);
+		animation: logo-scan-slice 3.4s steps(2, end) infinite;
+		pointer-events: none;
 	}
 
 	.logo-depth,
 	.logo-face {
 		position: absolute;
 		margin: 0;
-		font-family: 'Archivo Black', 'Impact', sans-serif;
-		font-size: clamp(2.4rem, 8.2vw, 6.8rem);
-		line-height: 0.8;
-		letter-spacing: 0.12em;
+		font-family: 'Orbitron', 'IBM Plex Mono', monospace;
+		font-size: clamp(2.35rem, 8vw, 6.6rem);
+		font-weight: 900;
+		line-height: 0.84;
+		letter-spacing: 0.11em;
 		text-transform: uppercase;
 		white-space: nowrap;
 		user-select: none;
@@ -879,89 +935,90 @@ const signalTrack = [...signals, ...signals];
 
 	.logo-depth {
 		mix-blend-mode: screen;
-		opacity: 0.74;
-		text-shadow: 0 0 12px rgb(241 244 255 / 0.18);
+		opacity: 0.56;
+		text-shadow: 0 0 10px rgb(241 244 255 / 0.16);
 	}
 
 	.depth-1 {
-		transform: translateZ(-70px);
-		color: rgb(86 173 255 / 0.66);
+		transform: translateZ(-94px) scale(1.03);
+		color: rgb(84 184 255 / 0.6);
 	}
 
 	.depth-2 {
-		transform: translateZ(-54px);
-		color: rgb(255 131 83 / 0.58);
+		transform: translateZ(-70px) scale(1.025);
+		color: rgb(255 134 90 / 0.5);
 	}
 
 	.depth-3 {
-		transform: translateZ(-40px);
-		color: rgb(188 154 255 / 0.56);
+		transform: translateZ(-48px) scale(1.018);
+		color: rgb(191 156 255 / 0.52);
 	}
 
 	.depth-4 {
-		transform: translateZ(-26px);
-		color: rgb(117 241 218 / 0.56);
+		transform: translateZ(-28px) scale(1.012);
+		color: rgb(124 250 218 / 0.5);
 	}
 
 	.depth-5 {
-		transform: translateZ(-14px);
-		color: rgb(255 220 141 / 0.62);
+		transform: translateZ(-14px) scale(1.008);
+		color: rgb(255 228 150 / 0.48);
 	}
 
 	.logo-face {
 		color: transparent;
-		background: linear-gradient(104deg, #89f8ef 0%, #ffe9a2 31%, #ff96b9 58%, #bb9dff 82%, #89f8ef 100%);
-		background-size: 210% 100%;
+		background: linear-gradient(102deg, #8ff8ef 0%, #ffe6a2 28%, #ff9cc2 55%, #c09fff 78%, #8ff8ef 100%);
+		background-size: 230% 100%;
 		-webkit-background-clip: text;
 		background-clip: text;
+		-webkit-text-stroke: 1px rgb(237 244 255 / 0.22);
 		text-shadow:
-			0 0 18px rgb(137 248 239 / 0.26),
-			0 0 28px rgb(187 157 255 / 0.2);
-		animation: logo-face-shift 7.2s linear infinite;
+			0 0 16px rgb(143 248 239 / 0.3),
+			0 0 28px rgb(192 159 255 / 0.24);
+		animation: logo-face-shift 5.6s linear infinite;
 	}
 
 	.logo-orbit {
 		position: absolute;
-		inset: 14% 6%;
+		inset: 13% 6%;
 		border-radius: 999px;
-		border: 1px solid rgb(169 205 255 / 0.38);
+		border: 1px solid rgb(169 205 255 / 0.4);
 		mix-blend-mode: screen;
 		pointer-events: none;
+		box-shadow: 0 0 24px rgb(130 199 255 / 0.2) inset;
 	}
 
 	.orbit-a {
-		transform: rotateX(70deg) rotateY(-14deg) translateZ(4px);
-		border-color: rgb(106 224 255 / 0.56);
-		animation: logo-orbit-a 6.4s linear infinite;
+		transform: rotateX(74deg) rotateY(-14deg) translateZ(8px);
+		border-color: rgb(106 224 255 / 0.66);
+		animation: logo-orbit-a 5.9s linear infinite;
 	}
 
 	.orbit-b {
-		inset: 23% 10%;
-		transform: rotateX(-70deg) rotateY(16deg) translateZ(-2px);
-		border-color: rgb(255 166 112 / 0.5);
-		animation: logo-orbit-b 7.6s linear infinite reverse;
+		inset: 21% 9%;
+		transform: rotateX(-72deg) rotateY(16deg) translateZ(-4px);
+		border-color: rgb(255 166 112 / 0.58);
+		animation: logo-orbit-b 6.8s linear infinite reverse;
 	}
 
 	.orbit-c {
-		inset: 9% 18%;
-		transform: rotateX(8deg) rotateY(68deg) translateZ(2px);
-		border-color: rgb(191 155 255 / 0.52);
-		animation: logo-orbit-c 8.8s linear infinite;
+		inset: 8% 17%;
+		transform: rotateX(10deg) rotateY(72deg) translateZ(2px);
+		border-color: rgb(191 155 255 / 0.58);
+		animation: logo-orbit-c 8.2s linear infinite;
 	}
 
 	.logo-grid {
 		position: absolute;
-		left: 8%;
-		right: 8%;
-		bottom: 10%;
-		height: 38%;
-		background:
-			repeating-linear-gradient(90deg, rgb(159 191 255 / 0.12) 0 1px, transparent 1px 16px),
-			repeating-linear-gradient(0deg, rgb(159 191 255 / 0.14) 0 1px, transparent 1px 12px);
-		transform: rotateX(72deg) translateZ(-38px);
-		opacity: 0.58;
-		mask-image: linear-gradient(to top, #000 0%, rgb(0 0 0 / 0.12) 84%, transparent 100%);
-		animation: logo-grid-scan 4.8s var(--ease-organic) infinite;
+		left: 10%;
+		right: 10%;
+		top: 46%;
+		height: 26%;
+		border-radius: 999px;
+		background: linear-gradient(90deg, transparent, rgb(143 238 255 / 0.62), transparent);
+		opacity: 0.66;
+		transform: rotateX(82deg) translateZ(-10px);
+		animation: logo-grid-scan 3.8s var(--ease-organic) infinite;
+		pointer-events: none;
 	}
 
 	.logo-flare {
@@ -972,21 +1029,21 @@ const signalTrack = [...signals, ...signals];
 	}
 
 	.flare-a {
-		width: clamp(1.6rem, 2.4vw, 2.6rem);
-		height: clamp(1.6rem, 2.4vw, 2.6rem);
-		left: 16%;
-		top: 58%;
-		background: radial-gradient(circle, rgb(112 230 255 / 0.9) 0%, rgb(112 230 255 / 0) 70%);
-		animation: logo-flare-a 3.6s var(--ease-organic) infinite;
+		width: clamp(1.8rem, 2.8vw, 3rem);
+		height: clamp(1.8rem, 2.8vw, 3rem);
+		left: 14%;
+		top: 57%;
+		background: radial-gradient(circle, rgb(112 230 255 / 0.94) 0%, rgb(112 230 255 / 0) 70%);
+		animation: logo-flare-a 2.8s var(--ease-organic) infinite;
 	}
 
 	.flare-b {
-		width: clamp(1.2rem, 2vw, 2rem);
-		height: clamp(1.2rem, 2vw, 2rem);
-		right: 19%;
-		top: 24%;
-		background: radial-gradient(circle, rgb(255 170 112 / 0.84) 0%, rgb(255 170 112 / 0) 72%);
-		animation: logo-flare-b 4.2s var(--ease-organic) infinite;
+		width: clamp(1.25rem, 2.1vw, 2.2rem);
+		height: clamp(1.25rem, 2.1vw, 2.2rem);
+		right: 18%;
+		top: 23%;
+		background: radial-gradient(circle, rgb(255 170 112 / 0.88) 0%, rgb(255 170 112 / 0) 72%);
+		animation: logo-flare-b 3.4s var(--ease-organic) infinite;
 	}
 
 	.headline {
@@ -1660,22 +1717,62 @@ const signalTrack = [...signals, ...signals];
 		}
 		50% {
 			transform:
-				translate3d(var(--logo-shift-x), calc(var(--logo-shift-y) - 7px), 0)
-				rotateX(calc(var(--logo-tilt-x) + 1.5deg))
-				rotateY(calc(var(--logo-tilt-y) - 1.8deg));
+				translate3d(var(--logo-shift-x), calc(var(--logo-shift-y) - 8px), 0)
+				rotateX(calc(var(--logo-tilt-x) + 2deg))
+				rotateY(calc(var(--logo-tilt-y) - 2deg));
+		}
+	}
+
+	@keyframes logo-aura-spin {
+		0% {
+			transform: translateZ(-64px) scale(0.98) rotate(0deg);
+		}
+		100% {
+			transform: translateZ(-64px) scale(0.98) rotate(360deg);
+		}
+	}
+
+	@keyframes logo-floor-drift {
+		0%,
+		100% {
+			opacity: 0.56;
+			transform: rotateX(73deg) translateZ(-44px) translateY(0);
+		}
+		50% {
+			opacity: 0.82;
+			transform: rotateX(73deg) translateZ(-44px) translateY(4px);
 		}
 	}
 
 	@keyframes logo-core-spin {
 		0%,
 		100% {
-			transform: rotateX(-7deg) rotateY(0deg) rotateZ(0deg);
+			transform: rotateX(-8deg) rotateY(0deg) rotateZ(0deg);
 		}
 		42% {
-			transform: rotateX(6deg) rotateY(8deg) rotateZ(-1.2deg);
+			transform: rotateX(7deg) rotateY(10deg) rotateZ(-1.4deg);
 		}
 		72% {
-			transform: rotateX(-5deg) rotateY(-8deg) rotateZ(1deg);
+			transform: rotateX(-6deg) rotateY(-10deg) rotateZ(1.2deg);
+		}
+	}
+
+	@keyframes logo-scan-slice {
+		0%,
+		100% {
+			clip-path: inset(0 0 72% 0);
+			transform: translateZ(22px) translateX(0);
+			opacity: 0.42;
+		}
+		35% {
+			clip-path: inset(32% 0 32% 0);
+			transform: translateZ(22px) translateX(2px);
+			opacity: 0.72;
+		}
+		70% {
+			clip-path: inset(70% 0 0 0);
+			transform: translateZ(22px) translateX(-2px);
+			opacity: 0.54;
 		}
 	}
 
@@ -1684,46 +1781,46 @@ const signalTrack = [...signals, ...signals];
 			background-position: 0% 50%;
 		}
 		100% {
-			background-position: 210% 50%;
+			background-position: 230% 50%;
 		}
 	}
 
 	@keyframes logo-orbit-a {
 		0% {
-			transform: rotateX(70deg) rotateY(-14deg) rotateZ(0deg) translateZ(4px);
+			transform: rotateX(74deg) rotateY(-14deg) rotateZ(0deg) translateZ(8px);
 		}
 		100% {
-			transform: rotateX(70deg) rotateY(-14deg) rotateZ(360deg) translateZ(4px);
+			transform: rotateX(74deg) rotateY(-14deg) rotateZ(360deg) translateZ(8px);
 		}
 	}
 
 	@keyframes logo-orbit-b {
 		0% {
-			transform: rotateX(-70deg) rotateY(16deg) rotateZ(0deg) translateZ(-2px);
+			transform: rotateX(-72deg) rotateY(16deg) rotateZ(0deg) translateZ(-4px);
 		}
 		100% {
-			transform: rotateX(-70deg) rotateY(16deg) rotateZ(360deg) translateZ(-2px);
+			transform: rotateX(-72deg) rotateY(16deg) rotateZ(360deg) translateZ(-4px);
 		}
 	}
 
 	@keyframes logo-orbit-c {
 		0% {
-			transform: rotateX(8deg) rotateY(68deg) rotateZ(0deg) translateZ(2px);
+			transform: rotateX(10deg) rotateY(72deg) rotateZ(0deg) translateZ(2px);
 		}
 		100% {
-			transform: rotateX(8deg) rotateY(68deg) rotateZ(360deg) translateZ(2px);
+			transform: rotateX(10deg) rotateY(72deg) rotateZ(360deg) translateZ(2px);
 		}
 	}
 
 	@keyframes logo-grid-scan {
 		0%,
 		100% {
-			opacity: 0.5;
-			transform: rotateX(72deg) translateZ(-38px) translateY(0);
+			opacity: 0.58;
+			transform: rotateX(82deg) translateZ(-10px) scaleX(0.88);
 		}
 		50% {
-			opacity: 0.78;
-			transform: rotateX(72deg) translateZ(-38px) translateY(4px);
+			opacity: 0.96;
+			transform: rotateX(82deg) translateZ(-10px) scaleX(1);
 		}
 	}
 
@@ -1731,10 +1828,10 @@ const signalTrack = [...signals, ...signals];
 		0%,
 		100% {
 			transform: scale(1) translate3d(0, 0, 0);
-			opacity: 0.72;
+			opacity: 0.74;
 		}
 		50% {
-			transform: scale(1.4) translate3d(4px, -2px, 0);
+			transform: scale(1.45) translate3d(5px, -2px, 0);
 			opacity: 1;
 		}
 	}
@@ -1746,10 +1843,11 @@ const signalTrack = [...signals, ...signals];
 			opacity: 0.58;
 		}
 		45% {
-			transform: scale(1.26) translate3d(-5px, 3px, 0);
-			opacity: 0.94;
+			transform: scale(1.32) translate3d(-6px, 4px, 0);
+			opacity: 0.98;
 		}
 	}
+
 	@keyframes headline-rainbow {
 		0% {
 			background-position: 0% 50%;
