@@ -142,18 +142,18 @@ const signalTrack = [...signals, ...signals];
 				<div class="hero-bottom">
 					<p class="t-block hero-copy">
 						<span data-l10n="pl">
-							Twoja strona ma robić robotę od pierwszego wejścia: pokazać ofertę, zbudować zaufanie i domknąć kontakt.
+							Projektuję strony, które <span class="hero-spark">zatrzymują uwagę w 3 sekundy</span> i prowadzą prosto do zapytania.
 						</span>
 						<span data-l10n="en">
-							Your website should deliver from the first second: explain the offer, build trust, and drive contact.
+							I craft websites that <span class="hero-spark">grab attention in three seconds</span> and lead straight to inquiry.
 						</span>
 					</p>
 					<p class="t-block hero-copy">
 						<span data-l10n="pl">
-							Biorę to na siebie od A do Z: koncept, design, Webflow i publikacja. Ty dostajesz efekt, nie chaos.
+							Łączę strategię, design i Webflow w jeden szybki flow, żeby Twoja marka wyglądała mocno i sprzedawała konkretnie.
 						</span>
 						<span data-l10n="en">
-							I handle it end to end: concept, design, Webflow, and launch. You get results, not production chaos.
+							I blend strategy, design, and Webflow into one fast flow so your brand looks bold and converts with clarity.
 						</span>
 					</p>
 				</div>
@@ -434,8 +434,8 @@ const signalTrack = [...signals, ...signals];
 				const rect = element.getBoundingClientRect();
 				const x = (e.clientX - rect.left) / rect.width - 0.5;
 				const y = (e.clientY - rect.top) / rect.height - 0.5;
-				element.style.setProperty('--rx', `${(-y * 7.5).toFixed(2)}deg`);
-				element.style.setProperty('--ry', `${(x * 8.5).toFixed(2)}deg`);
+				element.style.setProperty('--rx', `${(-y * 10.5).toFixed(2)}deg`);
+				element.style.setProperty('--ry', `${(x * 11.5).toFixed(2)}deg`);
 			});
 
 			element.addEventListener('pointerleave', () => {
@@ -492,6 +492,8 @@ const signalTrack = [...signals, ...signals];
 		--pink: #ff7b56;
 		--acid: #b4ff5c;
 		--amber: #ffd36d;
+		--mint: #64f6d8;
+		--violet: #b89aff;
 		--scroll-progress: 0;
 		--ease-organic: cubic-bezier(0.22, 0.86, 0.28, 1);
 		--ease-bouncy: cubic-bezier(0.2, 1.02, 0.3, 1);
@@ -639,18 +641,18 @@ const signalTrack = [...signals, ...signals];
 	.scroll-hint {
 		position: fixed;
 		right: 1rem;
-		bottom: 3.4rem;
+		bottom: 3.25rem;
 		z-index: 9;
 		display: inline-flex;
 		align-items: center;
-		gap: 0.48rem;
-		padding: 0.5rem 0.72rem;
+		gap: 0.72rem;
+		padding: 0.78rem 1.08rem;
 		border: 1px solid var(--line);
 		border-radius: 999px;
-		background: rgb(8 13 25 / 0.8);
+		background: rgb(8 13 25 / 0.86);
 		backdrop-filter: blur(4px);
 		transition: opacity var(--dur-sm) var(--ease-organic), transform var(--dur-sm) var(--ease-organic);
-		animation: hint-drift 5.6s var(--ease-organic) infinite;
+		animation: hint-drift 5.2s var(--ease-organic) infinite;
 	}
 
 	.scroll-hint.is-hidden {
@@ -661,8 +663,8 @@ const signalTrack = [...signals, ...signals];
 
 	.wheel {
 		display: inline-block;
-		width: 0.86rem;
-		height: 1.26rem;
+		width: 1.08rem;
+		height: 1.58rem;
 		border-radius: 999px;
 		border: 1px solid var(--ink-soft);
 		position: relative;
@@ -672,19 +674,20 @@ const signalTrack = [...signals, ...signals];
 		content: '';
 		position: absolute;
 		left: 50%;
-		top: 0.2rem;
-		width: 0.18rem;
-		height: 0.22rem;
-		margin-left: -0.09rem;
+		top: 0.24rem;
+		width: 0.24rem;
+		height: 0.28rem;
+		margin-left: -0.12rem;
 		border-radius: 999px;
 		background: var(--ink-soft);
-		animation: wheel-dot 2.4s var(--ease-organic) infinite;
+		animation: wheel-dot 2.1s var(--ease-organic) infinite;
 	}
 
 	.arrow {
-		font-size: 1rem;
+		font-size: 1.34rem;
+		line-height: 1;
 		color: var(--ink-soft);
-		animation: arrow-nudge 2.6s var(--ease-organic) infinite;
+		animation: arrow-nudge 2.2s var(--ease-organic) infinite;
 	}
 
 	.rail {
@@ -758,16 +761,16 @@ const signalTrack = [...signals, ...signals];
 
 	.ghost-frame:hover::before,
 	.ghost-frame:focus-within::before {
-		opacity: 0.92;
-		transform: scale(1.006) translateY(-0.5px);
-		filter: saturate(1.25) blur(0.1px);
-		animation: frame-spin 3.8s var(--ease-organic) infinite;
+		opacity: 0.98;
+		transform: scale(1.012) translateY(-1.2px);
+		filter: saturate(1.35) blur(0.08px);
+		animation: frame-spin 2.9s var(--ease-organic) infinite;
 	}
 
 	.ghost-frame:hover::after,
 	.ghost-frame:focus-within::after {
-		opacity: 0.8;
-		transform: scale(1.03);
+		opacity: 0.92;
+		transform: scale(1.05);
 	}
 
 	.panel-hero {
@@ -813,8 +816,8 @@ const signalTrack = [...signals, ...signals];
 		color: var(--ink);
 		will-change: transform;
 		text-shadow:
-			0 0 10px rgb(74 184 255 / 0.22),
-			0 0 16px rgb(255 123 86 / 0.14);
+			0 0 12px rgb(100 246 216 / 0.24),
+			0 0 18px rgb(184 154 255 / 0.2);
 		animation: headline-sway 5.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
 	}
 
@@ -828,51 +831,92 @@ const signalTrack = [...signals, ...signals];
 	}
 
 	.line-top::before {
-		color: var(--cyan);
-		opacity: 0.9;
+		color: var(--mint);
+		opacity: 0.96;
 		animation:
-			chroma-a 4.8s steps(2, end) infinite,
-			glitch-cut-a 2.6s steps(2, end) infinite;
+			chroma-a 4.2s steps(2, end) infinite,
+			glitch-cut-a 2.1s steps(2, end) infinite;
 	}
 
 	.line-top::after {
-		color: var(--pink);
-		opacity: 0.75;
+		color: var(--violet);
+		opacity: 0.84;
 		animation:
-			chroma-b 5.2s steps(2, end) infinite,
-			glitch-cut-b 2.9s steps(2, end) infinite;
+			chroma-b 4.6s steps(2, end) infinite,
+			glitch-cut-b 2.4s steps(2, end) infinite;
 	}
 
 	.line-bottom::before {
 		color: var(--amber);
-		opacity: 0.82;
+		opacity: 0.9;
 		animation:
-			chroma-c 4.9s steps(2, end) infinite,
-			glitch-cut-c 2.7s steps(2, end) infinite;
+			chroma-c 4.3s steps(2, end) infinite,
+			glitch-cut-c 2.2s steps(2, end) infinite;
 	}
 
 	.line-bottom::after {
 		color: var(--acid);
-		opacity: 0.68;
+		opacity: 0.76;
 		animation:
-			chroma-d 5.4s steps(2, end) infinite,
-			glitch-cut-d 3.1s steps(2, end) infinite;
+			chroma-d 4.9s steps(2, end) infinite,
+			glitch-cut-d 2.7s steps(2, end) infinite;
 	}
 
 	.hero-bottom {
-		margin-top: 0.58rem;
+		margin-top: 0.72rem;
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: clamp(0.9rem, 1.6vw, 1.3rem);
+		gap: clamp(1rem, 1.7vw, 1.5rem);
 		align-items: start;
 	}
 
 	.hero-copy {
+		position: relative;
 		margin: 0;
-		font-size: clamp(0.98rem, 1.1vw, 1.12rem);
-		line-height: 1.55;
-		color: rgb(225 234 255 / 0.92);
-		max-width: 56ch;
+		padding: 0.58rem 0.08rem 0.74rem 1.18rem;
+		font-size: clamp(1.03rem, 1.22vw, 1.22rem);
+		line-height: 1.5;
+		letter-spacing: 0.003em;
+		color: rgb(232 239 255 / 0.96);
+		max-width: 58ch;
+		animation: hero-breathe 6.2s var(--ease-organic) infinite;
+	}
+
+	.hero-copy:nth-child(2) {
+		animation-delay: -2.4s;
+	}
+
+	.hero-copy::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.72rem;
+		width: 0.56rem;
+		height: 0.56rem;
+		border-radius: 999px;
+		background: linear-gradient(135deg, var(--mint), var(--violet));
+		box-shadow: 0 0 14px rgb(100 246 216 / 0.45);
+		animation: hero-dot-pulse 3.1s var(--ease-organic) infinite;
+	}
+
+	.hero-copy::after {
+		content: '';
+		position: absolute;
+		left: 1.18rem;
+		right: 0;
+		bottom: 0;
+		height: 1px;
+		background: linear-gradient(90deg, rgb(100 246 216 / 0.82), rgb(184 154 255 / 0.38), transparent 84%);
+		transform-origin: left center;
+		animation: hero-line-sway 4.6s var(--ease-organic) infinite;
+	}
+
+	.hero-spark {
+		color: transparent;
+		background: linear-gradient(100deg, var(--mint) 0%, #d8ff84 50%, var(--violet) 100%);
+		-webkit-background-clip: text;
+		background-clip: text;
+		text-shadow: 0 0 18px rgb(100 246 216 / 0.22);
 	}
 
 	.panel-projects {
@@ -896,7 +940,7 @@ const signalTrack = [...signals, ...signals];
 	}
 
 	.project-frame:hover {
-		transform: translateY(-4px);
+		transform: translateY(-6px);
 	}
 
 	.project-id {
@@ -993,24 +1037,24 @@ const signalTrack = [...signals, ...signals];
 		overflow: visible;
 		padding: 1.1rem;
 		border-radius: 20px;
-		animation: intro-float 9.4s var(--ease-organic) infinite;
+		animation: intro-float 6.8s var(--ease-organic) infinite;
 		transition: transform var(--dur-md) var(--ease-organic), filter var(--dur-md) var(--ease-organic);
 	}
 
 	.value-intro:hover {
-		transform: translateY(-4px);
+		transform: translateY(-6px);
 	}
 
 	.value-intro:hover::before {
-		opacity: 0.86;
+		opacity: 1;
 		filter: saturate(1.2) blur(0.1px);
-		animation-duration: 3.8s;
+		animation-duration: 2.6s;
 	}
 
 	.value-intro:hover::after {
-		opacity: 0.76;
-		transform: scale(1.02);
-		filter: blur(18px);
+		opacity: 0.94;
+		transform: scale(1.06);
+		filter: blur(24px);
 	}
 
 	.value-kicker {
@@ -1050,7 +1094,7 @@ const signalTrack = [...signals, ...signals];
 	}
 
 	.selling-card:hover {
-		transform: perspective(980px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-4px) scale(1.015);
+		transform: perspective(980px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-7px) scale(1.03);
 	}
 
 	.selling-card:hover .selling-copy {
@@ -1262,8 +1306,8 @@ const signalTrack = [...signals, ...signals];
 
 	.reveal {
 		opacity: 0;
-		transform: translate3d(0, 22px, 0) scale(0.985);
-		animation: reveal 1080ms var(--ease-bouncy) forwards;
+		transform: translate3d(0, 30px, 0) scale(0.972);
+		animation: reveal 1180ms var(--ease-bouncy) forwards;
 	}
 
 	.reveal-1 {
@@ -1281,11 +1325,11 @@ const signalTrack = [...signals, ...signals];
 	@keyframes reveal {
 		0% {
 			opacity: 0;
-			transform: translate3d(0, 22px, 0) scale(0.985);
+			transform: translate3d(0, 30px, 0) scale(0.972);
 		}
-		66% {
+		68% {
 			opacity: 1;
-			transform: translate3d(0, -1.5px, 0) scale(1.003);
+			transform: translate3d(0, -3px, 0) scale(1.012);
 		}
 		100% {
 			opacity: 1;
@@ -1348,7 +1392,7 @@ const signalTrack = [...signals, ...signals];
 			transform: translateY(0);
 		}
 		50% {
-			transform: translateY(-2px);
+			transform: translateY(-4px);
 		}
 	}
 
@@ -1462,10 +1506,10 @@ const signalTrack = [...signals, ...signals];
 			transform: translate3d(0, 0, 0) rotate(0deg);
 		}
 		28% {
-			transform: translate3d(-1px, -3px, 0) rotate(-0.2deg);
+			transform: translate3d(-1.8px, -6px, 0) rotate(-0.34deg);
 		}
 		62% {
-			transform: translate3d(1px, 2px, 0) rotate(0.16deg);
+			transform: translate3d(1.6px, 3px, 0) rotate(0.26deg);
 		}
 	}
 
@@ -1545,10 +1589,47 @@ const signalTrack = [...signals, ...signals];
 			transform: scale(1) rotate(0deg) translate3d(0, 0, 0);
 		}
 		30% {
-			transform: scale(1.01) rotate(0.25deg) translate3d(0.6px, -0.5px, 0);
+			transform: scale(1.018) rotate(0.42deg) translate3d(1px, -1px, 0);
 		}
 		68% {
-			transform: scale(1.005) rotate(-0.2deg) translate3d(-0.5px, 0.4px, 0);
+			transform: scale(1.01) rotate(-0.34deg) translate3d(-0.9px, 0.8px, 0);
+		}
+	}
+
+	@keyframes hero-breathe {
+		0%,
+		100% {
+			transform: translate3d(0, 0, 0);
+		}
+		42% {
+			transform: translate3d(0, -2px, 0);
+		}
+		72% {
+			transform: translate3d(0, 1px, 0);
+		}
+	}
+
+	@keyframes hero-dot-pulse {
+		0%,
+		100% {
+			transform: scale(1);
+			filter: brightness(1);
+		}
+		50% {
+			transform: scale(1.26);
+			filter: brightness(1.18);
+		}
+	}
+
+	@keyframes hero-line-sway {
+		0%,
+		100% {
+			transform: scaleX(0.96);
+			opacity: 0.84;
+		}
+		50% {
+			transform: scaleX(1);
+			opacity: 1;
 		}
 	}
 
@@ -1567,7 +1648,6 @@ const signalTrack = [...signals, ...signals];
 			transform: translate3d(-0.8px, 0, 0);
 		}
 	}
-
 	@media (max-width: 920px) {
 		:global(body) {
 			overflow: auto;
@@ -1592,16 +1672,9 @@ const signalTrack = [...signals, ...signals];
 		}
 
 		.headline {
-		margin: 0;
-		font-family: 'Archivo Black', 'Impact', sans-serif;
-		font-size: clamp(2.4rem, 8.8vw, 6.6rem);
-		line-height: 0.78;
-		letter-spacing: 0.005em;
-		display: grid;
-		gap: 0;
-		align-content: start;
-		align-self: start;
-	}
+			font-size: clamp(2rem, 10.5vw, 4rem);
+			line-height: 0.86;
+		}
 
 		.headline-line {
 			flex-wrap: wrap;
