@@ -10,76 +10,179 @@ const projects = [
 			'Koncept platformy eventowej: szybkie flow publikacji, czytelny funnel i testy UX na wczesnym etapie.',
 		tags: ['UX Flow', 'MVP', 'Frontend Direction'],
 		repo: 'https://github.com/norbick/m2_stage',
-		lane: 'lane-a',
+		theme: 'theme-pink',
 	},
 	{
 		id: '02',
 		name: 'LooLoot',
 		role: 'Collectible drop concept',
 		blurb:
-			'Projekt around drop mechanics i kolekcjonowanie przedmiotow, ze stylem mocno opartym o rytm i feedback.',
+			'Projekt around drop mechanics i kolekcjonowanie przedmiotow, ze stylem opartym o rytm i mocny feedback.',
 		tags: ['Drop Logic', 'Game Economy', 'Product Visuals'],
 		repo: 'https://github.com/norbick/LooLoot',
-		lane: 'lane-b',
+		theme: 'theme-cyan',
 	},
 ];
 
-const signals = ['GLITCH MODE', 'KINETIC UI', 'NRBCK', 'ASTRO BUILD', 'SIGNAL ACTIVE', 'NO STATIC LAYOUT'];
+const labFrames = [
+	{ title: 'Visual Systems', text: 'Brand energy, typography tension, contrast control.', tone: 'tone-lime' },
+	{ title: 'Interaction Rhythm', text: 'Motion timing, scroll behavior, kinetic composition.', tone: 'tone-amber' },
+	{ title: 'Fast Iteration', text: 'From sketch to deploy in very short loops.', tone: 'tone-cyan' },
+	{ title: 'Signal Layering', text: 'Depth from overlays, scanlines, and moving rails.', tone: 'tone-pink' },
+];
+
+const signals = ['GLITCH MODE', 'KINETIC UI', 'NRBCK', 'ASTRO BUILD', 'SIGNAL ACTIVE', 'NO SAFE LAYOUT'];
+
+const bendPresets = [
+	{ rot: -11, skew: -3.6, hoverRot: -15, hoverSkew: -4.4 },
+	{ rot: 9, skew: 2.9, hoverRot: 13, hoverSkew: 3.8 },
+	{ rot: -8, skew: 3.2, hoverRot: -12, hoverSkew: 4.1 },
+	{ rot: 12, skew: -3.1, hoverRot: 16, hoverSkew: -4.2 },
+	{ rot: -10, skew: 2.4, hoverRot: -14, hoverSkew: 3.5 },
+	{ rot: 7, skew: -2.7, hoverRot: 11, hoverSkew: -3.6 },
+];
+
+const hash = (value: string) =>
+	[...value].reduce((acc, char, index) => acc + char.charCodeAt(0) * (index + 1), 0);
+
+const withTwist = <T extends { name?: string; title?: string }>(items: T[]) =>
+	items.map((item, index) => {
+		const key = item.name ?? item.title ?? String(index);
+		const preset = bendPresets[(hash(key) + index * 7) % bendPresets.length];
+		return { ...item, twist: preset };
+	});
+
+const projectPanels = withTwist(projects);
+const framePanels = withTwist(labFrames);
 ---
 
 <Layout title="NRBCK | Kinetic Glitch" description="Portfolio NRBCK w wersji glitch/kinetycznej.">
-	<main class="frame">
+	<main class="shell">
 		<div class="scanlines" aria-hidden="true"></div>
 		<div class="vignette" aria-hidden="true"></div>
 
-		<header class="hero reveal reveal-1">
-			<p class="topline">NRBCK // SIGNAL FEED // MODE 02</p>
-			<h1 class="glitch" data-text="KINETIC GLITCH">KINETIC GLITCH</h1>
-			<p class="intro">
-				Ten layout jest celowo agresywny wizualnie: wiecej ruchu, wiecej kontrastu i mniej bezpiecznego,
-				powtarzalnego ukladu. Ma wygladac jak zyjacy sygnal.
-			</p>
-			<div class="cta">
-				<a class="btn btn-main" href="#projects">Project Lanes</a>
-				<a class="btn btn-ghost" href="mailto:norbick@gmail.com">Ping Me</a>
-			</div>
-		</header>
+		<div class="scroll-hint" id="scroll-hint">
+			<span class="wheel" aria-hidden="true"></span>
+			<span class="hint-text">Scroll down to move right</span>
+			<span class="arrow" aria-hidden="true">→</span>
+		</div>
 
-		<section class="signal reveal reveal-2" aria-label="Signal ticker">
-			<div class="signal-track" aria-hidden="true">
-				{[...signals, ...signals, ...signals].map((item, index) => (
-					<span>{item} {String(index + 1).padStart(2, '0')}</span>
-				))}
-			</div>
-		</section>
-
-		<section id="projects" class="lanes reveal reveal-3">
-			{projects.map((project) => (
-				<article class={`lane ${project.lane}`}>
-					<div class="lane-head">
-						<p class="lane-id">{project.id}</p>
-						<p class="lane-role">{project.role}</p>
+		<section class="rail" id="horizontal-rail">
+			<article class="panel panel-hero reveal reveal-1">
+				<nav class="topbar">
+					<p class="brand">NRBCK</p>
+					<div class="controls">
+						<a href="mailto:norbick@gmail.com">Contact</a>
+						<span aria-hidden="true"></span>
+						<span aria-hidden="true"></span>
 					</div>
-					<div class="lane-body">
+				</nav>
+
+				<h1 class="headline">
+					<span class="muted">FREELANCE</span> KINETIC DESIGNER
+					<br />
+					<span class="muted">&amp;</span> GLITCH DEVELOPER
+				</h1>
+
+				<div class="hero-bottom">
+					<p>
+						I shape web experiences that feel alive: strong typography, deliberate friction and clean
+						interaction logic.
+					</p>
+					<div>
+						<p>
+							Current focus: personal portfolio, m2_stage and LooLoot. This version is intentionally kinetic
+							and driven by motion.
+						</p>
+						<a class="hero-link" href="#projects">Open project lanes</a>
+					</div>
+				</div>
+			</article>
+
+			<article class="panel panel-signal reveal reveal-2" aria-label="Signal rail">
+				<div class="signal-track" aria-hidden="true">
+					{[...signals, ...signals, ...signals].map((item, index) => (
+						<span>{item} {String(index + 1).padStart(2, '0')}</span>
+					))}
+				</div>
+			</article>
+
+			{projectPanels.map((project) => (
+				<article id={project.id === '01' ? 'projects' : undefined} class={`panel panel-project ${project.theme}`}>
+					<div
+						class="project-frame"
+						style={`--rot:${project.twist.rot}deg; --sk:${project.twist.skew}deg; --rot-hover:${project.twist.hoverRot}deg; --sk-hover:${project.twist.hoverSkew}deg;`}
+					>
+						<p class="project-id">{project.id}</p>
+						<p class="project-role">{project.role}</p>
 						<h2>{project.name}</h2>
-						<p>{project.blurb}</p>
+						<p class="project-copy">{project.blurb}</p>
 						<ul aria-label={`Highlights for ${project.name}`}>
 							{project.tags.map((tag) => (
 								<li>{tag}</li>
 							))}
 						</ul>
-					</div>
-					<div class="lane-action">
 						<a href={project.repo} target="_blank" rel="noreferrer">Open Repo</a>
 					</div>
 				</article>
 			))}
-		</section>
 
-		<section class="footer-note reveal reveal-4">
-			<p>Signal ends here. Next iteration: deeper case studies + custom domain.</p>
+			<article class="panel panel-lab reveal reveal-3">
+				<div class="lab-grid">
+					{framePanels.map((frame) => (
+						<article
+							class={`lab-card ${frame.tone}`}
+							style={`--rot:${frame.twist.rot}deg; --sk:${frame.twist.skew}deg; --rot-hover:${frame.twist.hoverRot}deg; --sk-hover:${frame.twist.hoverSkew}deg;`}
+						>
+							<h3>{frame.title}</h3>
+							<p>{frame.text}</p>
+						</article>
+					))}
+				</div>
+			</article>
 		</section>
 	</main>
+
+	<script is:inline>
+		const rail = document.getElementById('horizontal-rail');
+		const hint = document.getElementById('scroll-hint');
+		const desktop = window.matchMedia('(min-width: 921px)');
+
+		if (rail) {
+			const updateHint = () => {
+				if (!hint) return;
+				if (!desktop.matches || rail.scrollLeft > 42) hint.classList.add('is-hidden');
+				else hint.classList.remove('is-hidden');
+			};
+
+			const onWheel = (event) => {
+				if (!desktop.matches) return;
+				const delta = event.deltaY !== 0 ? event.deltaY : event.deltaX;
+				if (delta === 0) return;
+				event.preventDefault();
+				rail.scrollLeft += delta;
+				updateHint();
+			};
+
+			const onKey = (event) => {
+				if (!desktop.matches) return;
+				if (event.key === 'ArrowDown' || event.key === 'PageDown') {
+					event.preventDefault();
+					rail.scrollLeft += window.innerWidth * 0.72;
+				}
+				if (event.key === 'ArrowUp' || event.key === 'PageUp') {
+					event.preventDefault();
+					rail.scrollLeft -= window.innerWidth * 0.72;
+				}
+			};
+
+			rail.addEventListener('wheel', onWheel, { passive: false });
+			rail.addEventListener('scroll', updateHint, { passive: true });
+			window.addEventListener('keydown', onKey);
+			desktop.addEventListener('change', updateHint);
+			updateHint();
+		}
+	</script>
 </Layout>
 
 <style>
@@ -88,37 +191,41 @@ const signals = ['GLITCH MODE', 'KINETIC UI', 'NRBCK', 'ASTRO BUILD', 'SIGNAL AC
 	:root {
 		--bg-0: #02050b;
 		--bg-1: #050d1b;
-		--bg-2: #0b1630;
+		--bg-2: #0d1f3f;
 		--ink: #e8f1ff;
-		--ink-soft: #98abc6;
-		--line: rgb(150 185 232 / 0.28);
-		--cyan: #16dbff;
+		--ink-soft: #99adcb;
+		--line: rgb(152 188 238 / 0.3);
+		--cyan: #1be6ff;
 		--pink: #ff2fa7;
-		--acid: #c8ff35;
-		--amber: #ff9a2f;
+		--acid: #ccff37;
+		--amber: #ff9f2f;
 	}
 
 	:global(body) {
 		font-family: 'Sora', 'Trebuchet MS', sans-serif;
 		color: var(--ink);
 		background:
-			radial-gradient(44rem 30rem at 8% 10%, rgb(255 47 167 / 0.18), transparent 68%),
-			radial-gradient(42rem 33rem at 93% 12%, rgb(22 219 255 / 0.2), transparent 72%),
-			linear-gradient(132deg, var(--bg-0) 0%, var(--bg-1) 45%, var(--bg-2) 100%);
+			radial-gradient(46rem 32rem at 8% 8%, rgb(255 47 167 / 0.2), transparent 70%),
+			radial-gradient(40rem 30rem at 92% 14%, rgb(27 230 255 / 0.2), transparent 72%),
+			linear-gradient(130deg, var(--bg-0) 0%, var(--bg-1) 45%, var(--bg-2) 100%);
 	}
 
-	.frame {
+	@media (min-width: 921px) {
+		:global(body) {
+			overflow: hidden;
+		}
+	}
+
+	.shell {
 		position: relative;
-		max-width: 1080px;
-		margin: 0 auto;
-		padding: 1.15rem 0.85rem 2.8rem;
+		min-height: 100vh;
 	}
 
 	.scanlines {
 		position: fixed;
 		inset: 0;
 		pointer-events: none;
-		z-index: 0;
+		z-index: 2;
 		background: repeating-linear-gradient(
 			to bottom,
 			rgb(255 255 255 / 0.02) 0,
@@ -126,238 +233,271 @@ const signals = ['GLITCH MODE', 'KINETIC UI', 'NRBCK', 'ASTRO BUILD', 'SIGNAL AC
 			rgb(0 0 0 / 0) 2px,
 			rgb(0 0 0 / 0) 4px
 		);
-		animation: scan-shift 6s linear infinite;
+		animation: scan-shift 5s linear infinite;
 	}
 
 	.vignette {
 		position: fixed;
 		inset: 0;
 		pointer-events: none;
-		z-index: 0;
-		box-shadow: inset 0 0 180px rgb(0 0 0 / 0.65);
-	}
-
-	.hero,
-	.signal,
-	.lanes,
-	.footer-note {
-		position: relative;
 		z-index: 1;
+		box-shadow: inset 0 0 200px rgb(0 0 0 / 0.66);
 	}
 
-	.hero {
-		border-radius: 24px;
-		padding: clamp(1rem, 2.3vw, 2rem);
+	.scroll-hint {
+		position: fixed;
+		right: 1rem;
+		bottom: 1rem;
+		z-index: 9;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding: 0.55rem 0.8rem;
 		border: 1px solid var(--line);
-		background:
-			linear-gradient(140deg, rgb(4 10 22 / 0.84) 0%, rgb(8 21 43 / 0.8) 100%);
-		box-shadow:
-			0 0 0 1px rgb(255 255 255 / 0.03),
-			0 25px 50px rgb(1 4 10 / 0.5);
-		overflow: hidden;
+		border-radius: 999px;
+		background: rgb(2 8 18 / 0.76);
+		backdrop-filter: blur(4px);
+		transition: opacity 260ms ease, transform 260ms ease;
 	}
 
-	.hero::before {
-		content: '';
-		position: absolute;
-		inset: -20% -10% auto auto;
-		width: 18rem;
-		height: 18rem;
-		background: radial-gradient(circle, rgb(22 219 255 / 0.25), transparent 70%);
-		transform: rotate(-18deg);
-	}
-
-	.topline {
-		margin: 0;
-		font-family: 'IBM Plex Mono', 'Consolas', monospace;
-		font-size: 0.72rem;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		color: var(--ink-soft);
-	}
-
-	.glitch {
-		position: relative;
-		display: inline-block;
-		margin: 0.55rem 0 0;
-		font-family: 'Archivo Black', 'Impact', sans-serif;
-		font-size: clamp(2.2rem, 10vw, 6.8rem);
-		line-height: 0.86;
-		letter-spacing: 0.02em;
-		text-transform: uppercase;
-		color: var(--ink);
-		text-shadow: 0 0 18px rgb(22 219 255 / 0.24);
-	}
-
-	.glitch::before,
-	.glitch::after {
-		content: attr(data-text);
-		position: absolute;
-		inset: 0;
+	.scroll-hint.is-hidden {
+		opacity: 0;
+		transform: translateY(14px);
 		pointer-events: none;
 	}
 
-	.glitch::before {
-		color: var(--cyan);
-		transform: translate(2px, 0);
-		clip-path: polygon(0 2%, 100% 0, 100% 46%, 0 43%);
-		animation: glitch-a 2.4s infinite linear alternate-reverse;
+	.wheel {
+		display: inline-block;
+		width: 0.85rem;
+		height: 1.25rem;
+		border-radius: 999px;
+		border: 1px solid var(--ink-soft);
+		position: relative;
 	}
 
-	.glitch::after {
-		color: var(--pink);
-		transform: translate(-2px, 0);
-		clip-path: polygon(0 58%, 100% 54%, 100% 100%, 0 100%);
-		animation: glitch-b 1.8s infinite linear alternate-reverse;
+	.wheel::before {
+		content: '';
+		position: absolute;
+		left: 50%;
+		top: 0.2rem;
+		width: 0.18rem;
+		height: 0.22rem;
+		margin-left: -0.09rem;
+		border-radius: 999px;
+		background: var(--ink-soft);
+		animation: wheel-dot 1.1s ease infinite;
 	}
 
-	.intro {
-		margin: 1rem 0 0;
-		max-width: 63ch;
-		line-height: 1.62;
+	.hint-text {
+		font-family: 'IBM Plex Mono', 'Consolas', monospace;
+		font-size: 0.66rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
 		color: var(--ink-soft);
 	}
 
-	.cta {
-		display: flex;
-		gap: 0.65rem;
-		flex-wrap: wrap;
-		margin-top: 1.2rem;
+	.arrow {
+		font-size: 0.95rem;
+		animation: arrow-nudge 0.9s ease infinite;
 	}
 
-	.btn {
+	.rail {
+		position: relative;
+		z-index: 4;
+		display: flex;
+		height: 100vh;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-snap-type: x mandatory;
+		gap: 1rem;
+		padding: 1rem;
+		scrollbar-width: none;
+	}
+
+	.rail::-webkit-scrollbar {
+		display: none;
+	}
+
+	.panel {
+		flex: 0 0 calc(100vw - 2rem);
+		height: calc(100vh - 2rem);
+		scroll-snap-align: start;
+		border-radius: 24px;
+		border: 1px solid var(--line);
+		padding: clamp(0.9rem, 2vw, 1.6rem);
+		background: rgb(4 12 26 / 0.74);
+		backdrop-filter: blur(4px);
+		box-shadow: 0 24px 42px rgb(0 0 0 / 0.42);
+		overflow: hidden;
+	}
+
+	.panel-hero {
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+	}
+
+	.topbar {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.8rem;
+	}
+
+	.brand {
+		margin: 0;
+		font-family: 'IBM Plex Mono', 'Consolas', monospace;
+		font-size: 0.75rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	.controls {
 		display: inline-flex;
 		align-items: center;
-		justify-content: center;
-		padding: 0.62rem 1rem;
-		border-radius: 999px;
+		gap: 0.45rem;
+	}
+
+	.controls a {
 		text-decoration: none;
-		font-weight: 700;
-		transition: transform 150ms ease, box-shadow 180ms ease, background-color 160ms ease;
-	}
-
-	.btn:hover {
-		transform: translateY(-2px);
-	}
-
-	.btn-main {
-		background: linear-gradient(125deg, var(--pink), var(--amber));
-		color: #0b0b0d;
-		box-shadow: 0 10px 20px rgb(255 47 167 / 0.3);
-	}
-
-	.btn-ghost {
-		border: 1px solid var(--line);
 		color: var(--ink);
+		font-size: 0.72rem;
+		padding: 0.38rem 0.68rem;
+		border-radius: 999px;
+		border: 1px solid var(--line);
 		background: rgb(255 255 255 / 0.04);
 	}
 
-	.signal {
-		margin-top: 0.95rem;
-		border-radius: 999px;
-		overflow: hidden;
+	.controls span {
+		display: inline-block;
+		width: 1.6rem;
+		height: 1.6rem;
 		border: 1px solid var(--line);
-		background: rgb(8 19 38 / 0.7);
+		border-radius: 999px;
+		background: rgb(255 255 255 / 0.05);
+	}
+
+	.headline {
+		margin: 0.6rem 0 0;
+		font-family: 'Archivo Black', 'Impact', sans-serif;
+		font-size: clamp(2.3rem, 9vw, 6.1rem);
+		line-height: 0.88;
+		letter-spacing: 0.02em;
+	}
+
+	.muted {
+		color: rgb(232 241 255 / 0.36);
+	}
+
+	.hero-bottom {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+		align-items: end;
+	}
+
+	.hero-bottom p {
+		margin: 0;
+		font-size: 0.96rem;
+		line-height: 1.56;
+		color: var(--ink-soft);
+	}
+
+	.hero-link {
+		margin-top: 0.85rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.52rem 0.84rem;
+		border-radius: 999px;
+		border: 1px solid var(--line);
+		text-decoration: none;
+		font-weight: 700;
+		color: var(--ink);
+		background: linear-gradient(125deg, var(--pink), var(--amber));
+	}
+
+	.panel-signal {
+		display: flex;
+		align-items: center;
+		padding: 0;
 	}
 
 	.signal-track {
 		display: flex;
 		width: max-content;
-		gap: 0.62rem;
-		padding: 0.72rem 0.55rem;
-		animation: ticker 14s linear infinite;
+		gap: 0.65rem;
+		padding: 0.9rem 0.7rem;
+		animation: ticker 11s linear infinite;
 	}
 
 	.signal-track span {
 		font-family: 'IBM Plex Mono', 'Consolas', monospace;
-		font-size: 0.74rem;
+		font-size: 0.76rem;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		padding: 0.32rem 0.58rem;
+		padding: 0.38rem 0.63rem;
 		border: 1px solid var(--line);
 		border-radius: 999px;
 		color: var(--ink-soft);
-		background: rgb(255 255 255 / 0.03);
+		background: rgb(255 255 255 / 0.04);
 	}
 
-	.lanes {
-		margin-top: 0.95rem;
+	.panel-project {
 		display: grid;
-		gap: 0.78rem;
+		place-items: center;
 	}
 
-	.lane {
-		display: grid;
-		grid-template-columns: auto 1fr auto;
-		gap: 1rem;
-		align-items: center;
-		padding: 1rem;
-		border-radius: 20px;
+	.project-frame,
+	.lab-card {
+		transform: rotate(var(--rot)) skewX(var(--sk));
+		transform-origin: center;
+		transition: transform 260ms ease, box-shadow 220ms ease, border-color 220ms ease;
+	}
+
+	.project-frame:hover,
+	.lab-card:hover {
+		transform: rotate(var(--rot-hover)) skewX(var(--sk-hover)) translateY(-6px);
+	}
+
+	.project-frame {
+		width: min(900px, 88%);
+		padding: 1.1rem;
+		border-radius: 22px;
 		border: 1px solid var(--line);
-		background: rgb(5 16 32 / 0.78);
-		backdrop-filter: blur(4px);
-		transform-origin: center left;
-		transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
-	}
-
-	.lane:hover {
-		transform: translateY(-3px) skewX(-1.1deg);
-		box-shadow: 0 18px 28px rgb(0 0 0 / 0.35);
-	}
-
-	.lane-a {
-		border-color: rgb(255 47 167 / 0.58);
-	}
-
-	.lane-b {
-		border-color: rgb(22 219 255 / 0.58);
-	}
-
-	.lane-head {
+		background: rgb(4 14 31 / 0.86);
+		box-shadow: 0 22px 34px rgb(0 0 0 / 0.44);
 		display: grid;
-		gap: 0.34rem;
+		gap: 0.72rem;
 	}
 
-	.lane-id {
+	.project-id {
 		margin: 0;
 		font-family: 'Archivo Black', 'Impact', sans-serif;
-		font-size: clamp(1.8rem, 4vw, 2.7rem);
+		font-size: clamp(1.8rem, 4vw, 2.9rem);
 		line-height: 1;
-		color: rgb(232 241 255 / 0.18);
+		color: rgb(232 241 255 / 0.22);
 	}
 
-	.lane-role {
+	.project-role {
 		margin: 0;
 		font-family: 'IBM Plex Mono', 'Consolas', monospace;
-		font-size: 0.7rem;
+		font-size: 0.72rem;
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		color: var(--ink-soft);
 	}
 
-	.lane-body {
-		display: grid;
-		gap: 0.62rem;
-	}
-
 	h2 {
 		margin: 0;
-		font-size: clamp(1.65rem, 4vw, 2.7rem);
+		font-size: clamp(1.7rem, 4vw, 2.9rem);
 		line-height: 0.95;
 	}
 
-	.lane-a h2 {
-		color: var(--pink);
-	}
-
-	.lane-b h2 {
-		color: var(--cyan);
-	}
-
-	.lane-body p {
+	.project-copy {
 		margin: 0;
-		color: rgb(232 241 255 / 0.9);
 		line-height: 1.56;
+		color: rgb(232 241 255 / 0.9);
 		max-width: 64ch;
 	}
 
@@ -371,49 +511,108 @@ const signals = ['GLITCH MODE', 'KINETIC UI', 'NRBCK', 'ASTRO BUILD', 'SIGNAL AC
 	}
 
 	li {
-		padding: 0.3rem 0.55rem;
+		padding: 0.32rem 0.56rem;
 		border-radius: 999px;
-		font-size: 0.73rem;
-		color: var(--ink-soft);
+		font-size: 0.74rem;
 		border: 1px solid var(--line);
-		background: rgb(255 255 255 / 0.03);
+		color: var(--ink-soft);
+		background: rgb(255 255 255 / 0.04);
 	}
 
-	.lane-action a {
-		display: inline-block;
-		padding: 0.54rem 0.82rem;
-		border-radius: 999px;
+	.project-frame a {
+		justify-self: start;
+		display: inline-flex;
 		text-decoration: none;
 		font-weight: 700;
 		color: var(--ink);
+		padding: 0.5rem 0.8rem;
+		border-radius: 999px;
 		border: 1px solid var(--line);
-		background: rgb(255 255 255 / 0.06);
+		background: rgb(255 255 255 / 0.08);
 	}
 
-	.lane-action a:hover {
-		background: rgb(255 255 255 / 0.16);
+	.theme-pink .project-frame {
+		border-color: rgb(255 47 167 / 0.62);
 	}
 
-	.footer-note {
-		margin-top: 0.95rem;
-		padding: 0.88rem 1rem;
-		border-radius: 16px;
+	.theme-pink h2 {
+		color: var(--pink);
+	}
+
+	.theme-cyan .project-frame {
+		border-color: rgb(27 230 255 / 0.62);
+	}
+
+	.theme-cyan h2 {
+		color: var(--cyan);
+	}
+
+	.panel-lab {
+		display: flex;
+		align-items: center;
+	}
+
+	.lab-grid {
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.8rem;
+	}
+
+	.lab-card {
+		padding: 0.9rem;
+		border-radius: 18px;
 		border: 1px solid var(--line);
-		background: rgb(5 15 30 / 0.74);
+		background: rgb(4 14 30 / 0.8);
+		box-shadow: 0 18px 24px rgb(0 0 0 / 0.34);
 	}
 
-	.footer-note p {
+	h3 {
 		margin: 0;
-		font-family: 'IBM Plex Mono', 'Consolas', monospace;
-		font-size: 0.76rem;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		font-size: clamp(1rem, 2.2vw, 1.6rem);
+	}
+
+	.lab-card p {
+		margin: 0.55rem 0 0;
+		line-height: 1.5;
 		color: var(--ink-soft);
+	}
+
+	.tone-lime {
+		border-color: rgb(204 255 55 / 0.62);
+	}
+
+	.tone-lime h3 {
+		color: var(--acid);
+	}
+
+	.tone-amber {
+		border-color: rgb(255 159 47 / 0.62);
+	}
+
+	.tone-amber h3 {
+		color: var(--amber);
+	}
+
+	.tone-cyan {
+		border-color: rgb(27 230 255 / 0.62);
+	}
+
+	.tone-cyan h3 {
+		color: var(--cyan);
+	}
+
+	.tone-pink {
+		border-color: rgb(255 47 167 / 0.62);
+	}
+
+	.tone-pink h3 {
+		color: var(--pink);
 	}
 
 	.reveal {
 		opacity: 0;
-		transform: translateY(14px);
+		transform: translateY(16px);
 		animation: reveal 620ms cubic-bezier(0.2, 1, 0.2, 1) forwards;
 	}
 
@@ -426,11 +625,7 @@ const signals = ['GLITCH MODE', 'KINETIC UI', 'NRBCK', 'ASTRO BUILD', 'SIGNAL AC
 	}
 
 	.reveal-3 {
-		animation-delay: 250ms;
-	}
-
-	.reveal-4 {
-		animation-delay: 340ms;
+		animation-delay: 260ms;
 	}
 
 	@keyframes reveal {
@@ -451,77 +646,66 @@ const signals = ['GLITCH MODE', 'KINETIC UI', 'NRBCK', 'ASTRO BUILD', 'SIGNAL AC
 			transform: translateY(0);
 		}
 		100% {
-			transform: translateY(4px);
+			transform: translateY(5px);
 		}
 	}
 
-	@keyframes glitch-a {
+	@keyframes wheel-dot {
 		0% {
-			transform: translate(2px, 0);
-		}
-		20% {
-			transform: translate(-1px, -1px);
+			opacity: 0;
+			transform: translateY(0);
 		}
 		40% {
-			transform: translate(3px, 1px);
-		}
-		60% {
-			transform: translate(-2px, 0);
-		}
-		80% {
-			transform: translate(1px, -1px);
+			opacity: 1;
 		}
 		100% {
-			transform: translate(2px, 0);
+			opacity: 0;
+			transform: translateY(0.5rem);
 		}
 	}
 
-	@keyframes glitch-b {
-		0% {
-			transform: translate(-2px, 0);
-		}
-		20% {
-			transform: translate(1px, 1px);
-		}
-		40% {
-			transform: translate(-3px, -1px);
-		}
-		60% {
-			transform: translate(2px, 0);
-		}
-		80% {
-			transform: translate(-1px, 1px);
-		}
+	@keyframes arrow-nudge {
+		0%,
 		100% {
-			transform: translate(-2px, 0);
+			transform: translateX(0);
+		}
+		50% {
+			transform: translateX(3px);
 		}
 	}
 
-	@media (max-width: 860px) {
-		.lane {
+	@media (max-width: 920px) {
+		:global(body) {
+			overflow: auto;
+		}
+
+		.scroll-hint {
+			display: none;
+		}
+
+		.rail {
+			display: block;
+			height: auto;
+			overflow: visible;
+			padding: 0.8rem;
+		}
+
+		.panel {
+			height: auto;
+			min-height: 68vh;
+			margin-bottom: 0.8rem;
+		}
+
+		.hero-bottom {
 			grid-template-columns: 1fr;
-			gap: 0.74rem;
 		}
 
-		.lane-head {
-			grid-auto-flow: column;
-			justify-content: start;
-			align-items: baseline;
-			column-gap: 0.8rem;
-		}
-	}
-
-	@media (max-width: 560px) {
-		.frame {
-			padding: 0.8rem 0.6rem 2rem;
-		}
-
-		.cta {
-			gap: 0.5rem;
-		}
-
-		.btn {
+		.project-frame {
 			width: 100%;
+		}
+
+		.lab-grid {
+			grid-template-columns: 1fr;
 		}
 	}
 
