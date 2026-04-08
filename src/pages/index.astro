@@ -10,7 +10,7 @@ const projects = [
 			'Koncept platformy eventowej: szybkie flow publikacji, czytelny funnel i testy UX na wczesnym etapie.',
 		tags: ['UX Flow', 'MVP', 'Frontend Direction'],
 		repo: 'https://github.com/norbick/m2_stage',
-		theme: 'theme-pink',
+		theme: 'theme-blue',
 	},
 	{
 		id: '02',
@@ -20,65 +20,64 @@ const projects = [
 			'Projekt around drop mechanics i kolekcjonowanie przedmiotow, ze stylem opartym o rytm i mocny feedback.',
 		tags: ['Drop Logic', 'Game Economy', 'Product Visuals'],
 		repo: 'https://github.com/norbick/LooLoot',
-		theme: 'theme-cyan',
+		theme: 'theme-orange',
 	},
 ];
 
-const labFrames = [
-	{ title: 'Visual Systems', text: 'Brand energy, typography tension, contrast control.', tone: 'tone-lime' },
-	{ title: 'Interaction Rhythm', text: 'Motion timing, scroll behavior, kinetic composition.', tone: 'tone-amber' },
-	{ title: 'Fast Iteration', text: 'From sketch to deploy in very short loops.', tone: 'tone-cyan' },
-	{ title: 'Signal Layering', text: 'Depth from overlays, scanlines and moving rails.', tone: 'tone-pink' },
+const sellingPoints = [
+	{
+		title: 'Design, ktory sprzedaje',
+		text: 'Lacze estetyke z celem produktu: kazdy ekran ma prowadzic uzytkownika do decyzji.',
+	},
+	{
+		title: 'Silny kierunek wizualny',
+		text: 'Buduje wyrazisty styl marki zamiast bezpiecznych, generycznych szablonow.',
+	},
+	{
+		title: 'Szybkie iteracje',
+		text: 'Pracuje w krotkich petlach: pomysl -> prototyp -> test -> poprawka -> deploy.',
+	},
+	{
+		title: 'Frontend + UX w jednym',
+		text: 'Decyzje projektowe i implementacje sa spojne, bo projektuje i koduje to sam.',
+	},
+	{
+		title: 'Porzadek informacji',
+		text: 'Ukladam tresc tak, by user od razu wiedzial co jest wazne i co zrobic dalej.',
+	},
+	{
+		title: 'Komunikacja bez chaosu',
+		text: 'Jasno tlumacze decyzje i priorytety, dzieki czemu projekt idzie do przodu bez tarcia.',
+	},
 ];
 
 const signals = [
-	'GLITCH MODE',
-	'KINETIC UI',
-	'NRBCK',
-	'ASTRO BUILD',
-	'SIGNAL ACTIVE',
-	'NO SAFE LAYOUT',
-	'MOTION RHYTHM',
-	'CREATIVE ENGINEERING',
-	'WEB DESIGN LAB',
-	'INTERACTION DIRECTION',
+	'NRBCK PORTFOLIO',
+	'FREELANCE UI DESIGN',
+	'WEBFLOW + ASTRO',
+	'VISUAL DIRECTION',
+	'UX FLOW THINKING',
+	'FAST ITERATION LOOP',
 	'BRAND ENERGY',
-	'UI + CODE',
-	'FAST ITERATION',
-	'VISUAL TENSION',
-	'DEPLOY LOOP',
-	'PORTFOLIO FEED',
+	'PRODUCT MINDSET',
+	'CLEAR USER PATHS',
+	'CREATIVE ENGINEERING',
+	'MOTION WITH PURPOSE',
+	'NO TEMPLATE VIBES',
+	'STRONG TYPOGRAPHY',
+	'DESIGN THAT CONVERTS',
+	'DEVELOPMENT READY',
+	'LIVE DEPLOY MODE',
+	'RELIABLE EXECUTION',
+	'BUSINESS-ORIENTED UI',
+	'VISUAL STORYTELLING',
+	'PIXEL + CODE CONTROL',
 ];
 
 const signalTrack = [...signals, ...signals];
-
-const bendPresets = [
-	{ rot: -18, skew: -6.2, hoverRot: -25, hoverSkew: -7.8, ty: -18, tyHover: -26 },
-	{ rot: 16, skew: 5.4, hoverRot: 24, hoverSkew: 7.2, ty: 14, tyHover: 24 },
-	{ rot: -14, skew: 6.8, hoverRot: -22, hoverSkew: 8.4, ty: 20, tyHover: 28 },
-	{ rot: 20, skew: -5.6, hoverRot: 28, hoverSkew: -7.5, ty: -12, tyHover: -22 },
-	{ rot: -22, skew: 4.5, hoverRot: -30, hoverSkew: 6.2, ty: 10, tyHover: 18 },
-	{ rot: 13, skew: -7.1, hoverRot: 21, hoverSkew: -9.2, ty: -16, tyHover: -24 },
-	{ rot: -16, skew: -4.8, hoverRot: -24, hoverSkew: -6.8, ty: 12, tyHover: 20 },
-	{ rot: 19, skew: 6.1, hoverRot: 27, hoverSkew: 8.6, ty: -8, tyHover: -18 },
-	{ rot: -12, skew: 7.2, hoverRot: -20, hoverSkew: 9.1, ty: 16, tyHover: 26 },
-	{ rot: 15, skew: -6.3, hoverRot: 23, hoverSkew: -8.1, ty: -20, tyHover: -28 },
-];
-
-const hash = (value: string) => [...value].reduce((acc, char, index) => acc + char.charCodeAt(0) * (index + 1), 0);
-
-const withTwist = <T extends { name?: string; title?: string }>(items: T[]) =>
-	items.map((item, index) => {
-		const key = item.name ?? item.title ?? String(index);
-		const preset = bendPresets[(hash(key) + index * 7) % bendPresets.length];
-		return { ...item, twist: preset };
-	});
-
-const projectPanels = withTwist(projects);
-const framePanels = withTwist(labFrames);
 ---
 
-<Layout title="NRBCK | Kinetic Glitch" description="Portfolio NRBCK w wersji glitch/kinetycznej.">
+<Layout title="NRBCK | Portfolio" description="Portfolio NRBCK: web design, Webflow i frontend implementation.">
 	<main class="shell">
 		<div class="scanlines" aria-hidden="true"></div>
 		<div class="vignette" aria-hidden="true"></div>
@@ -91,66 +90,70 @@ const framePanels = withTwist(labFrames);
 
 		<section class="rail" id="horizontal-rail">
 			<article class="panel panel-hero reveal reveal-1">
-				<nav class="topbar">
-					<p class="brand">NRBCK</p>
-					<div class="controls">
-						<a href="mailto:norbick@gmail.com">Contact</a>
-						<span aria-hidden="true"></span>
-						<span aria-hidden="true"></span>
-					</div>
-				</nav>
+				<p class="eyebrow">Portfolio 2026 / NRBCK</p>
 
 				<h1 class="headline">
-					<span class="glitch-line line-top" data-text="FREELANCE WEB DESIGNER">FREELANCE WEB DESIGNER</span>
-					<span class="glitch-line line-bottom" data-text="&amp; WEBFLOW DEVELOPER">&amp; WEBFLOW DEVELOPER</span>
+					<span class="headline-row">
+						<span class="headline-muted">FREELANCE</span>
+						<span class="glitch-line line-top" data-text="WEB DESIGNER">WEB DESIGNER</span>
+					</span>
+					<span class="headline-row">
+						<span class="headline-muted amp">&amp;</span>
+						<span class="glitch-line line-bottom" data-text="WEBFLOW DEVELOPER">WEBFLOW DEVELOPER</span>
+					</span>
 				</h1>
 
 				<div class="hero-bottom">
 					<p>
-						I shape web experiences that feel alive: strong typography, deliberate friction and clean
-						interaction logic.
+						Projektuje i koduje strony, ktore wygladaja mocno, prowadza usera jasno i realnie wspieraja cel
+						biznesowy.
 					</p>
 					<div>
 						<p>
-							Current focus: personal portfolio, m2_stage and LooLoot. This version is intentionally kinetic
-							and driven by motion.
+							Moj focus: czytelny UX, wyrazista typografia, sensowna hierarchia tresci i szybkie wdrozenie bez
+							chaosu.
 						</p>
-						<a class="hero-link" href="#projects">Open project lanes</a>
+						<a class="hero-link" id="open-projects" href="#projects">Open project lanes</a>
 					</div>
 				</div>
 			</article>
 
-			{projectPanels.map((project) => (
+			{projects.map((project) => (
 				<article id={project.id === '01' ? 'projects' : undefined} class={`panel panel-project ${project.theme}`}>
-					<div
-						class="project-frame"
-						style={`--rot:${project.twist.rot}deg; --sk:${project.twist.skew}deg; --rot-hover:${project.twist.hoverRot}deg; --sk-hover:${project.twist.hoverSkew}deg; --ty:${project.twist.ty}px; --ty-hover:${project.twist.tyHover}px;`}
-					>
+					<div class="project-frame">
 						<p class="project-id">{project.id}</p>
 						<p class="project-role">{project.role}</p>
-						<h2>{project.name}</h2>
+						<h2 class="project-title">{project.name}</h2>
 						<p class="project-copy">{project.blurb}</p>
-						<ul aria-label={`Highlights for ${project.name}`}>
+						<ul class="project-tags" aria-label={`Highlights for ${project.name}`}>
 							{project.tags.map((tag) => (
-								<li>{tag}</li>
+								<li class="project-tag">{tag}</li>
 							))}
 						</ul>
-						<a href={project.repo} target="_blank" rel="noreferrer">Open Repo</a>
+						<a class="project-link" href={project.repo} target="_blank" rel="noreferrer">Open Repo</a>
 					</div>
 				</article>
 			))}
 
-			<article class="panel panel-lab reveal reveal-3">
-				<div class="lab-grid">
-					{framePanels.map((frame) => (
-						<article
-							class={`lab-card ${frame.tone}`}
-							style={`--rot:${frame.twist.rot}deg; --sk:${frame.twist.skew}deg; --rot-hover:${frame.twist.hoverRot}deg; --sk-hover:${frame.twist.hoverSkew}deg; --ty:${frame.twist.ty}px; --ty-hover:${frame.twist.tyHover}px;`}
-						>
-							<h3>{frame.title}</h3>
-							<p>{frame.text}</p>
-						</article>
-					))}
+			<article class="panel panel-value reveal reveal-3">
+				<div class="value-shell">
+					<div class="value-intro">
+						<p class="value-kicker">Why work with me</p>
+						<h3 class="value-title">Designer, ktory mysli produktowo i dowozi</h3>
+						<p class="value-copy">
+							Nie projektuje "ladnych ekranow" dla samego wygladu. Celem jest zawsze efekt: lepsze zrozumienie
+							oferty, wieksze zaufanie do marki i czytelna sciezka dzialania.
+						</p>
+					</div>
+
+					<div class="selling-grid">
+						{sellingPoints.map((point) => (
+							<article class="selling-card">
+								<h4 class="selling-title">{point.title}</h4>
+								<p class="selling-copy">{point.text}</p>
+							</article>
+						))}
+					</div>
 				</div>
 			</article>
 		</section>
@@ -167,6 +170,8 @@ const framePanels = withTwist(labFrames);
 	<script is:inline>
 		const rail = document.getElementById('horizontal-rail');
 		const hint = document.getElementById('scroll-hint');
+		const projectsTrigger = document.getElementById('open-projects');
+		const projectsPanel = document.getElementById('projects');
 		const desktop = window.matchMedia('(min-width: 921px)');
 
 		if (rail) {
@@ -174,6 +179,11 @@ const framePanels = withTwist(labFrames);
 			let target = rail.scrollLeft;
 			let current = rail.scrollLeft;
 			let raf = 0;
+
+			const syncState = () => {
+				target = rail.scrollLeft;
+				current = rail.scrollLeft;
+			};
 
 			const updateHint = () => {
 				if (!hint) return;
@@ -183,19 +193,27 @@ const framePanels = withTwist(labFrames);
 
 			const animate = () => {
 				const diff = target - current;
-				current += diff * 0.14;
+				current += diff * 0.16;
 				rail.scrollLeft = current;
 				updateHint();
-				if (Math.abs(diff) > 0.35) raf = requestAnimationFrame(animate);
-				else {
-					current = target;
-					rail.scrollLeft = current;
+
+				if (Math.abs(diff) > 0.3) {
+					raf = requestAnimationFrame(animate);
+				} else {
+					syncState();
 					raf = 0;
 				}
 			};
 
 			const moveBy = (delta) => {
+				if (!raf) syncState();
 				target = clamp(target + delta, 0, rail.scrollWidth - rail.clientWidth);
+				if (!raf) raf = requestAnimationFrame(animate);
+			};
+
+			const moveTo = (left) => {
+				if (!raf) syncState();
+				target = clamp(left, 0, rail.scrollWidth - rail.clientWidth);
 				if (!raf) raf = requestAnimationFrame(animate);
 			};
 
@@ -204,19 +222,19 @@ const framePanels = withTwist(labFrames);
 				const source = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
 				if (source === 0) return;
 				event.preventDefault();
-				const normalized = Math.sign(source) * Math.min(Math.abs(source), 96);
-				moveBy(normalized * 2.8);
+				const normalized = Math.sign(source) * Math.min(Math.abs(source), 100);
+				moveBy(normalized * 2.1);
 			};
 
 			const onKey = (event) => {
 				if (!desktop.matches) return;
 				if (event.key === 'ArrowDown' || event.key === 'PageDown') {
 					event.preventDefault();
-					moveBy(window.innerWidth * 0.84);
+					moveBy(window.innerWidth * 0.86);
 				}
 				if (event.key === 'ArrowUp' || event.key === 'PageUp') {
 					event.preventDefault();
-					moveBy(-window.innerWidth * 0.84);
+					moveBy(-window.innerWidth * 0.86);
 				}
 			};
 
@@ -233,10 +251,22 @@ const framePanels = withTwist(labFrames);
 				updateHint();
 			};
 
+			const onProjectsClick = (event) => {
+				if (!projectsPanel || !desktop.matches) return;
+				event.preventDefault();
+				moveTo(projectsPanel.offsetLeft);
+			};
+
+			const onRailScroll = () => {
+				updateHint();
+				if (!raf) syncState();
+			};
+
 			window.addEventListener('wheel', onWheel, { passive: false });
 			window.addEventListener('keydown', onKey);
-			rail.addEventListener('scroll', updateHint, { passive: true });
+			rail.addEventListener('scroll', onRailScroll, { passive: true });
 			desktop.addEventListener('change', onDesktopChange);
+			projectsTrigger?.addEventListener('click', onProjectsClick);
 			updateHint();
 		}
 	</script>
@@ -246,25 +276,25 @@ const framePanels = withTwist(labFrames);
 	@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@500;600&family=Sora:wght@400;600;700&display=swap');
 
 	:root {
-		--bg-0: #02050b;
-		--bg-1: #050d1b;
-		--bg-2: #0d1f3f;
-		--ink: #e8f1ff;
-		--ink-soft: #99adcb;
-		--line: rgb(152 188 238 / 0.3);
-		--cyan: #1be6ff;
-		--pink: #ff2fa7;
-		--acid: #ccff37;
-		--amber: #ff9f2f;
+		--bg-0: #e9edf5;
+		--bg-1: #d6deea;
+		--bg-2: #f6f8fc;
+		--ink: #111722;
+		--ink-soft: #51607a;
+		--line: rgb(17 23 34 / 0.24);
+		--cyan: #2468ff;
+		--pink: #ff6432;
+		--acid: #8eb700;
+		--amber: #0ea9a1;
 	}
 
 	:global(body) {
 		font-family: 'Sora', 'Trebuchet MS', sans-serif;
 		color: var(--ink);
 		background:
-			radial-gradient(46rem 32rem at 8% 8%, rgb(255 47 167 / 0.2), transparent 70%),
-			radial-gradient(40rem 30rem at 92% 14%, rgb(27 230 255 / 0.2), transparent 72%),
-			linear-gradient(130deg, var(--bg-0) 0%, var(--bg-1) 45%, var(--bg-2) 100%);
+			radial-gradient(42rem 30rem at 12% 12%, rgb(255 100 50 / 0.18), transparent 70%),
+			radial-gradient(38rem 28rem at 88% 18%, rgb(36 104 255 / 0.2), transparent 72%),
+			linear-gradient(132deg, var(--bg-0) 0%, var(--bg-1) 48%, var(--bg-2) 100%);
 	}
 
 	@media (min-width: 921px) {
@@ -285,12 +315,12 @@ const framePanels = withTwist(labFrames);
 		z-index: 2;
 		background: repeating-linear-gradient(
 			to bottom,
-			rgb(255 255 255 / 0.02) 0,
-			rgb(255 255 255 / 0.02) 1px,
-			rgb(0 0 0 / 0) 2px,
-			rgb(0 0 0 / 0) 4px
+			rgb(17 23 34 / 0.02) 0,
+			rgb(17 23 34 / 0.02) 1px,
+			rgb(255 255 255 / 0) 2px,
+			rgb(255 255 255 / 0) 4px
 		);
-		animation: scan-shift 12s linear infinite;
+		animation: scan-shift 14s linear infinite;
 	}
 
 	.vignette {
@@ -298,7 +328,7 @@ const framePanels = withTwist(labFrames);
 		inset: 0;
 		pointer-events: none;
 		z-index: 1;
-		box-shadow: inset 0 0 200px rgb(0 0 0 / 0.66);
+		box-shadow: inset 0 0 140px rgb(16 24 38 / 0.12);
 	}
 
 	.scroll-hint {
@@ -309,10 +339,10 @@ const framePanels = withTwist(labFrames);
 		display: inline-flex;
 		align-items: center;
 		gap: 0.55rem;
-		padding: 0.55rem 0.8rem;
+		padding: 0.56rem 0.84rem;
 		border: 1px solid var(--line);
 		border-radius: 999px;
-		background: rgb(2 8 18 / 0.76);
+		background: rgb(248 251 255 / 0.76);
 		backdrop-filter: blur(4px);
 		transition: opacity 260ms ease, transform 260ms ease;
 	}
@@ -387,62 +417,46 @@ const framePanels = withTwist(labFrames);
 		grid-template-rows: auto 1fr auto;
 	}
 
-	.topbar {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 0.8rem;
-	}
-
-	.brand {
+	.eyebrow {
 		margin: 0;
 		font-family: 'IBM Plex Mono', 'Consolas', monospace;
-		font-size: 0.75rem;
-		letter-spacing: 0.12em;
+		font-size: 0.74rem;
+		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		color: var(--ink-soft);
 	}
 
-	.controls {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.45rem;
-	}
-
-	.controls a {
-		text-decoration: none;
-		color: var(--ink);
-		font-size: 0.72rem;
-		padding: 0.38rem 0.68rem;
-		border-radius: 999px;
-		border: 1px solid var(--line);
-		background: rgb(255 255 255 / 0.04);
-	}
-
-	.controls span {
-		display: inline-block;
-		width: 1.6rem;
-		height: 1.6rem;
-		border: 1px solid var(--line);
-		border-radius: 999px;
-		background: rgb(255 255 255 / 0.05);
-	}
-
 	.headline {
-		margin: 0.6rem 0 0;
+		margin: 0.8rem 0 0;
 		font-family: 'Archivo Black', 'Impact', sans-serif;
-		font-size: clamp(2.3rem, 9vw, 6.1rem);
-		line-height: 0.88;
-		letter-spacing: 0.02em;
+		font-size: clamp(2.2rem, 8.6vw, 5.8rem);
+		line-height: 0.9;
+		letter-spacing: 0.01em;
 		display: grid;
-		gap: 0.08em;
+		gap: 0.12em;
+	}
+
+	.headline-row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.2em;
+	}
+
+	.headline-muted {
+		color: rgb(17 23 34 / 0.45);
+	}
+
+	.headline-muted.amp {
+		color: rgb(17 23 34 / 0.6);
 	}
 
 	.glitch-line {
 		position: relative;
-		display: block;
-		width: fit-content;
+		display: inline-block;
 		text-transform: uppercase;
+		color: var(--ink);
+		animation: title-pulse 7s ease-in-out infinite;
 	}
 
 	.glitch-line::before,
@@ -451,64 +465,59 @@ const framePanels = withTwist(labFrames);
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
-		opacity: 0.72;
+		opacity: 0.88;
 		will-change: transform;
-	}
-
-	.line-top {
-		color: var(--amber);
-	}
-
-	.line-bottom {
-		color: var(--cyan);
 	}
 
 	.line-top::before {
 		color: var(--pink);
-		animation: glitch-smooth-a 14s linear infinite;
+		animation: glitch-a 8s linear infinite;
 	}
 
 	.line-top::after {
-		color: var(--acid);
-		animation: glitch-smooth-b 16s linear infinite;
+		color: var(--cyan);
+		animation: glitch-b 9.4s linear infinite;
 	}
 
 	.line-bottom::before {
 		color: var(--amber);
-		animation: glitch-smooth-c 15s linear infinite;
+		animation: glitch-c 7.6s linear infinite;
 	}
 
 	.line-bottom::after {
-		color: var(--pink);
-		animation: glitch-smooth-d 13.5s linear infinite;
+		color: var(--acid);
+		animation: glitch-d 10.2s linear infinite;
 	}
 
 	.hero-bottom {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
+		gap: 1.2rem;
 		align-items: end;
 	}
 
 	.hero-bottom p {
 		margin: 0;
-		font-size: 0.96rem;
-		line-height: 1.56;
+		font-size: 1rem;
+		line-height: 1.58;
 		color: var(--ink-soft);
+		max-width: 62ch;
 	}
 
 	.hero-link {
-		margin-top: 0.85rem;
+		margin-top: 0.9rem;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0.52rem 0.84rem;
+		padding: 0.56rem 0.96rem;
 		border-radius: 999px;
 		border: 1px solid var(--line);
 		text-decoration: none;
 		font-weight: 700;
-		color: var(--ink);
-		background: linear-gradient(125deg, var(--pink), var(--amber));
+		font-size: 0.9rem;
+		color: #ffffff;
+		background: linear-gradient(125deg, var(--pink), var(--cyan));
+		box-shadow: 0 12px 22px rgb(36 104 255 / 0.25);
 	}
 
 	.panel-project {
@@ -516,60 +525,55 @@ const framePanels = withTwist(labFrames);
 		place-items: center;
 	}
 
-	.project-frame,
-	.lab-card {
-		transform: translateY(var(--ty)) rotate(var(--rot)) skewX(var(--sk));
-		transform-origin: center;
-		transition: transform 300ms ease, box-shadow 220ms ease, border-color 220ms ease;
-	}
-
-	.project-frame:hover,
-	.lab-card:hover {
-		transform: translateY(var(--ty-hover)) rotate(var(--rot-hover)) skewX(var(--sk-hover));
-	}
-
 	.project-frame {
 		width: min(900px, 88%);
-		padding: 1.1rem;
+		padding: 1.14rem;
 		border-radius: 22px;
-		border: 2px solid var(--line);
-		background: rgb(4 14 31 / 0.86);
-		box-shadow: 0 24px 36px rgb(0 0 0 / 0.48);
+		border: 1px solid var(--line);
+		background: rgb(255 255 255 / 0.68);
+		backdrop-filter: blur(2px);
+		box-shadow: 0 18px 34px rgb(18 28 46 / 0.12);
 		display: grid;
-		gap: 0.72rem;
+		gap: 0.75rem;
+		transition: transform 220ms ease, box-shadow 220ms ease;
+	}
+
+	.project-frame:hover {
+		transform: translateY(-6px);
+		box-shadow: 0 22px 38px rgb(18 28 46 / 0.16);
 	}
 
 	.project-id {
 		margin: 0;
 		font-family: 'Archivo Black', 'Impact', sans-serif;
-		font-size: clamp(1.8rem, 4vw, 2.9rem);
+		font-size: clamp(1.7rem, 4vw, 2.8rem);
 		line-height: 1;
-		color: rgb(232 241 255 / 0.22);
+		color: rgb(17 23 34 / 0.22);
 	}
 
 	.project-role {
 		margin: 0;
 		font-family: 'IBM Plex Mono', 'Consolas', monospace;
-		font-size: 0.72rem;
+		font-size: 0.73rem;
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		color: var(--ink-soft);
 	}
 
-	h2 {
+	.project-title {
 		margin: 0;
-		font-size: clamp(1.7rem, 4vw, 2.9rem);
+		font-size: clamp(1.6rem, 4vw, 2.8rem);
 		line-height: 0.95;
 	}
 
 	.project-copy {
 		margin: 0;
-		line-height: 1.56;
-		color: rgb(232 241 255 / 0.9);
+		line-height: 1.58;
+		color: rgb(17 23 34 / 0.84);
 		max-width: 64ch;
 	}
 
-	ul {
+	.project-tags {
 		list-style: none;
 		padding: 0;
 		margin: 0;
@@ -578,104 +582,111 @@ const framePanels = withTwist(labFrames);
 		flex-wrap: wrap;
 	}
 
-	li {
+	.project-tag {
 		padding: 0.32rem 0.56rem;
 		border-radius: 999px;
 		font-size: 0.74rem;
 		border: 1px solid var(--line);
 		color: var(--ink-soft);
-		background: rgb(255 255 255 / 0.04);
+		background: rgb(255 255 255 / 0.6);
 	}
 
-	.project-frame a {
+	.project-link {
 		justify-self: start;
 		display: inline-flex;
 		text-decoration: none;
 		font-weight: 700;
-		color: var(--ink);
-		padding: 0.5rem 0.8rem;
+		font-size: 0.86rem;
+		color: #ffffff;
+		padding: 0.52rem 0.86rem;
 		border-radius: 999px;
-		border: 1px solid var(--line);
-		background: rgb(255 255 255 / 0.08);
+		border: 1px solid transparent;
+		background: linear-gradient(135deg, rgb(17 23 34 / 0.9), rgb(36 104 255 / 0.9));
 	}
 
-	.theme-pink .project-frame {
-		border-color: rgb(255 47 167 / 0.72);
+	.theme-blue .project-frame {
+		border-color: rgb(36 104 255 / 0.42);
 	}
 
-	.theme-pink h2 {
-		color: var(--pink);
-	}
-
-	.theme-cyan .project-frame {
-		border-color: rgb(27 230 255 / 0.72);
-	}
-
-	.theme-cyan h2 {
+	.theme-blue .project-title {
 		color: var(--cyan);
 	}
 
-	.panel-lab {
+	.theme-orange .project-frame {
+		border-color: rgb(255 100 50 / 0.48);
+	}
+
+	.theme-orange .project-title {
+		color: var(--pink);
+	}
+
+	.panel-value {
 		display: flex;
 		align-items: center;
 	}
 
-	.lab-grid {
-		width: 100%;
+	.value-shell {
+		width: min(1060px, 100%);
+		display: grid;
+		grid-template-columns: 1.2fr 1.8fr;
+		gap: 1rem;
+	}
+
+	.value-intro {
+		padding: 1rem;
+		border: 1px solid var(--line);
+		border-radius: 18px;
+		background: rgb(255 255 255 / 0.66);
+		box-shadow: 0 14px 28px rgb(18 28 46 / 0.1);
+	}
+
+	.value-kicker {
+		margin: 0;
+		font-family: 'IBM Plex Mono', 'Consolas', monospace;
+		font-size: 0.72rem;
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	.value-title {
+		margin: 0.52rem 0 0;
+		font-size: clamp(1.28rem, 2.4vw, 2.05rem);
+		line-height: 1.06;
+		color: var(--ink);
+	}
+
+	.value-copy {
+		margin: 0.7rem 0 0;
+		line-height: 1.58;
+		color: var(--ink-soft);
+	}
+
+	.selling-grid {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 0.8rem;
 	}
 
-	.lab-card {
+	.selling-card {
 		padding: 0.9rem;
-		border-radius: 18px;
-		border: 2px solid var(--line);
-		background: rgb(4 14 30 / 0.8);
-		box-shadow: 0 20px 24px rgb(0 0 0 / 0.36);
+		border-radius: 16px;
+		border: 1px solid var(--line);
+		background: rgb(255 255 255 / 0.72);
+		box-shadow: 0 12px 20px rgb(18 28 46 / 0.08);
 	}
 
-	h3 {
+	.selling-title {
 		margin: 0;
-		font-size: clamp(1rem, 2.2vw, 1.6rem);
+		font-size: 1.02rem;
+		line-height: 1.2;
+		color: var(--ink);
 	}
 
-	.lab-card p {
-		margin: 0.55rem 0 0;
+	.selling-copy {
+		margin: 0.5rem 0 0;
 		line-height: 1.5;
 		color: var(--ink-soft);
-	}
-
-	.tone-lime {
-		border-color: rgb(204 255 55 / 0.72);
-	}
-
-	.tone-lime h3 {
-		color: var(--acid);
-	}
-
-	.tone-amber {
-		border-color: rgb(255 159 47 / 0.72);
-	}
-
-	.tone-amber h3 {
-		color: var(--amber);
-	}
-
-	.tone-cyan {
-		border-color: rgb(27 230 255 / 0.72);
-	}
-
-	.tone-cyan h3 {
-		color: var(--cyan);
-	}
-
-	.tone-pink {
-		border-color: rgb(255 47 167 / 0.72);
-	}
-
-	.tone-pink h3 {
-		color: var(--pink);
 	}
 
 	.global-signal {
@@ -686,8 +697,8 @@ const framePanels = withTwist(labFrames);
 		z-index: 10;
 		overflow: hidden;
 		border-top: 1px solid var(--line);
-		background: rgb(4 12 24 / 0.88);
-		backdrop-filter: blur(4px);
+		background: rgb(245 248 253 / 0.88);
+		backdrop-filter: blur(6px);
 	}
 
 	.global-signal-track {
@@ -696,19 +707,19 @@ const framePanels = withTwist(labFrames);
 		gap: 0.65rem;
 		padding: 0.58rem 0.7rem;
 		will-change: transform;
-		animation: ticker 30s linear infinite;
+		animation: ticker 28s linear infinite;
 	}
 
 	.global-signal-track span {
 		font-family: 'IBM Plex Mono', 'Consolas', monospace;
-		font-size: 0.7rem;
+		font-size: 0.69rem;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		padding: 0.28rem 0.52rem;
 		border: 1px solid var(--line);
 		border-radius: 999px;
 		color: var(--ink-soft);
-		background: rgb(255 255 255 / 0.04);
+		background: rgb(255 255 255 / 0.64);
 	}
 
 	.reveal {
@@ -718,15 +729,11 @@ const framePanels = withTwist(labFrames);
 	}
 
 	.reveal-1 {
-		animation-delay: 130ms;
-	}
-
-	.reveal-2 {
-		animation-delay: 270ms;
+		animation-delay: 120ms;
 	}
 
 	.reveal-3 {
-		animation-delay: 410ms;
+		animation-delay: 360ms;
 	}
 
 	@keyframes reveal {
@@ -775,67 +782,77 @@ const framePanels = withTwist(labFrames);
 		}
 	}
 
-	@keyframes glitch-smooth-a {
+	@keyframes title-pulse {
 		0%,
 		100% {
-			transform: translate3d(0.5px, 0, 0);
-		}
-		25% {
-			transform: translate3d(-0.7px, -0.3px, 0);
-		}
-		55% {
-			transform: translate3d(0.9px, 0.4px, 0);
-		}
-		80% {
-			transform: translate3d(-0.6px, 0, 0);
-		}
-	}
-
-	@keyframes glitch-smooth-b {
-		0%,
-		100% {
-			transform: translate3d(-0.5px, 0, 0);
-		}
-		30% {
-			transform: translate3d(0.7px, 0.3px, 0);
-		}
-		62% {
-			transform: translate3d(-0.9px, -0.3px, 0);
-		}
-		84% {
-			transform: translate3d(0.6px, 0, 0);
-		}
-	}
-
-	@keyframes glitch-smooth-c {
-		0%,
-		100% {
-			transform: translate3d(0.5px, 0, 0);
-		}
-		28% {
-			transform: translate3d(-0.8px, 0.3px, 0);
-		}
-		58% {
-			transform: translate3d(0.9px, -0.3px, 0);
-		}
-		82% {
-			transform: translate3d(-0.6px, 0, 0);
-		}
-	}
-
-	@keyframes glitch-smooth-d {
-		0%,
-		100% {
-			transform: translate3d(-0.5px, 0, 0);
-		}
-		24% {
-			transform: translate3d(0.6px, -0.3px, 0);
+			text-shadow: 0 0 0 rgb(36 104 255 / 0.12);
 		}
 		50% {
-			transform: translate3d(-0.8px, 0.3px, 0);
+			text-shadow: 0 0 14px rgb(36 104 255 / 0.25);
 		}
-		78% {
-			transform: translate3d(0.5px, 0, 0);
+	}
+
+	@keyframes glitch-a {
+		0%,
+		100% {
+			transform: translate3d(-1.8px, 0, 0);
+			opacity: 0.9;
+		}
+		35% {
+			transform: translate3d(1.4px, -0.8px, 0);
+			opacity: 0.75;
+		}
+		70% {
+			transform: translate3d(-1px, 0.6px, 0);
+			opacity: 0.88;
+		}
+	}
+
+	@keyframes glitch-b {
+		0%,
+		100% {
+			transform: translate3d(1.8px, 0, 0);
+			opacity: 0.88;
+		}
+		40% {
+			transform: translate3d(-1.2px, 0.7px, 0);
+			opacity: 0.7;
+		}
+		72% {
+			transform: translate3d(1px, -0.6px, 0);
+			opacity: 0.84;
+		}
+	}
+
+	@keyframes glitch-c {
+		0%,
+		100% {
+			transform: translate3d(-1.6px, 0, 0);
+			opacity: 0.9;
+		}
+		33% {
+			transform: translate3d(1.3px, -0.5px, 0);
+			opacity: 0.74;
+		}
+		68% {
+			transform: translate3d(-0.9px, 0.7px, 0);
+			opacity: 0.85;
+		}
+	}
+
+	@keyframes glitch-d {
+		0%,
+		100% {
+			transform: translate3d(1.5px, 0, 0);
+			opacity: 0.86;
+		}
+		38% {
+			transform: translate3d(-1.4px, 0.6px, 0);
+			opacity: 0.72;
+		}
+		74% {
+			transform: translate3d(0.8px, -0.6px, 0);
+			opacity: 0.83;
 		}
 	}
 
@@ -862,6 +879,11 @@ const framePanels = withTwist(labFrames);
 			padding: 0.4rem;
 		}
 
+		.headline {
+			font-size: clamp(2rem, 10vw, 3.6rem);
+			line-height: 0.92;
+		}
+
 		.hero-bottom {
 			grid-template-columns: 1fr;
 		}
@@ -870,7 +892,11 @@ const framePanels = withTwist(labFrames);
 			width: 100%;
 		}
 
-		.lab-grid {
+		.value-shell {
+			grid-template-columns: 1fr;
+		}
+
+		.selling-grid {
 			grid-template-columns: 1fr;
 		}
 	}
@@ -883,5 +909,3 @@ const framePanels = withTwist(labFrames);
 		}
 	}
 </style>
-
-
