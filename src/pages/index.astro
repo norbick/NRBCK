@@ -1,156 +1,224 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
 
-const projects = [
+type Localized = { pl: string; en: string };
+
+type Project = {
+	id: string;
+	name: string;
+	repo: string;
+	theme: string;
+	role: Localized;
+	blurb: Localized;
+	tags: Localized[];
+	cta: Localized;
+};
+
+const projects: Project[] = [
 	{
 		id: '01',
 		name: 'm2_stage',
-		role: 'Event platform MVP',
-		blurb:
-			'Koncept platformy eventowej: szybkie flow publikacji, czytelny funnel i testy UX na wczesnym etapie.',
-		tags: ['UX Flow', 'MVP', 'Frontend Direction'],
 		repo: 'https://github.com/norbick/m2_stage',
 		theme: 'theme-blue',
+		role: { pl: 'Platforma eventowa MVP', en: 'Event platform MVP' },
+		blurb: {
+			pl: 'Koncept platformy eventowej: szybki przepływ publikacji, czytelny funnel i testy UX na wczesnym etapie.',
+			en: 'Event platform concept with fast publishing flow, clear funnel and early-stage UX testing.',
+		},
+		tags: [
+			{ pl: 'Przepływ UX', en: 'UX Flow' },
+			{ pl: 'MVP', en: 'MVP' },
+			{ pl: 'Kierunek frontendu', en: 'Frontend Direction' },
+		],
+		cta: { pl: 'Otwórz repozytorium', en: 'Open repository' },
 	},
 	{
 		id: '02',
 		name: 'LooLoot',
-		role: 'Collectible drop concept',
-		blurb:
-			'Projekt around drop mechanics i kolekcjonowanie przedmiotow, ze stylem opartym o rytm i mocny feedback.',
-		tags: ['Drop Logic', 'Game Economy', 'Product Visuals'],
 		repo: 'https://github.com/norbick/LooLoot',
 		theme: 'theme-orange',
+		role: { pl: 'Koncepcja dropów kolekcjonerskich', en: 'Collectible drop concept' },
+		blurb: {
+			pl: 'Projekt oparty o mechaniki dropów i kolekcjonowanie przedmiotów, z naciskiem na rytm i mocny feedback.',
+			en: 'A concept focused on drop mechanics and collectible loops, built around rhythm and strong feedback.',
+		},
+		tags: [
+			{ pl: 'Logika dropów', en: 'Drop Logic' },
+			{ pl: 'Ekonomia gry', en: 'Game Economy' },
+			{ pl: 'Wizualizacja produktu', en: 'Product Visuals' },
+		],
+		cta: { pl: 'Otwórz repozytorium', en: 'Open repository' },
 	},
 ];
 
-const sellingPoints = [
+const sellingPoints: Localized[] = [
 	{
-		title: 'Design, ktory sprzedaje',
-		text: 'Lacze estetyke z celem produktu: kazdy ekran ma prowadzic uzytkownika do decyzji.',
+		pl: 'Projektuję pod cel biznesowy: nie tylko ładny widok, ale też decyzje, które zwiększają konwersję.',
+		en: 'I design for business outcomes, not just visuals: decisions are made to improve conversion.',
 	},
 	{
-		title: 'Silny kierunek wizualny',
-		text: 'Buduje wyrazisty styl marki zamiast bezpiecznych, generycznych szablonow.',
+		pl: 'Łączę branding, UX i development, więc koncept nie rozpada się przy wdrożeniu.',
+		en: 'I combine branding, UX and development, so the concept stays intact in implementation.',
 	},
 	{
-		title: 'Szybkie iteracje',
-		text: 'Pracuje w krotkich petlach: pomysl -> prototyp -> test -> poprawka -> deploy.',
+		pl: 'Błyskawicznie iteruję: szkic, prototyp, test i poprawka w krótkich pętlach.',
+		en: 'I iterate fast: sketch, prototype, test and refine in short loops.',
 	},
 	{
-		title: 'Frontend + UX w jednym',
-		text: 'Decyzje projektowe i implementacje sa spojne, bo projektuje i koduje to sam.',
+		pl: 'Buduję hierarchię treści tak, żeby użytkownik od razu wiedział co jest ważne.',
+		en: 'I structure content hierarchy so users instantly understand what matters.',
 	},
 	{
-		title: 'Porzadek informacji',
-		text: 'Ukladam tresc tak, by user od razu wiedzial co jest wazne i co zrobic dalej.',
+		pl: 'Dowożę rzeczy na czas i komunikuję decyzje jasno, bez chaosu projektowego.',
+		en: 'I deliver on time and communicate design decisions clearly, without project chaos.',
 	},
 	{
-		title: 'Komunikacja bez chaosu',
-		text: 'Jasno tlumacze decyzje i priorytety, dzieki czemu projekt idzie do przodu bez tarcia.',
+		pl: 'Lubię odważny kierunek wizualny, ale zawsze kontroluję czytelność i użyteczność.',
+		en: 'I like bold visual direction while keeping readability and usability fully under control.',
 	},
 ];
 
-const signals = [
-	'NRBCK PORTFOLIO',
-	'FREELANCE UI DESIGN',
-	'WEBFLOW + ASTRO',
-	'VISUAL DIRECTION',
-	'UX FLOW THINKING',
-	'FAST ITERATION LOOP',
-	'BRAND ENERGY',
-	'PRODUCT MINDSET',
-	'CLEAR USER PATHS',
-	'CREATIVE ENGINEERING',
-	'MOTION WITH PURPOSE',
-	'NO TEMPLATE VIBES',
-	'STRONG TYPOGRAPHY',
-	'DESIGN THAT CONVERTS',
-	'DEVELOPMENT READY',
-	'LIVE DEPLOY MODE',
-	'RELIABLE EXECUTION',
-	'BUSINESS-ORIENTED UI',
-	'VISUAL STORYTELLING',
-	'PIXEL + CODE CONTROL',
+const signals: Localized[] = [
+	{ pl: 'PORTFOLIO NRBCK', en: 'NRBCK PORTFOLIO' },
+	{ pl: 'FREELANCE DESIGN', en: 'FREELANCE DESIGN' },
+	{ pl: 'WEBFLOW + ASTRO', en: 'WEBFLOW + ASTRO' },
+	{ pl: 'KIERUNEK WIZUALNY', en: 'VISUAL DIRECTION' },
+	{ pl: 'MYŚLENIE PRODUKTOWE', en: 'PRODUCT THINKING' },
+	{ pl: 'SZYBKA ITERACJA', en: 'FAST ITERATION LOOP' },
+	{ pl: 'MOCNA TYPOGRAFIA', en: 'STRONG TYPOGRAPHY' },
+	{ pl: 'JASNA ŚCIEŻKA UŻYTKOWNIKA', en: 'CLEAR USER PATHS' },
+	{ pl: 'KREATYWNA INŻYNIERIA', en: 'CREATIVE ENGINEERING' },
+	{ pl: 'RUCH Z CELEM', en: 'MOTION WITH PURPOSE' },
+	{ pl: 'DESIGN, KTÓRY SPRZEDAJE', en: 'DESIGN THAT CONVERTS' },
+	{ pl: 'GOTOWE DO WDROŻENIA', en: 'DEVELOPMENT READY' },
+	{ pl: 'LIVE DEPLOY MODE', en: 'LIVE DEPLOY MODE' },
+	{ pl: 'NIE GENERYCZNY SZABLON', en: 'NO TEMPLATE VIBES' },
 ];
 
 const signalTrack = [...signals, ...signals];
 ---
 
-<Layout title="NRBCK | Portfolio" description="Portfolio NRBCK: web design, Webflow i frontend implementation.">
+<Layout title="NRBCK | Portfolio" description="Portfolio NRBCK: design, Webflow i frontend.">
 	<main class="shell">
+		<script is:inline>
+			(() => {
+				const langs = navigator.languages?.length ? navigator.languages : [navigator.language || 'en'];
+				const isPolish = langs.some((lang) => String(lang).toLowerCase().startsWith('pl'));
+				const root = document.documentElement;
+				root.classList.add(isPolish ? 'lang-pl' : 'lang-en');
+				root.lang = isPolish ? 'pl' : 'en';
+			})();
+		</script>
+
+		<div class="orb orb-a" aria-hidden="true"></div>
+		<div class="orb orb-b" aria-hidden="true"></div>
 		<div class="scanlines" aria-hidden="true"></div>
 		<div class="vignette" aria-hidden="true"></div>
 
-		<div class="scroll-hint" id="scroll-hint">
-			<span class="wheel" aria-hidden="true"></span>
-			<span class="hint-text">Desktop: scroll down moves right</span>
-			<span class="arrow" aria-hidden="true">→</span>
+		<div class="scroll-hint" id="scroll-hint" aria-hidden="true">
+			<span class="wheel"></span>
+			<span class="arrow">→</span>
 		</div>
 
 		<section class="rail" id="horizontal-rail">
 			<article class="panel panel-hero reveal reveal-1">
-				<p class="eyebrow">Portfolio 2026 / NRBCK</p>
-
 				<h1 class="headline">
-					<span class="headline-row">
-						<span class="headline-muted">FREELANCE</span>
-						<span class="glitch-line line-top" data-text="WEB DESIGNER">WEB DESIGNER</span>
+					<span class="headline-line">
+						<span class="headline-muted t-inline">
+							<span data-l10n="pl">FREELANCE</span>
+							<span data-l10n="en">FREELANCE</span>
+						</span>
+						<span class="glitch-line line-top" data-l10n="pl" data-text="DESIGNER WWW">DESIGNER WWW</span>
+						<span class="glitch-line line-top" data-l10n="en" data-text="WEB DESIGNER">WEB DESIGNER</span>
 					</span>
-					<span class="headline-row">
+					<span class="headline-line">
 						<span class="headline-muted amp">&amp;</span>
-						<span class="glitch-line line-bottom" data-text="WEBFLOW DEVELOPER">WEBFLOW DEVELOPER</span>
+						<span class="glitch-line line-bottom" data-l10n="pl" data-text="DEWELOPER WEBFLOW">DEWELOPER WEBFLOW</span>
+						<span class="glitch-line line-bottom" data-l10n="en" data-text="WEBFLOW DEVELOPER">WEBFLOW DEVELOPER</span>
 					</span>
 				</h1>
 
 				<div class="hero-bottom">
-					<p>
-						Projektuje i koduje strony, ktore wygladaja mocno, prowadza usera jasno i realnie wspieraja cel
-						biznesowy.
+					<p class="t-block hero-copy">
+						<span data-l10n="pl">
+							Projektuję i koduję strony, które mają charakter, prowadzą użytkownika jasno i pomagają realnie
+							sprzedawać ofertę.
+						</span>
+						<span data-l10n="en">
+							I design and build websites with character, clear user guidance and strong business impact.
+						</span>
 					</p>
-					<div>
-						<p>
-							Moj focus: czytelny UX, wyrazista typografia, sensowna hierarchia tresci i szybkie wdrozenie bez
-							chaosu.
-						</p>
-						<a class="hero-link" id="open-projects" href="#projects">Open project lanes</a>
-					</div>
+					<p class="t-block hero-copy">
+						<span data-l10n="pl">
+							Skupiam się na czytelności, odważnej typografii i precyzyjnym flow od pierwszego ekranu do akcji.
+						</span>
+						<span data-l10n="en">
+							My focus is readability, bold typography and precise flow from first impression to action.
+						</span>
+					</p>
 				</div>
 			</article>
 
-			{projects.map((project) => (
-				<article id={project.id === '01' ? 'projects' : undefined} class={`panel panel-project ${project.theme}`}>
-					<div class="project-frame">
-						<p class="project-id">{project.id}</p>
-						<p class="project-role">{project.role}</p>
-						<h2 class="project-title">{project.name}</h2>
-						<p class="project-copy">{project.blurb}</p>
-						<ul class="project-tags" aria-label={`Highlights for ${project.name}`}>
-							{project.tags.map((tag) => (
-								<li class="project-tag">{tag}</li>
-							))}
-						</ul>
-						<a class="project-link" href={project.repo} target="_blank" rel="noreferrer">Open Repo</a>
-					</div>
-				</article>
-			))}
+			<article id="projects" class="panel panel-projects reveal reveal-2">
+				<div class="project-grid">
+					{projects.map((project) => (
+						<article class={`project-frame ${project.theme}`}>
+							<p class="project-id">{project.id}</p>
+							<p class="project-role t-inline">
+								<span data-l10n="pl">{project.role.pl}</span>
+								<span data-l10n="en">{project.role.en}</span>
+							</p>
+							<h2 class="project-title">{project.name}</h2>
+							<p class="project-copy t-block">
+								<span data-l10n="pl">{project.blurb.pl}</span>
+								<span data-l10n="en">{project.blurb.en}</span>
+							</p>
+							<ul class="project-tags">
+								{project.tags.map((tag) => (
+									<li class="project-tag t-inline">
+										<span data-l10n="pl">{tag.pl}</span>
+										<span data-l10n="en">{tag.en}</span>
+									</li>
+								))}
+							</ul>
+							<a class="project-link t-inline" href={project.repo} target="_blank" rel="noreferrer">
+								<span data-l10n="pl">{project.cta.pl}</span>
+								<span data-l10n="en">{project.cta.en}</span>
+							</a>
+						</article>
+					))}
+				</div>
+			</article>
 
 			<article class="panel panel-value reveal reveal-3">
 				<div class="value-shell">
 					<div class="value-intro">
-						<p class="value-kicker">Why work with me</p>
-						<h3 class="value-title">Designer, ktory mysli produktowo i dowozi</h3>
-						<p class="value-copy">
-							Nie projektuje "ladnych ekranow" dla samego wygladu. Celem jest zawsze efekt: lepsze zrozumienie
-							oferty, wieksze zaufanie do marki i czytelna sciezka dzialania.
+						<p class="value-kicker t-inline">
+							<span data-l10n="pl">Dlaczego warto ze mną pracować</span>
+							<span data-l10n="en">Why work with me</span>
+						</p>
+						<h3 class="value-title t-block">
+							<span data-l10n="pl">Design i development spięte w jedną, skuteczną całość</span>
+							<span data-l10n="en">Design and development fused into one effective process</span>
+						</h3>
+						<p class="value-copy t-block">
+							<span data-l10n="pl">
+								Każdy element wizualny ma tu robić robotę: budować zaufanie, prowadzić uwagę i skracać drogę do
+								działania.
+							</span>
+							<span data-l10n="en">
+								Every visual element is here to do a job: build trust, guide attention and shorten the path to action.
+							</span>
 						</p>
 					</div>
 
 					<div class="selling-grid">
 						{sellingPoints.map((point) => (
 							<article class="selling-card">
-								<h4 class="selling-title">{point.title}</h4>
-								<p class="selling-copy">{point.text}</p>
+								<p class="selling-copy t-block">
+									<span data-l10n="pl">{point.pl}</span>
+									<span data-l10n="en">{point.en}</span>
+								</p>
 							</article>
 						))}
 					</div>
@@ -161,7 +229,10 @@ const signalTrack = [...signals, ...signals];
 		<aside class="global-signal" aria-label="Signal rail">
 			<div class="global-signal-track" aria-hidden="true">
 				{signalTrack.map((item) => (
-					<span>{item}</span>
+					<span class="signal-chip t-inline">
+						<span data-l10n="pl">{item.pl}</span>
+						<span data-l10n="en">{item.en}</span>
+					</span>
 				))}
 			</div>
 		</aside>
@@ -170,8 +241,6 @@ const signalTrack = [...signals, ...signals];
 	<script is:inline>
 		const rail = document.getElementById('horizontal-rail');
 		const hint = document.getElementById('scroll-hint');
-		const projectsTrigger = document.getElementById('open-projects');
-		const projectsPanel = document.getElementById('projects');
 		const desktop = window.matchMedia('(min-width: 921px)');
 
 		if (rail) {
@@ -196,10 +265,8 @@ const signalTrack = [...signals, ...signals];
 				current += diff * 0.16;
 				rail.scrollLeft = current;
 				updateHint();
-
-				if (Math.abs(diff) > 0.3) {
-					raf = requestAnimationFrame(animate);
-				} else {
+				if (Math.abs(diff) > 0.3) raf = requestAnimationFrame(animate);
+				else {
 					syncState();
 					raf = 0;
 				}
@@ -211,19 +278,13 @@ const signalTrack = [...signals, ...signals];
 				if (!raf) raf = requestAnimationFrame(animate);
 			};
 
-			const moveTo = (left) => {
-				if (!raf) syncState();
-				target = clamp(left, 0, rail.scrollWidth - rail.clientWidth);
-				if (!raf) raf = requestAnimationFrame(animate);
-			};
-
 			const onWheel = (event) => {
 				if (!desktop.matches) return;
 				const source = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
 				if (source === 0) return;
 				event.preventDefault();
-				const normalized = Math.sign(source) * Math.min(Math.abs(source), 100);
-				moveBy(normalized * 2.1);
+				const normalized = Math.sign(source) * Math.min(Math.abs(source), 95);
+				moveBy(normalized * 2.2);
 			};
 
 			const onKey = (event) => {
@@ -251,12 +312,6 @@ const signalTrack = [...signals, ...signals];
 				updateHint();
 			};
 
-			const onProjectsClick = (event) => {
-				if (!projectsPanel || !desktop.matches) return;
-				event.preventDefault();
-				moveTo(projectsPanel.offsetLeft);
-			};
-
 			const onRailScroll = () => {
 				updateHint();
 				if (!raf) syncState();
@@ -266,9 +321,25 @@ const signalTrack = [...signals, ...signals];
 			window.addEventListener('keydown', onKey);
 			rail.addEventListener('scroll', onRailScroll, { passive: true });
 			desktop.addEventListener('change', onDesktopChange);
-			projectsTrigger?.addEventListener('click', onProjectsClick);
 			updateHint();
 		}
+
+		document.querySelectorAll('.selling-card').forEach((card) => {
+			const element = /** @type {HTMLElement} */ (card);
+			element.addEventListener('pointermove', (event) => {
+				const e = /** @type {PointerEvent} */ (event);
+				const rect = element.getBoundingClientRect();
+				const x = (e.clientX - rect.left) / rect.width - 0.5;
+				const y = (e.clientY - rect.top) / rect.height - 0.5;
+				element.style.setProperty('--rx', `${(-y * 14).toFixed(2)}deg`);
+				element.style.setProperty('--ry', `${(x * 16).toFixed(2)}deg`);
+			});
+
+			element.addEventListener('pointerleave', () => {
+				element.style.setProperty('--rx', '0deg');
+				element.style.setProperty('--ry', '0deg');
+			});
+		});
 	</script>
 </Layout>
 
@@ -276,25 +347,25 @@ const signalTrack = [...signals, ...signals];
 	@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@500;600&family=Sora:wght@400;600;700&display=swap');
 
 	:root {
-		--bg-0: #e9edf5;
-		--bg-1: #d6deea;
-		--bg-2: #f6f8fc;
-		--ink: #111722;
-		--ink-soft: #51607a;
-		--line: rgb(17 23 34 / 0.24);
-		--cyan: #2468ff;
-		--pink: #ff6432;
-		--acid: #8eb700;
-		--amber: #0ea9a1;
+		--bg-0: #070b15;
+		--bg-1: #0d1426;
+		--bg-2: #121c34;
+		--ink: #f1f4ff;
+		--ink-soft: #adb8d8;
+		--line: rgb(143 166 224 / 0.34);
+		--cyan: #49a9ff;
+		--pink: #ff8450;
+		--acid: #b2ff4f;
+		--amber: #ffd066;
 	}
 
 	:global(body) {
 		font-family: 'Sora', 'Trebuchet MS', sans-serif;
 		color: var(--ink);
 		background:
-			radial-gradient(42rem 30rem at 12% 12%, rgb(255 100 50 / 0.18), transparent 70%),
-			radial-gradient(38rem 28rem at 88% 18%, rgb(36 104 255 / 0.2), transparent 72%),
-			linear-gradient(132deg, var(--bg-0) 0%, var(--bg-1) 48%, var(--bg-2) 100%);
+			radial-gradient(44rem 34rem at 12% 10%, rgb(255 132 80 / 0.14), transparent 72%),
+			radial-gradient(40rem 30rem at 88% 18%, rgb(73 169 255 / 0.16), transparent 74%),
+			linear-gradient(132deg, var(--bg-0) 0%, var(--bg-1) 52%, var(--bg-2) 100%);
 	}
 
 	@media (min-width: 921px) {
@@ -303,9 +374,72 @@ const signalTrack = [...signals, ...signals];
 		}
 	}
 
+	[data-l10n] {
+		display: none;
+	}
+
+	.t-inline > [data-l10n='en'] {
+		display: inline;
+	}
+
+	.t-block > [data-l10n='en'] {
+		display: block;
+	}
+
+	html.lang-pl .t-inline > [data-l10n='pl'] {
+		display: inline;
+	}
+
+	html.lang-pl .t-inline > [data-l10n='en'] {
+		display: none;
+	}
+
+	html.lang-pl .t-block > [data-l10n='pl'] {
+		display: block;
+	}
+
+	html.lang-pl .t-block > [data-l10n='en'] {
+		display: none;
+	}
+
+	.glitch-line[data-l10n] {
+		display: none;
+	}
+
+	html.lang-en .glitch-line[data-l10n='en'],
+	html.lang-pl .glitch-line[data-l10n='pl'],
+	html:not(.lang-pl):not(.lang-en) .glitch-line[data-l10n='en'] {
+		display: inline-block;
+	}
+
 	.shell {
 		position: relative;
 		min-height: 100vh;
+	}
+
+	.orb {
+		position: fixed;
+		width: min(46vw, 620px);
+		height: min(46vw, 620px);
+		border-radius: 50%;
+		filter: blur(64px);
+		pointer-events: none;
+		z-index: 0;
+		opacity: 0.35;
+	}
+
+	.orb-a {
+		top: -18vh;
+		left: -10vw;
+		background: radial-gradient(circle, rgb(255 132 80 / 0.8), rgb(255 132 80 / 0));
+		animation: orb-drift-a 16s ease-in-out infinite;
+	}
+
+	.orb-b {
+		right: -12vw;
+		bottom: -22vh;
+		background: radial-gradient(circle, rgb(73 169 255 / 0.82), rgb(73 169 255 / 0));
+		animation: orb-drift-b 18s ease-in-out infinite;
 	}
 
 	.scanlines {
@@ -315,12 +449,12 @@ const signalTrack = [...signals, ...signals];
 		z-index: 2;
 		background: repeating-linear-gradient(
 			to bottom,
-			rgb(17 23 34 / 0.02) 0,
-			rgb(17 23 34 / 0.02) 1px,
-			rgb(255 255 255 / 0) 2px,
-			rgb(255 255 255 / 0) 4px
+			rgb(241 244 255 / 0.018) 0,
+			rgb(241 244 255 / 0.018) 1px,
+			rgb(0 0 0 / 0) 2px,
+			rgb(0 0 0 / 0) 4px
 		);
-		animation: scan-shift 14s linear infinite;
+		animation: scan-shift 12s linear infinite;
 	}
 
 	.vignette {
@@ -328,21 +462,21 @@ const signalTrack = [...signals, ...signals];
 		inset: 0;
 		pointer-events: none;
 		z-index: 1;
-		box-shadow: inset 0 0 140px rgb(16 24 38 / 0.12);
+		box-shadow: inset 0 0 180px rgb(0 0 0 / 0.55);
 	}
 
 	.scroll-hint {
 		position: fixed;
 		right: 1rem;
-		bottom: 3.5rem;
+		bottom: 3.4rem;
 		z-index: 9;
 		display: inline-flex;
 		align-items: center;
-		gap: 0.55rem;
-		padding: 0.56rem 0.84rem;
+		gap: 0.48rem;
+		padding: 0.5rem 0.72rem;
 		border: 1px solid var(--line);
 		border-radius: 999px;
-		background: rgb(248 251 255 / 0.76);
+		background: rgb(8 13 25 / 0.8);
 		backdrop-filter: blur(4px);
 		transition: opacity 260ms ease, transform 260ms ease;
 	}
@@ -355,8 +489,8 @@ const signalTrack = [...signals, ...signals];
 
 	.wheel {
 		display: inline-block;
-		width: 0.85rem;
-		height: 1.25rem;
+		width: 0.86rem;
+		height: 1.26rem;
 		border-radius: 999px;
 		border: 1px solid var(--ink-soft);
 		position: relative;
@@ -372,20 +506,13 @@ const signalTrack = [...signals, ...signals];
 		margin-left: -0.09rem;
 		border-radius: 999px;
 		background: var(--ink-soft);
-		animation: wheel-dot 2s ease infinite;
-	}
-
-	.hint-text {
-		font-family: 'IBM Plex Mono', 'Consolas', monospace;
-		font-size: 0.66rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--ink-soft);
+		animation: wheel-dot 1.7s ease infinite;
 	}
 
 	.arrow {
-		font-size: 0.95rem;
-		animation: arrow-nudge 2s ease infinite;
+		font-size: 1rem;
+		color: var(--ink-soft);
+		animation: arrow-nudge 1.8s ease infinite;
 	}
 
 	.rail {
@@ -395,7 +522,6 @@ const signalTrack = [...signals, ...signals];
 		height: 100vh;
 		overflow-x: auto;
 		overflow-y: hidden;
-		scroll-snap-type: none;
 		gap: 1.2rem;
 		padding: 1rem 1rem 4.2rem;
 		scrollbar-width: none;
@@ -414,49 +540,40 @@ const signalTrack = [...signals, ...signals];
 
 	.panel-hero {
 		display: grid;
-		grid-template-rows: auto 1fr auto;
-	}
-
-	.eyebrow {
-		margin: 0;
-		font-family: 'IBM Plex Mono', 'Consolas', monospace;
-		font-size: 0.74rem;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--ink-soft);
+		grid-template-rows: 1fr auto;
+		align-content: center;
 	}
 
 	.headline {
-		margin: 0.8rem 0 0;
+		margin: 0;
 		font-family: 'Archivo Black', 'Impact', sans-serif;
-		font-size: clamp(2.2rem, 8.6vw, 5.8rem);
-		line-height: 0.9;
-		letter-spacing: 0.01em;
+		font-size: clamp(2.6rem, 10vw, 7.4rem);
+		line-height: 0.84;
+		letter-spacing: 0.008em;
 		display: grid;
-		gap: 0.12em;
+		gap: 0.02em;
 	}
 
-	.headline-row {
+	.headline-line {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: baseline;
-		gap: 0.2em;
+		column-gap: 0.18em;
 	}
 
 	.headline-muted {
-		color: rgb(17 23 34 / 0.45);
+		color: rgb(241 244 255 / 0.38);
 	}
 
 	.headline-muted.amp {
-		color: rgb(17 23 34 / 0.6);
+		color: rgb(241 244 255 / 0.54);
 	}
 
 	.glitch-line {
 		position: relative;
-		display: inline-block;
-		text-transform: uppercase;
 		color: var(--ink);
-		animation: title-pulse 7s ease-in-out infinite;
+		will-change: transform;
+		animation: headline-sway 5.2s cubic-bezier(0.33, 0, 0.67, 1) infinite;
 	}
 
 	.glitch-line::before,
@@ -465,38 +582,47 @@ const signalTrack = [...signals, ...signals];
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
-		opacity: 0.88;
-		will-change: transform;
+		opacity: 0.9;
+		will-change: transform, clip-path;
 	}
 
 	.line-top::before {
-		color: var(--pink);
-		animation: glitch-a 8s linear infinite;
+		color: var(--cyan);
+		animation:
+			glitch-shift-a 3.2s linear infinite,
+			glitch-cut-a 1.6s steps(1, end) infinite;
 	}
 
 	.line-top::after {
-		color: var(--cyan);
-		animation: glitch-b 9.4s linear infinite;
+		color: var(--pink);
+		animation:
+			glitch-shift-b 2.9s linear infinite,
+			glitch-cut-b 1.9s steps(1, end) infinite;
 	}
 
 	.line-bottom::before {
 		color: var(--amber);
-		animation: glitch-c 7.6s linear infinite;
+		animation:
+			glitch-shift-c 3.5s linear infinite,
+			glitch-cut-c 1.8s steps(1, end) infinite;
 	}
 
 	.line-bottom::after {
 		color: var(--acid);
-		animation: glitch-d 10.2s linear infinite;
+		animation:
+			glitch-shift-d 2.7s linear infinite,
+			glitch-cut-d 2.1s steps(1, end) infinite;
 	}
 
 	.hero-bottom {
+		margin-top: 1.1rem;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 1.2rem;
 		align-items: end;
 	}
 
-	.hero-bottom p {
+	.hero-copy {
 		margin: 0;
 		font-size: 1rem;
 		line-height: 1.58;
@@ -504,73 +630,62 @@ const signalTrack = [...signals, ...signals];
 		max-width: 62ch;
 	}
 
-	.hero-link {
-		margin-top: 0.9rem;
-		display: inline-flex;
+	.panel-projects {
+		display: flex;
 		align-items: center;
-		justify-content: center;
-		padding: 0.56rem 0.96rem;
-		border-radius: 999px;
-		border: 1px solid var(--line);
-		text-decoration: none;
-		font-weight: 700;
-		font-size: 0.9rem;
-		color: #ffffff;
-		background: linear-gradient(125deg, var(--pink), var(--cyan));
-		box-shadow: 0 12px 22px rgb(36 104 255 / 0.25);
 	}
 
-	.panel-project {
+	.project-grid {
+		width: 100%;
 		display: grid;
-		place-items: center;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.95rem;
 	}
 
 	.project-frame {
-		width: min(900px, 88%);
 		padding: 1.14rem;
-		border-radius: 22px;
+		border-radius: 20px;
 		border: 1px solid var(--line);
-		background: rgb(255 255 255 / 0.68);
-		backdrop-filter: blur(2px);
-		box-shadow: 0 18px 34px rgb(18 28 46 / 0.12);
+		background: rgb(11 18 34 / 0.74);
+		backdrop-filter: blur(4px);
+		box-shadow: 0 18px 32px rgb(0 0 0 / 0.34);
 		display: grid;
-		gap: 0.75rem;
-		transition: transform 220ms ease, box-shadow 220ms ease;
+		gap: 0.72rem;
+		transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
 	}
 
 	.project-frame:hover {
 		transform: translateY(-6px);
-		box-shadow: 0 22px 38px rgb(18 28 46 / 0.16);
+		box-shadow: 0 24px 38px rgb(0 0 0 / 0.42);
 	}
 
 	.project-id {
 		margin: 0;
 		font-family: 'Archivo Black', 'Impact', sans-serif;
-		font-size: clamp(1.7rem, 4vw, 2.8rem);
+		font-size: clamp(1.7rem, 3.8vw, 2.6rem);
 		line-height: 1;
-		color: rgb(17 23 34 / 0.22);
+		color: rgb(241 244 255 / 0.22);
 	}
 
 	.project-role {
 		margin: 0;
 		font-family: 'IBM Plex Mono', 'Consolas', monospace;
-		font-size: 0.73rem;
-		letter-spacing: 0.1em;
+		font-size: 0.72rem;
+		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		color: var(--ink-soft);
 	}
 
 	.project-title {
 		margin: 0;
-		font-size: clamp(1.6rem, 4vw, 2.8rem);
+		font-size: clamp(1.55rem, 3vw, 2.2rem);
 		line-height: 0.95;
 	}
 
 	.project-copy {
 		margin: 0;
-		line-height: 1.58;
-		color: rgb(17 23 34 / 0.84);
-		max-width: 64ch;
+		line-height: 1.56;
+		color: rgb(241 244 255 / 0.86);
 	}
 
 	.project-tags {
@@ -578,17 +693,17 @@ const signalTrack = [...signals, ...signals];
 		padding: 0;
 		margin: 0;
 		display: flex;
-		gap: 0.45rem;
+		gap: 0.42rem;
 		flex-wrap: wrap;
 	}
 
 	.project-tag {
 		padding: 0.32rem 0.56rem;
 		border-radius: 999px;
-		font-size: 0.74rem;
+		font-size: 0.73rem;
 		border: 1px solid var(--line);
 		color: var(--ink-soft);
-		background: rgb(255 255 255 / 0.6);
+		background: rgb(255 255 255 / 0.06);
 	}
 
 	.project-link {
@@ -596,24 +711,24 @@ const signalTrack = [...signals, ...signals];
 		display: inline-flex;
 		text-decoration: none;
 		font-weight: 700;
-		font-size: 0.86rem;
+		font-size: 0.82rem;
 		color: #ffffff;
-		padding: 0.52rem 0.86rem;
+		padding: 0.52rem 0.84rem;
 		border-radius: 999px;
 		border: 1px solid transparent;
-		background: linear-gradient(135deg, rgb(17 23 34 / 0.9), rgb(36 104 255 / 0.9));
+		background: linear-gradient(130deg, var(--pink), var(--cyan));
 	}
 
-	.theme-blue .project-frame {
-		border-color: rgb(36 104 255 / 0.42);
+	.theme-blue {
+		border-color: rgb(73 169 255 / 0.54);
 	}
 
 	.theme-blue .project-title {
 		color: var(--cyan);
 	}
 
-	.theme-orange .project-frame {
-		border-color: rgb(255 100 50 / 0.48);
+	.theme-orange {
+		border-color: rgb(255 132 80 / 0.54);
 	}
 
 	.theme-orange .project-title {
@@ -626,9 +741,9 @@ const signalTrack = [...signals, ...signals];
 	}
 
 	.value-shell {
-		width: min(1060px, 100%);
+		width: min(1080px, 100%);
 		display: grid;
-		grid-template-columns: 1.2fr 1.8fr;
+		grid-template-columns: 1.15fr 1.85fr;
 		gap: 1rem;
 	}
 
@@ -636,8 +751,8 @@ const signalTrack = [...signals, ...signals];
 		padding: 1rem;
 		border: 1px solid var(--line);
 		border-radius: 18px;
-		background: rgb(255 255 255 / 0.66);
-		box-shadow: 0 14px 28px rgb(18 28 46 / 0.1);
+		background: rgb(10 17 31 / 0.72);
+		box-shadow: 0 14px 30px rgb(0 0 0 / 0.3);
 	}
 
 	.value-kicker {
@@ -650,15 +765,15 @@ const signalTrack = [...signals, ...signals];
 	}
 
 	.value-title {
-		margin: 0.52rem 0 0;
-		font-size: clamp(1.28rem, 2.4vw, 2.05rem);
+		margin: 0.55rem 0 0;
+		font-size: clamp(1.28rem, 2.2vw, 1.95rem);
 		line-height: 1.06;
 		color: var(--ink);
 	}
 
 	.value-copy {
-		margin: 0.7rem 0 0;
-		line-height: 1.58;
+		margin: 0.72rem 0 0;
+		line-height: 1.56;
 		color: var(--ink-soft);
 	}
 
@@ -669,22 +784,62 @@ const signalTrack = [...signals, ...signals];
 	}
 
 	.selling-card {
-		padding: 0.9rem;
+		position: relative;
+		padding: 0.95rem;
 		border-radius: 16px;
 		border: 1px solid var(--line);
-		background: rgb(255 255 255 / 0.72);
-		box-shadow: 0 12px 20px rgb(18 28 46 / 0.08);
+		background: rgb(8 14 26 / 0.72);
+		box-shadow: 0 12px 22px rgb(0 0 0 / 0.3);
+		overflow: hidden;
+		isolation: isolate;
+		transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+		transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
 	}
 
-	.selling-title {
-		margin: 0;
-		font-size: 1.02rem;
-		line-height: 1.2;
-		color: var(--ink);
+	.selling-card::before {
+		content: '';
+		position: absolute;
+		inset: -48%;
+		background: conic-gradient(
+			from 0deg,
+			rgb(73 169 255 / 0.95),
+			rgb(255 132 80 / 0.95),
+			rgb(178 255 79 / 0.9),
+			rgb(73 169 255 / 0.95)
+		);
+		opacity: 0;
+		transform: scale(0.7);
+		transition: opacity 220ms ease, transform 280ms ease;
+		animation: spin 3.4s linear infinite;
+		z-index: -2;
+	}
+
+	.selling-card::after {
+		content: '';
+		position: absolute;
+		inset: 1px;
+		border-radius: 15px;
+		background: rgb(8 14 26 / 0.92);
+		z-index: -1;
+	}
+
+	.selling-card:hover {
+		transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-8px) scale(1.04);
+		box-shadow: 0 22px 34px rgb(0 0 0 / 0.45);
+		border-color: rgb(255 255 255 / 0.44);
+	}
+
+	.selling-card:hover::before {
+		opacity: 0.92;
+		transform: scale(1.1);
+	}
+
+	.selling-card:hover .selling-copy {
+		animation: text-chaos 0.52s steps(2, end) infinite;
 	}
 
 	.selling-copy {
-		margin: 0.5rem 0 0;
+		margin: 0;
 		line-height: 1.5;
 		color: var(--ink-soft);
 	}
@@ -697,29 +852,29 @@ const signalTrack = [...signals, ...signals];
 		z-index: 10;
 		overflow: hidden;
 		border-top: 1px solid var(--line);
-		background: rgb(245 248 253 / 0.88);
+		background: rgb(8 13 24 / 0.88);
 		backdrop-filter: blur(6px);
 	}
 
 	.global-signal-track {
 		display: flex;
 		width: max-content;
-		gap: 0.65rem;
-		padding: 0.58rem 0.7rem;
+		gap: 0.66rem;
+		padding: 0.58rem 0.72rem;
 		will-change: transform;
-		animation: ticker 28s linear infinite;
+		animation: ticker 27s linear infinite;
 	}
 
-	.global-signal-track span {
+	.signal-chip {
 		font-family: 'IBM Plex Mono', 'Consolas', monospace;
 		font-size: 0.69rem;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		padding: 0.28rem 0.52rem;
+		padding: 0.28rem 0.54rem;
 		border: 1px solid var(--line);
 		border-radius: 999px;
 		color: var(--ink-soft);
-		background: rgb(255 255 255 / 0.64);
+		background: rgb(255 255 255 / 0.06);
 	}
 
 	.reveal {
@@ -730,6 +885,10 @@ const signalTrack = [...signals, ...signals];
 
 	.reveal-1 {
 		animation-delay: 120ms;
+	}
+
+	.reveal-2 {
+		animation-delay: 230ms;
 	}
 
 	.reveal-3 {
@@ -754,7 +913,7 @@ const signalTrack = [...signals, ...signals];
 			transform: translateY(0);
 		}
 		100% {
-			transform: translateY(5px);
+			transform: translateY(6px);
 		}
 	}
 
@@ -763,12 +922,12 @@ const signalTrack = [...signals, ...signals];
 			opacity: 0;
 			transform: translateY(0);
 		}
-		40% {
+		38% {
 			opacity: 1;
 		}
 		100% {
 			opacity: 0;
-			transform: translateY(0.5rem);
+			transform: translateY(0.56rem);
 		}
 	}
 
@@ -782,77 +941,174 @@ const signalTrack = [...signals, ...signals];
 		}
 	}
 
-	@keyframes title-pulse {
+	@keyframes orb-drift-a {
 		0%,
 		100% {
-			text-shadow: 0 0 0 rgb(36 104 255 / 0.12);
+			transform: translate3d(0, 0, 0) scale(1);
 		}
 		50% {
-			text-shadow: 0 0 14px rgb(36 104 255 / 0.25);
+			transform: translate3d(4vw, 2vh, 0) scale(1.12);
 		}
 	}
 
-	@keyframes glitch-a {
+	@keyframes orb-drift-b {
 		0%,
 		100% {
-			transform: translate3d(-1.8px, 0, 0);
-			opacity: 0.9;
+			transform: translate3d(0, 0, 0) scale(1);
+		}
+		50% {
+			transform: translate3d(-5vw, -2vh, 0) scale(1.1);
+		}
+	}
+
+	@keyframes headline-sway {
+		0%,
+		100% {
+			transform: translate3d(0, 0, 0);
+		}
+		30% {
+			transform: translate3d(-0.7px, -0.3px, 0);
+		}
+		62% {
+			transform: translate3d(0.9px, 0.4px, 0);
+		}
+	}
+
+	@keyframes glitch-shift-a {
+		0%,
+		100% {
+			transform: translate3d(-2.6px, 0, 0);
 		}
 		35% {
-			transform: translate3d(1.4px, -0.8px, 0);
-			opacity: 0.75;
+			transform: translate3d(1.8px, -1.1px, 0);
 		}
 		70% {
-			transform: translate3d(-1px, 0.6px, 0);
-			opacity: 0.88;
+			transform: translate3d(-1px, 0.8px, 0);
 		}
 	}
 
-	@keyframes glitch-b {
+	@keyframes glitch-shift-b {
 		0%,
 		100% {
-			transform: translate3d(1.8px, 0, 0);
-			opacity: 0.88;
-		}
-		40% {
-			transform: translate3d(-1.2px, 0.7px, 0);
-			opacity: 0.7;
-		}
-		72% {
-			transform: translate3d(1px, -0.6px, 0);
-			opacity: 0.84;
-		}
-	}
-
-	@keyframes glitch-c {
-		0%,
-		100% {
-			transform: translate3d(-1.6px, 0, 0);
-			opacity: 0.9;
-		}
-		33% {
-			transform: translate3d(1.3px, -0.5px, 0);
-			opacity: 0.74;
-		}
-		68% {
-			transform: translate3d(-0.9px, 0.7px, 0);
-			opacity: 0.85;
-		}
-	}
-
-	@keyframes glitch-d {
-		0%,
-		100% {
-			transform: translate3d(1.5px, 0, 0);
-			opacity: 0.86;
+			transform: translate3d(2.5px, 0, 0);
 		}
 		38% {
-			transform: translate3d(-1.4px, 0.6px, 0);
-			opacity: 0.72;
+			transform: translate3d(-1.8px, 0.9px, 0);
+		}
+		72% {
+			transform: translate3d(1.1px, -0.7px, 0);
+		}
+	}
+
+	@keyframes glitch-shift-c {
+		0%,
+		100% {
+			transform: translate3d(-2.2px, 0, 0);
+		}
+		32% {
+			transform: translate3d(1.7px, -0.9px, 0);
+		}
+		68% {
+			transform: translate3d(-0.9px, 0.8px, 0);
+		}
+	}
+
+	@keyframes glitch-shift-d {
+		0%,
+		100% {
+			transform: translate3d(2.2px, 0, 0);
+		}
+		41% {
+			transform: translate3d(-1.5px, 0.8px, 0);
 		}
 		74% {
-			transform: translate3d(0.8px, -0.6px, 0);
-			opacity: 0.83;
+			transform: translate3d(0.9px, -0.7px, 0);
+		}
+	}
+
+	@keyframes glitch-cut-a {
+		0%,
+		100% {
+			clip-path: inset(0 0 0 0);
+		}
+		20% {
+			clip-path: inset(0 0 62% 0);
+		}
+		55% {
+			clip-path: inset(40% 0 22% 0);
+		}
+		82% {
+			clip-path: inset(76% 0 0 0);
+		}
+	}
+
+	@keyframes glitch-cut-b {
+		0%,
+		100% {
+			clip-path: inset(0 0 0 0);
+		}
+		26% {
+			clip-path: inset(10% 0 56% 0);
+		}
+		60% {
+			clip-path: inset(52% 0 20% 0);
+		}
+		88% {
+			clip-path: inset(78% 0 0 0);
+		}
+	}
+
+	@keyframes glitch-cut-c {
+		0%,
+		100% {
+			clip-path: inset(0 0 0 0);
+		}
+		24% {
+			clip-path: inset(0 0 58% 0);
+		}
+		52% {
+			clip-path: inset(36% 0 30% 0);
+		}
+		86% {
+			clip-path: inset(80% 0 0 0);
+		}
+	}
+
+	@keyframes glitch-cut-d {
+		0%,
+		100% {
+			clip-path: inset(0 0 0 0);
+		}
+		22% {
+			clip-path: inset(8% 0 60% 0);
+		}
+		58% {
+			clip-path: inset(46% 0 28% 0);
+		}
+		84% {
+			clip-path: inset(74% 0 0 0);
+		}
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(1turn);
+		}
+	}
+
+	@keyframes text-chaos {
+		0%,
+		100% {
+			transform: translate3d(0, 0, 0);
+		}
+		25% {
+			transform: translate3d(-1px, 0, 0);
+		}
+		50% {
+			transform: translate3d(1px, 0, 0);
+		}
+		75% {
+			transform: translate3d(-0.8px, 0, 0);
 		}
 	}
 
@@ -880,16 +1136,16 @@ const signalTrack = [...signals, ...signals];
 		}
 
 		.headline {
-			font-size: clamp(2rem, 10vw, 3.6rem);
-			line-height: 0.92;
+			font-size: clamp(2rem, 10.5vw, 4rem);
+			line-height: 0.9;
 		}
 
 		.hero-bottom {
 			grid-template-columns: 1fr;
 		}
 
-		.project-frame {
-			width: 100%;
+		.project-grid {
+			grid-template-columns: 1fr;
 		}
 
 		.value-shell {
