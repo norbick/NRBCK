@@ -117,8 +117,18 @@ const signalTrack = [...signals, ...signals];
 		<div class="vignette" aria-hidden="true"></div>
 
 		<div class="scroll-hint" id="scroll-hint" aria-hidden="true">
-			<span class="wheel"></span>
-			<span class="arrow">→</span>
+			<svg class="hint-ring" viewBox="0 0 180 180" aria-hidden="true">
+				<defs>
+					<path id="hint-ring-path" d="M 90,90 m -64,0 a 64,64 0 1,1 128,0 a 64,64 0 1,1 -128,0" />
+				</defs>
+				<text>
+					<textPath href="#hint-ring-path">SCROLL TO EXPLORE • SCROLL TO EXPLORE •</textPath>
+				</text>
+			</svg>
+			<span class="hint-core">
+				<span class="wheel"></span>
+				<span class="arrow">→</span>
+			</span>
 		</div>
 
 		<section class="rail" id="horizontal-rail">
@@ -2192,31 +2202,75 @@ const signalTrack = [...signals, ...signals];
 	}
 
 	.scroll-hint {
-		right: 1.35rem;
-		bottom: 3.35rem;
-		gap: 0.92rem;
-		padding: 0.95rem 1.28rem;
-		border-color: rgb(194 176 255 / 0.55);
+		right: 0.5rem;
+		top: 50%;
+		bottom: auto;
+		width: clamp(8.2rem, 10.5vw, 10rem);
+		aspect-ratio: 1;
+		padding: 0;
+		border: none;
+		border-radius: 999px;
+		display: grid;
+		place-items: center;
+		background: transparent;
+		transform: translate3d(0, -50%, 0);
+		box-shadow: none;
+		animation: hint-core-bob 3.8s var(--ease-organic) infinite;
+	}
+
+	.scroll-hint.is-hidden {
+		opacity: 0;
+		transform: translate3d(18px, -50%, 0) scale(0.9);
+		pointer-events: none;
+	}
+
+	.hint-ring {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		overflow: visible;
+		animation: hint-ring-spin 9s linear infinite;
+		filter: drop-shadow(0 0 16px rgb(166 137 255 / 0.45));
+	}
+
+	.hint-ring text {
+		fill: rgb(233 222 255 / 0.9);
+		font-family: 'IBM Plex Mono', 'Consolas', monospace;
+		font-size: 11px;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+	}
+
+	.hint-core {
+		width: 48%;
+		height: 48%;
+		border-radius: 999px;
+		display: grid;
+		place-items: center;
+		gap: 0.16rem;
 		background:
-			linear-gradient(130deg, rgb(26 14 58 / 0.86), rgb(11 20 52 / 0.78));
+			linear-gradient(132deg, rgb(35 16 78 / 0.94), rgb(11 28 66 / 0.9));
 		box-shadow:
-			0 14px 30px rgb(0 0 0 / 0.4),
-			inset 0 0 0 1px rgb(255 255 255 / 0.07);
+			0 10px 26px rgb(0 0 0 / 0.44),
+			inset 0 0 0 1px rgb(225 213 255 / 0.2),
+			inset 0 0 28px rgb(165 142 255 / 0.22);
 	}
 
 	.wheel {
-		width: 1.18rem;
-		height: 1.72rem;
-		border-color: rgb(220 210 255 / 0.84);
+		width: 1.02rem;
+		height: 1.48rem;
+		border-width: 1.4px;
+		border-color: rgb(236 228 255 / 0.9);
 	}
 
 	.wheel::before {
-		background: rgb(220 210 255 / 0.92);
+		background: rgb(236 228 255 / 0.94);
 	}
 
 	.arrow {
-		font-size: 1.58rem;
-		color: rgb(229 220 255 / 0.95);
+		font-size: 1.25rem;
+		color: rgb(241 234 255 / 0.98);
 	}
 
 	.panel {
@@ -2295,6 +2349,7 @@ const signalTrack = [...signals, ...signals];
 	.glitch-line {
 		background: linear-gradient(104deg, #7fffe7 0%, #7fc8ff 20%, #ffe87a 42%, #ff64cf 62%, #9d8bff 82%, #7fffe7 100%);
 		background-size: 250% 100%;
+		-webkit-text-fill-color: transparent;
 		text-shadow:
 			0 0 18px rgb(127 255 231 / 0.34),
 			0 0 28px rgb(157 139 255 / 0.28);
@@ -2352,6 +2407,7 @@ const signalTrack = [...signals, ...signals];
 
 	.logo-face {
 		background: linear-gradient(105deg, #7fffe7 0%, #ffe87a 26%, #ff64cf 54%, #9d8bff 78%, #7fffe7 100%);
+		-webkit-text-fill-color: transparent;
 	}
 
 	.hero-bottom {
@@ -2373,6 +2429,7 @@ const signalTrack = [...signals, ...signals];
 	.hero-spark {
 		background: linear-gradient(100deg, #7fffe7 0%, #ffe87a 30%, #ff64cf 62%, #9d8bff 100%);
 		background-size: 240% 100%;
+		-webkit-text-fill-color: transparent;
 	}
 
 	.project-frame {
@@ -2488,6 +2545,25 @@ const signalTrack = [...signals, ...signals];
 		}
 		75% {
 			transform: translate3d(0, 4px, 0) scale(0.99);
+		}
+	}
+
+	@keyframes hint-ring-spin {
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	@keyframes hint-core-bob {
+		0%,
+		100% {
+			translate: 0 0;
+		}
+		50% {
+			translate: 0 -4px;
 		}
 	}
 
