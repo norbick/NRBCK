@@ -142,18 +142,18 @@ const signalTrack = [...signals, ...signals];
 				<div class="hero-bottom">
 					<p class="t-block hero-copy">
 						<span data-l10n="pl">
-							Tworzę strony internetowe, motywy WordPress i aplikacje webowe, które dobrze wyglądają, szybko działają i jasno pokazują, co masz do zaoferowania.
+							Tworzę <span class="hero-spark">strony internetowe, motywy WordPress i aplikacje webowe</span>, które dobrze wyglądają, szybko działają i jasno pokazują, co masz do zaoferowania.
 						</span>
 						<span data-l10n="en">
-							I build websites, WordPress themes, and web apps that look good, run fast, and clearly show what you offer.
+							I build <span class="hero-spark">websites, WordPress themes, and web apps</span> that look good, run fast, and clearly show what you offer.
 						</span>
 					</p>
 					<p class="t-block hero-copy">
 						<span data-l10n="pl">
-							Projektuję i wdrażam całość tak, żeby strona była prosta w odbiorze, wygodna w użyciu i pomagała ludziom szybko zrobić kolejny krok.
+							Projektuję i wdrażam całość tak, żeby strona była <span class="hero-spark">prosta w odbiorze i wygodna w użyciu</span> i pomagała ludziom szybko zrobić kolejny krok.
 						</span>
 						<span data-l10n="en">
-							I design and develop the whole thing so it feels simple, works smoothly, and helps people take the next step without confusion.
+							I design and develop the whole thing so it feels <span class="hero-spark">simple and smooth to use</span> and helps people take the next step without confusion.
 						</span>
 					</p>
 				</div>
@@ -813,12 +813,18 @@ const signalTrack = [...signals, ...signals];
 
 	.glitch-line {
 		position: relative;
-		color: var(--ink);
-		will-change: transform;
+		color: transparent;
+		background: linear-gradient(102deg, #95f6f0 0%, #ffd786 27%, #ff9ac1 53%, #b89bff 77%, #95f6f0 100%);
+		background-size: 220% 100%;
+		-webkit-background-clip: text;
+		background-clip: text;
+		will-change: transform, background-position;
 		text-shadow:
-			0 0 12px rgb(100 246 216 / 0.24),
-			0 0 18px rgb(184 154 255 / 0.2);
-		animation: headline-sway 5.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+			0 0 14px rgb(149 246 240 / 0.26),
+			0 0 20px rgb(184 155 255 / 0.24);
+		animation:
+			headline-sway 5.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite,
+			headline-rainbow 9.4s linear infinite;
 	}
 
 	.glitch-line::before,
@@ -832,7 +838,7 @@ const signalTrack = [...signals, ...signals];
 
 	.line-top::before {
 		color: var(--mint);
-		opacity: 0.96;
+		opacity: 0.58;
 		animation:
 			chroma-a 4.2s steps(2, end) infinite,
 			glitch-cut-a 2.1s steps(2, end) infinite;
@@ -840,7 +846,7 @@ const signalTrack = [...signals, ...signals];
 
 	.line-top::after {
 		color: var(--violet);
-		opacity: 0.84;
+		opacity: 0.5;
 		animation:
 			chroma-b 4.6s steps(2, end) infinite,
 			glitch-cut-b 2.4s steps(2, end) infinite;
@@ -848,7 +854,7 @@ const signalTrack = [...signals, ...signals];
 
 	.line-bottom::before {
 		color: var(--amber);
-		opacity: 0.9;
+		opacity: 0.54;
 		animation:
 			chroma-c 4.3s steps(2, end) infinite,
 			glitch-cut-c 2.2s steps(2, end) infinite;
@@ -856,7 +862,7 @@ const signalTrack = [...signals, ...signals];
 
 	.line-bottom::after {
 		color: var(--acid);
-		opacity: 0.76;
+		opacity: 0.46;
 		animation:
 			chroma-d 4.9s steps(2, end) infinite,
 			glitch-cut-d 2.7s steps(2, end) infinite;
@@ -913,10 +919,12 @@ const signalTrack = [...signals, ...signals];
 
 	.hero-spark {
 		color: transparent;
-		background: linear-gradient(100deg, var(--mint) 0%, #d8ff84 50%, var(--violet) 100%);
+		background: linear-gradient(100deg, var(--mint) 0%, #d8ff84 34%, #ff9ac1 66%, var(--violet) 100%);
+		background-size: 220% 100%;
 		-webkit-background-clip: text;
 		background-clip: text;
 		text-shadow: 0 0 18px rgb(100 246 216 / 0.22);
+		animation: spark-shift 8.6s linear infinite;
 	}
 
 	.panel-projects {
@@ -1432,6 +1440,23 @@ const signalTrack = [...signals, ...signals];
 		}
 	}
 
+	@keyframes headline-rainbow {
+		0% {
+			background-position: 0% 50%;
+		}
+		100% {
+			background-position: 200% 50%;
+		}
+	}
+
+	@keyframes spark-shift {
+		0% {
+			background-position: 0% 50%;
+		}
+		100% {
+			background-position: 200% 50%;
+		}
+	}
 	@keyframes headline-sway {
 		0%,
 		100% {
@@ -1713,6 +1738,7 @@ const signalTrack = [...signals, ...signals];
 		}
 	}
 </style>
+
 
 
 
