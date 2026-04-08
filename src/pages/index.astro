@@ -2420,21 +2420,27 @@ const signalTrack = [...signals, ...signals];
 
 	.hero-copy {
 		padding: 0.72rem 0.42rem 0.86rem 1.26rem;
-		border: 1.5px solid transparent;
 		border-radius: 12px;
-		background:
-			linear-gradient(126deg, rgb(18 16 44 / 0.5), rgb(8 18 42 / 0.24)) padding-box,
-			linear-gradient(112deg, #7fffe7, #ffe87a, #ff64cf, #9d8bff, #7fffe7) border-box;
-		background-size: 100% 100%, 240% 240%;
-		background-position: 0 0, 0% 50%;
+		background: linear-gradient(126deg, rgb(18 16 44 / 0.74), rgb(8 18 42 / 0.44));
 		box-shadow: 0 8px 20px rgb(6 2 20 / 0.36);
-		animation:
-			hero-breathe 6.2s var(--ease-organic) infinite,
-			hero-frame-rainbow 9.2s linear infinite;
+		animation: hero-breathe 6.2s var(--ease-organic) infinite;
 	}
 
 	.hero-copy::before {
-		content: none;
+		content: '';
+		position: absolute;
+		inset: 0;
+		padding: 1.5px;
+		border-radius: inherit;
+		background: linear-gradient(112deg, #7fffe7, #ffe87a, #ff64cf, #9d8bff, #7fffe7);
+		background-size: 240% 100%;
+		background-position: 0% 50%;
+		-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+		-webkit-mask-composite: xor;
+		mask-composite: exclude;
+		pointer-events: none;
+		opacity: 0.95;
+		animation: hero-frame-rainbow 9.2s linear infinite;
 	}
 
 	.hero-copy::after {
@@ -2726,10 +2732,10 @@ const signalTrack = [...signals, ...signals];
 
 	@keyframes hero-frame-rainbow {
 		0% {
-			background-position: 0 0, 0% 50%;
+			background-position: 0% 50%;
 		}
 		100% {
-			background-position: 0 0, 220% 50%;
+			background-position: 220% 50%;
 		}
 	}
 
