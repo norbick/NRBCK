@@ -118,7 +118,6 @@ const signals: Localized[] = [
 
 const signalTrack = [...signals, ...signals];
 const contactRecipient = 'norbick@gmail.com';
-const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 ---
 
 <Layout title="NRBCK | Portfolio" description="Portfolio NRBCK: design i frontend.">
@@ -303,12 +302,12 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 							<span data-l10n="en">Have an idea for a website, WordPress theme, or web app? Tell me what you need.</span>
 						</h3>
 						<p class="contact-copy t-block">
-							<span data-l10n="pl">Formularz działa normalnie. Napisz, a odpiszę na maila.</span>
-							<span data-l10n="en">The form is live. Send a message and I will reply by email.</span>
+							<span data-l10n="pl">Po kliknięciu otworzy się gotowy draft maila w Gmailu.</span>
+							<span data-l10n="en">After submit, a prefilled Gmail draft will open.</span>
 						</p>
 					</div>
 
-					<form class="contact-form ghost-frame" id="contact-form" novalidate data-endpoint={contactEndpoint} data-recipient={contactRecipient}>
+					<form class="contact-form ghost-frame" id="contact-form" novalidate data-recipient={contactRecipient}>
 						<input class="contact-honeypot" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
 						<input type="hidden" name="_captcha" value="false" />
 						<input type="hidden" name="_template" value="table" />
@@ -598,7 +597,6 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 
 		if (contactForm instanceof HTMLFormElement && contactStatus instanceof HTMLElement) {
 			const submitButton = contactForm.querySelector('button[type="submit"]');
-			const endpoint = contactForm.dataset.endpoint || '';
 			const recipient = contactForm.dataset.recipient || 'norbick@gmail.com';
 			const timelineLabels = {
 				asap: isPolish ? 'Jak najszybciej' : 'ASAP',
@@ -612,22 +610,18 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 				contactStatus.setAttribute('data-state', state);
 			};
 
-			const detectProviderError = (message) => {
-				const providerMessage = String(message || '').toLowerCase();
-				if (!providerMessage) return '';
-				if (providerMessage.includes('needs activation') || providerMessage.includes('activate form')) return 'activation';
-				if (providerMessage.includes('open this page through a web server')) return 'web-server';
-				return '';
-			};
-
 			const openEmailFallback = (subject, body) => {
 				const gmailCompose = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
 					recipient,
 				)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-				window.location.href = gmailCompose;
+				const popup = window.open(gmailCompose, '_blank', 'noopener,noreferrer');
+				if (!popup) {
+					const mailto = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+					window.location.href = mailto;
+				}
 			};
 
-			contactForm.addEventListener('submit', async (event) => {
+			contactForm.addEventListener('submit', (event) => {
 				event.preventDefault();
 				if (isSending) return;
 
@@ -654,78 +648,26 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactRecipient}`;
 					? `Imię: ${name}\nE-mail: ${email}\nTermin: ${timelineLabel}\n\nOpis projektu:\n${message}`
 					: `Name: ${name}\nEmail: ${email}\nTimeline: ${timelineLabel}\n\nProject details:\n${message}`;
 
-				formData.set('timeline', timelineLabel);
-				formData.set('_subject', subject);
-				formData.set('_replyto', email);
-				formData.set('_captcha', 'false');
-				formData.set('_template', 'table');
-
 				isSending = true;
 				contactForm.setAttribute('aria-busy', 'true');
 				if (submitButton instanceof HTMLButtonElement) submitButton.disabled = true;
-				setStatus(isPolish ? 'Wysyłam wiadomość...' : 'Sending your message...', 'pending');
+				setStatus(
+					isPolish ? 'Otwieram gotowego maila w Gmailu...' : 'Opening a prefilled email in Gmail...',
+					'pending',
+				);
 
-				try {
-					if (!endpoint) throw new Error('missing-endpoint');
+				openEmailFallback(subject, body);
+				setStatus(
+					isPolish
+						? 'Gotowe. Sprawdź kartę Gmail i kliknij Wyślij.'
+						: 'Done. Check the Gmail tab and click Send.',
+					'success',
+				);
+				contactForm.reset();
 
-					const payload = Object.fromEntries(formData.entries());
-					const response = await fetch(endpoint, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-							Accept: 'application/json',
-						},
-						body: JSON.stringify(payload),
-					});
-
-					const result = await response.json().catch(() => null);
-					const providerError = detectProviderError(result && typeof result.message === 'string' ? result.message : '');
-					if (providerError === 'activation') {
-						setStatus(
-							isPolish
-								? 'Sprawdź skrzynkę norbick@gmail.com i kliknij link "Activate Form" od FormSubmit. To jednorazowa aktywacja.'
-								: 'Check norbick@gmail.com and click the "Activate Form" email from FormSubmit. This is a one-time activation.',
-							'info',
-						);
-						openEmailFallback(subject, body);
-						return;
-					}
-
-					if (providerError === 'web-server') {
-						setStatus(
-							isPolish
-								? 'Formularz działa tylko z serwera (localhost/GitHub Pages), nie z pliku otwartego lokalnie.'
-								: 'This form works only from a web server (localhost/GitHub Pages), not from a locally opened file.',
-							'info',
-						);
-						openEmailFallback(subject, body);
-						return;
-					}
-
-					if (!response.ok || (result && (result.success === false || result.success === 'false'))) {
-						throw new Error('submit-failed');
-					}
-
-					setStatus(
-						isPolish
-							? 'Dzięki! Wiadomość wysłana. Odpowiem najszybciej, jak się da.'
-							: 'Thanks! Your message has been sent. I will reply as soon as I can.',
-						'success',
-					);
-					contactForm.reset();
-				} catch {
-					openEmailFallback(subject, body);
-					setStatus(
-						isPolish
-							? 'Nie udało się wysłać bezpośrednio, więc otworzyłem gotowego maila jako plan B.'
-							: 'Direct send failed, so I opened a prefilled email as backup.',
-						'fallback',
-					);
-				} finally {
-					isSending = false;
-					contactForm.removeAttribute('aria-busy');
-					if (submitButton instanceof HTMLButtonElement) submitButton.disabled = false;
-				}
+				isSending = false;
+				contactForm.removeAttribute('aria-busy');
+				if (submitButton instanceof HTMLButtonElement) submitButton.disabled = false;
 			});
 		}
 	</script>
