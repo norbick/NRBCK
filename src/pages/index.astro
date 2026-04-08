@@ -2567,13 +2567,13 @@ const signalTrack = [...signals, ...signals];
 	@keyframes retro-horizon-float {
 		0%,
 		100% {
-			transform: translate3d(0, 0, 0) scale(1);
+			transform: translate3d(0, 0, 0) scale(calc(1 - (var(--scroll-progress) * 0.42)));
 		}
 		45% {
-			transform: translate3d(0, -8px, 0) scale(1.02);
+			transform: translate3d(0, -8px, 0) scale(calc(1.02 - (var(--scroll-progress) * 0.42)));
 		}
 		75% {
-			transform: translate3d(0, 4px, 0) scale(0.99);
+			transform: translate3d(0, 4px, 0) scale(calc(0.99 - (var(--scroll-progress) * 0.42)));
 		}
 	}
 
