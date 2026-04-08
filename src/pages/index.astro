@@ -34,12 +34,16 @@ const labFrames = [
 const signals = ['GLITCH MODE', 'KINETIC UI', 'NRBCK', 'ASTRO BUILD', 'SIGNAL ACTIVE', 'NO SAFE LAYOUT'];
 
 const bendPresets = [
-	{ rot: -11, skew: -3.6, hoverRot: -15, hoverSkew: -4.4 },
-	{ rot: 9, skew: 2.9, hoverRot: 13, hoverSkew: 3.8 },
-	{ rot: -8, skew: 3.2, hoverRot: -12, hoverSkew: 4.1 },
-	{ rot: 12, skew: -3.1, hoverRot: 16, hoverSkew: -4.2 },
-	{ rot: -10, skew: 2.4, hoverRot: -14, hoverSkew: 3.5 },
-	{ rot: 7, skew: -2.7, hoverRot: 11, hoverSkew: -3.6 },
+	{ rot: -18, skew: -6.2, hoverRot: -25, hoverSkew: -7.8, ty: -18, tyHover: -26 },
+	{ rot: 16, skew: 5.4, hoverRot: 24, hoverSkew: 7.2, ty: 14, tyHover: 24 },
+	{ rot: -14, skew: 6.8, hoverRot: -22, hoverSkew: 8.4, ty: 20, tyHover: 28 },
+	{ rot: 20, skew: -5.6, hoverRot: 28, hoverSkew: -7.5, ty: -12, tyHover: -22 },
+	{ rot: -22, skew: 4.5, hoverRot: -30, hoverSkew: 6.2, ty: 10, tyHover: 18 },
+	{ rot: 13, skew: -7.1, hoverRot: 21, hoverSkew: -9.2, ty: -16, tyHover: -24 },
+	{ rot: -16, skew: -4.8, hoverRot: -24, hoverSkew: -6.8, ty: 12, tyHover: 20 },
+	{ rot: 19, skew: 6.1, hoverRot: 27, hoverSkew: 8.6, ty: -8, tyHover: -18 },
+	{ rot: -12, skew: 7.2, hoverRot: -20, hoverSkew: 9.1, ty: 16, tyHover: 26 },
+	{ rot: 15, skew: -6.3, hoverRot: 23, hoverSkew: -8.1, ty: -20, tyHover: -28 },
 ];
 
 const hash = (value: string) =>
@@ -63,7 +67,7 @@ const framePanels = withTwist(labFrames);
 
 		<div class="scroll-hint" id="scroll-hint">
 			<span class="wheel" aria-hidden="true"></span>
-			<span class="hint-text">Scroll down to move right</span>
+			<span class="hint-text">Desktop: scroll down moves right</span>
 			<span class="arrow" aria-hidden="true">→</span>
 		</div>
 
@@ -79,10 +83,12 @@ const framePanels = withTwist(labFrames);
 				</nav>
 
 				<h1 class="headline">
-					<span class="muted">FREELANCE</span> KINETIC DESIGNER
+					<span class="muted">FREELANCE</span> WEB DESIGNER
 					<br />
-					<span class="muted">&amp;</span> GLITCH DEVELOPER
+					<span class="muted">&amp;</span> WEBFLOW DEVELOPER
 				</h1>
+
+				<p class="glitch-title" data-text="KINETIC GLITCH">KINETIC GLITCH</p>
 
 				<div class="hero-bottom">
 					<p>
@@ -111,7 +117,7 @@ const framePanels = withTwist(labFrames);
 				<article id={project.id === '01' ? 'projects' : undefined} class={`panel panel-project ${project.theme}`}>
 					<div
 						class="project-frame"
-						style={`--rot:${project.twist.rot}deg; --sk:${project.twist.skew}deg; --rot-hover:${project.twist.hoverRot}deg; --sk-hover:${project.twist.hoverSkew}deg;`}
+						style={`--rot:${project.twist.rot}deg; --sk:${project.twist.skew}deg; --rot-hover:${project.twist.hoverRot}deg; --sk-hover:${project.twist.hoverSkew}deg; --ty:${project.twist.ty}px; --ty-hover:${project.twist.tyHover}px;`}
 					>
 						<p class="project-id">{project.id}</p>
 						<p class="project-role">{project.role}</p>
@@ -132,7 +138,7 @@ const framePanels = withTwist(labFrames);
 					{framePanels.map((frame) => (
 						<article
 							class={`lab-card ${frame.tone}`}
-							style={`--rot:${frame.twist.rot}deg; --sk:${frame.twist.skew}deg; --rot-hover:${frame.twist.hoverRot}deg; --sk-hover:${frame.twist.hoverSkew}deg;`}
+							style={`--rot:${frame.twist.rot}deg; --sk:${frame.twist.skew}deg; --rot-hover:${frame.twist.hoverRot}deg; --sk-hover:${frame.twist.hoverSkew}deg; --ty:${frame.twist.ty}px; --ty-hover:${frame.twist.tyHover}px;`}
 						>
 							<h3>{frame.title}</h3>
 							<p>{frame.text}</p>
@@ -149,37 +155,68 @@ const framePanels = withTwist(labFrames);
 		const desktop = window.matchMedia('(min-width: 921px)');
 
 		if (rail) {
+			const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+			let target = rail.scrollLeft;
+			let raf = 0;
+
 			const updateHint = () => {
 				if (!hint) return;
-				if (!desktop.matches || rail.scrollLeft > 42) hint.classList.add('is-hidden');
+				if (!desktop.matches || rail.scrollLeft > 60) hint.classList.add('is-hidden');
 				else hint.classList.remove('is-hidden');
+			};
+
+			const animate = () => {
+				const diff = target - rail.scrollLeft;
+				rail.scrollLeft += diff * 0.24;
+				updateHint();
+				if (Math.abs(diff) > 0.6) raf = requestAnimationFrame(animate);
+				else {
+					rail.scrollLeft = target;
+					raf = 0;
+				}
+			};
+
+			const moveBy = (delta) => {
+				target = clamp(target + delta, 0, rail.scrollWidth - rail.clientWidth);
+				if (!raf) raf = requestAnimationFrame(animate);
 			};
 
 			const onWheel = (event) => {
 				if (!desktop.matches) return;
-				const delta = event.deltaY !== 0 ? event.deltaY : event.deltaX;
-				if (delta === 0) return;
+				const source = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
+				if (source === 0) return;
 				event.preventDefault();
-				rail.scrollLeft += delta;
-				updateHint();
+				moveBy(source * 2.2);
 			};
 
 			const onKey = (event) => {
 				if (!desktop.matches) return;
 				if (event.key === 'ArrowDown' || event.key === 'PageDown') {
 					event.preventDefault();
-					rail.scrollLeft += window.innerWidth * 0.72;
+					moveBy(window.innerWidth * 0.8);
 				}
 				if (event.key === 'ArrowUp' || event.key === 'PageUp') {
 					event.preventDefault();
-					rail.scrollLeft -= window.innerWidth * 0.72;
+					moveBy(-window.innerWidth * 0.8);
 				}
 			};
 
-			rail.addEventListener('wheel', onWheel, { passive: false });
-			rail.addEventListener('scroll', updateHint, { passive: true });
+			const onDesktopChange = () => {
+				if (!desktop.matches) {
+					if (raf) {
+						cancelAnimationFrame(raf);
+						raf = 0;
+					}
+					rail.scrollLeft = 0;
+					target = 0;
+				}
+				updateHint();
+			};
+
+			window.addEventListener('wheel', onWheel, { passive: false });
 			window.addEventListener('keydown', onKey);
-			desktop.addEventListener('change', updateHint);
+			rail.addEventListener('scroll', updateHint, { passive: true });
+			desktop.addEventListener('change', onDesktopChange);
 			updateHint();
 		}
 	</script>
@@ -308,7 +345,7 @@ const framePanels = withTwist(labFrames);
 		height: 100vh;
 		overflow-x: auto;
 		overflow-y: hidden;
-		scroll-snap-type: x mandatory;
+		scroll-snap-type: none;
 		gap: 1rem;
 		padding: 1rem;
 		scrollbar-width: none;
@@ -321,7 +358,6 @@ const framePanels = withTwist(labFrames);
 	.panel {
 		flex: 0 0 calc(100vw - 2rem);
 		height: calc(100vh - 2rem);
-		scroll-snap-align: start;
 		border-radius: 24px;
 		border: 1px solid var(--line);
 		padding: clamp(0.9rem, 2vw, 1.6rem);
@@ -329,6 +365,11 @@ const framePanels = withTwist(labFrames);
 		backdrop-filter: blur(4px);
 		box-shadow: 0 24px 42px rgb(0 0 0 / 0.42);
 		overflow: hidden;
+	}
+
+	.panel-project,
+	.panel-lab {
+		overflow: visible;
 	}
 
 	.panel-hero {
@@ -387,6 +428,39 @@ const framePanels = withTwist(labFrames);
 
 	.muted {
 		color: rgb(232 241 255 / 0.36);
+	}
+
+	.glitch-title {
+		position: relative;
+		display: inline-block;
+		margin: 0.4rem 0 0;
+		font-family: 'Archivo Black', 'Impact', sans-serif;
+		font-size: clamp(1.2rem, 3.6vw, 2.6rem);
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		color: var(--ink);
+	}
+
+	.glitch-title::before,
+	.glitch-title::after {
+		content: attr(data-text);
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+	}
+
+	.glitch-title::before {
+		color: var(--cyan);
+		transform: translate(2px, 0);
+		clip-path: polygon(0 0, 100% 0, 100% 45%, 0 52%);
+		animation: glitch-a 2.6s infinite linear alternate-reverse;
+	}
+
+	.glitch-title::after {
+		color: var(--pink);
+		transform: translate(-2px, 0);
+		clip-path: polygon(0 58%, 100% 50%, 100% 100%, 0 100%);
+		animation: glitch-b 1.8s infinite linear alternate-reverse;
 	}
 
 	.hero-bottom {
@@ -450,23 +524,23 @@ const framePanels = withTwist(labFrames);
 
 	.project-frame,
 	.lab-card {
-		transform: rotate(var(--rot)) skewX(var(--sk));
+		transform: translateY(var(--ty)) rotate(var(--rot)) skewX(var(--sk));
 		transform-origin: center;
-		transition: transform 260ms ease, box-shadow 220ms ease, border-color 220ms ease;
+		transition: transform 300ms ease, box-shadow 220ms ease, border-color 220ms ease;
 	}
 
 	.project-frame:hover,
 	.lab-card:hover {
-		transform: rotate(var(--rot-hover)) skewX(var(--sk-hover)) translateY(-6px);
+		transform: translateY(var(--ty-hover)) rotate(var(--rot-hover)) skewX(var(--sk-hover));
 	}
 
 	.project-frame {
 		width: min(900px, 88%);
 		padding: 1.1rem;
 		border-radius: 22px;
-		border: 1px solid var(--line);
+		border: 2px solid var(--line);
 		background: rgb(4 14 31 / 0.86);
-		box-shadow: 0 22px 34px rgb(0 0 0 / 0.44);
+		box-shadow: 0 24px 36px rgb(0 0 0 / 0.48);
 		display: grid;
 		gap: 0.72rem;
 	}
@@ -532,7 +606,7 @@ const framePanels = withTwist(labFrames);
 	}
 
 	.theme-pink .project-frame {
-		border-color: rgb(255 47 167 / 0.62);
+		border-color: rgb(255 47 167 / 0.72);
 	}
 
 	.theme-pink h2 {
@@ -540,7 +614,7 @@ const framePanels = withTwist(labFrames);
 	}
 
 	.theme-cyan .project-frame {
-		border-color: rgb(27 230 255 / 0.62);
+		border-color: rgb(27 230 255 / 0.72);
 	}
 
 	.theme-cyan h2 {
@@ -562,9 +636,9 @@ const framePanels = withTwist(labFrames);
 	.lab-card {
 		padding: 0.9rem;
 		border-radius: 18px;
-		border: 1px solid var(--line);
+		border: 2px solid var(--line);
 		background: rgb(4 14 30 / 0.8);
-		box-shadow: 0 18px 24px rgb(0 0 0 / 0.34);
+		box-shadow: 0 20px 24px rgb(0 0 0 / 0.36);
 	}
 
 	h3 {
@@ -579,7 +653,7 @@ const framePanels = withTwist(labFrames);
 	}
 
 	.tone-lime {
-		border-color: rgb(204 255 55 / 0.62);
+		border-color: rgb(204 255 55 / 0.72);
 	}
 
 	.tone-lime h3 {
@@ -587,7 +661,7 @@ const framePanels = withTwist(labFrames);
 	}
 
 	.tone-amber {
-		border-color: rgb(255 159 47 / 0.62);
+		border-color: rgb(255 159 47 / 0.72);
 	}
 
 	.tone-amber h3 {
@@ -595,7 +669,7 @@ const framePanels = withTwist(labFrames);
 	}
 
 	.tone-cyan {
-		border-color: rgb(27 230 255 / 0.62);
+		border-color: rgb(27 230 255 / 0.72);
 	}
 
 	.tone-cyan h3 {
@@ -603,7 +677,7 @@ const framePanels = withTwist(labFrames);
 	}
 
 	.tone-pink {
-		border-color: rgb(255 47 167 / 0.62);
+		border-color: rgb(255 47 167 / 0.72);
 	}
 
 	.tone-pink h3 {
@@ -671,6 +745,48 @@ const framePanels = withTwist(labFrames);
 		}
 		50% {
 			transform: translateX(3px);
+		}
+	}
+
+	@keyframes glitch-a {
+		0% {
+			transform: translate(2px, 0);
+		}
+		20% {
+			transform: translate(-2px, -1px);
+		}
+		40% {
+			transform: translate(3px, 1px);
+		}
+		60% {
+			transform: translate(-3px, 0);
+		}
+		80% {
+			transform: translate(2px, -1px);
+		}
+		100% {
+			transform: translate(2px, 0);
+		}
+	}
+
+	@keyframes glitch-b {
+		0% {
+			transform: translate(-2px, 0);
+		}
+		20% {
+			transform: translate(2px, 1px);
+		}
+		40% {
+			transform: translate(-3px, -1px);
+		}
+		60% {
+			transform: translate(2px, 0);
+		}
+		80% {
+			transform: translate(-2px, 1px);
+		}
+		100% {
+			transform: translate(-2px, 0);
 		}
 	}
 
