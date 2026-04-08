@@ -764,18 +764,20 @@ const signalTrack = [...signals, ...signals];
 
 	.panel-hero {
 		display: grid;
-		grid-template-rows: 1fr auto;
-		align-content: center;
+		grid-template-rows: auto auto;
+		align-content: space-between;
 	}
 
 	.headline {
 		margin: 0;
 		font-family: 'Archivo Black', 'Impact', sans-serif;
 		font-size: clamp(2.4rem, 8.8vw, 6.6rem);
-		line-height: 0.74;
-		letter-spacing: 0.006em;
+		line-height: 0.72;
+		letter-spacing: 0.005em;
 		display: grid;
 		gap: 0;
+		align-content: start;
+		align-self: start;
 	}
 
 	.headline-line {
@@ -787,7 +789,7 @@ const signalTrack = [...signals, ...signals];
 	}
 
 	.headline-line + .headline-line {
-		margin-top: -0.2em;
+		margin-top: -0.3em;
 	}
 
 	.headline-muted {
@@ -802,7 +804,10 @@ const signalTrack = [...signals, ...signals];
 		position: relative;
 		color: var(--ink);
 		will-change: transform;
-		animation: headline-sway 10.8s ease-in-out infinite;
+		text-shadow:
+			0 0 10px rgb(74 184 255 / 0.22),
+			0 0 16px rgb(255 123 86 / 0.14);
+		animation: headline-sway 5.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
 	}
 
 	.glitch-line::before,
@@ -816,26 +821,34 @@ const signalTrack = [...signals, ...signals];
 
 	.line-top::before {
 		color: var(--cyan);
-		opacity: 0.66;
-		animation: chroma-a 9.8s ease-in-out infinite;
+		opacity: 0.9;
+		animation:
+			chroma-a 4.8s steps(2, end) infinite,
+			glitch-cut-a 2.6s steps(2, end) infinite;
 	}
 
 	.line-top::after {
 		color: var(--pink);
-		opacity: 0.52;
-		animation: chroma-b 11.2s ease-in-out infinite;
+		opacity: 0.75;
+		animation:
+			chroma-b 5.2s steps(2, end) infinite,
+			glitch-cut-b 2.9s steps(2, end) infinite;
 	}
 
 	.line-bottom::before {
 		color: var(--amber);
-		opacity: 0.58;
-		animation: chroma-c 10.4s ease-in-out infinite;
+		opacity: 0.82;
+		animation:
+			chroma-c 4.9s steps(2, end) infinite,
+			glitch-cut-c 2.7s steps(2, end) infinite;
 	}
 
 	.line-bottom::after {
 		color: var(--acid);
-		opacity: 0.44;
-		animation: chroma-d 12.3s ease-in-out infinite;
+		opacity: 0.68;
+		animation:
+			chroma-d 5.4s steps(2, end) infinite,
+			glitch-cut-d 3.1s steps(2, end) infinite;
 	}
 
 	.hero-bottom {
@@ -1154,6 +1167,25 @@ const signalTrack = [...signals, ...signals];
 		background-position: 0 100%;
 		background-repeat: no-repeat;
 	}
+	.field select {
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		cursor: pointer;
+	}
+
+	.field select:invalid {
+		color: rgb(173 184 216 / 0.78);
+	}
+
+	.field select option {
+		color: #0f172a;
+		background: #f2f6ff;
+	}
+
+	.field select option:disabled {
+		color: #64748b;
+	}
 
 	.field input::placeholder,
 	.field textarea::placeholder {
@@ -1319,63 +1351,66 @@ const signalTrack = [...signals, ...signals];
 		100% {
 			transform: translate3d(0, 0, 0);
 		}
-		30% {
-			transform: translate3d(0.8px, -0.4px, 0);
+		22% {
+			transform: translate3d(1.5px, -0.8px, 0);
 		}
-		68% {
-			transform: translate3d(-0.6px, 0.3px, 0);
+		52% {
+			transform: translate3d(-1.2px, 0.6px, 0);
+		}
+		74% {
+			transform: translate3d(0.8px, -0.4px, 0);
 		}
 	}
 
 	@keyframes chroma-a {
 		0%,
 		100% {
-			transform: translate3d(-1.4px, 0, 0);
+			transform: translate3d(-3px, 0, 0);
 		}
 		40% {
-			transform: translate3d(1.5px, -0.6px, 0);
+			transform: translate3d(2.8px, -1.1px, 0);
 		}
 		75% {
-			transform: translate3d(-0.9px, 0.5px, 0);
+			transform: translate3d(-2px, 0.8px, 0);
 		}
 	}
 
 	@keyframes chroma-b {
 		0%,
 		100% {
-			transform: translate3d(1.2px, 0, 0);
+			transform: translate3d(2.7px, 0, 0);
 		}
 		36% {
-			transform: translate3d(-1.3px, 0.6px, 0);
+			transform: translate3d(-2.9px, 1.2px, 0);
 		}
 		72% {
-			transform: translate3d(0.9px, -0.4px, 0);
+			transform: translate3d(1.9px, -0.9px, 0);
 		}
 	}
 
 	@keyframes chroma-c {
 		0%,
 		100% {
-			transform: translate3d(-1.1px, 0, 0);
+			transform: translate3d(-2.4px, 0, 0);
 		}
 		42% {
-			transform: translate3d(1.4px, 0.5px, 0);
+			transform: translate3d(2.8px, 1.1px, 0);
 		}
 		74% {
-			transform: translate3d(-0.8px, -0.3px, 0);
+			transform: translate3d(-1.8px, -0.8px, 0);
 		}
 	}
 
 	@keyframes chroma-d {
 		0%,
 		100% {
-			transform: translate3d(1.1px, 0, 0);
+			transform: translate3d(2.3px, 0, 0);
 		}
 		34% {
-			transform: translate3d(-1.2px, -0.4px, 0);
+			transform: translate3d(-2.6px, -1.1px, 0);
 		}
 		70% {
-			transform: translate3d(0.8px, 0.5px, 0);
+			transform: translate3d(1.8px, 1px, 0);
 		}
 	}
 
@@ -1505,9 +1540,16 @@ const signalTrack = [...signals, ...signals];
 		}
 
 		.headline {
-			font-size: clamp(2rem, 10.5vw, 4rem);
-			line-height: 0.86;
-		}
+		margin: 0;
+		font-family: 'Archivo Black', 'Impact', sans-serif;
+		font-size: clamp(2.4rem, 8.8vw, 6.6rem);
+		line-height: 0.72;
+		letter-spacing: 0.005em;
+		display: grid;
+		gap: 0;
+		align-content: start;
+		align-self: start;
+	}
 
 		.headline-line {
 			flex-wrap: wrap;
@@ -1546,6 +1588,9 @@ const signalTrack = [...signals, ...signals];
 		}
 	}
 </style>
+
+
+
 
 
 
