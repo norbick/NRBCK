@@ -726,26 +726,25 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				musicToggle.classList.add('is-disabled');
 			} else {
 				const progression = [
-					[57, 60, 64],
-					[53, 57, 60],
-					[48, 52, 55],
-					[50, 55, 59],
+					[48, 55, 59, 64],
+					[45, 52, 57, 60],
+					[41, 48, 52, 57],
+					[43, 50, 55, 59],
 				];
-				const arpPattern = [0, 2, 1, 2, 0, 1, 2, 1];
-				const bpm = 74;
-				const stepSeconds = (60 / bpm) / 2;
-				const scheduleAhead = 0.2;
+				const bpm = 56;
+				const barSeconds = (60 / bpm) * 4;
+				const scheduleAhead = 0.5;
 				let context = null;
 				let master = null;
 				let padBus = null;
 				let padFilter = null;
 				let bassOsc = null;
-				let arpOsc = null;
-				let arpGain = null;
+				let shimmerOsc = null;
+				let shimmerGain = null;
 				let padVoices = [];
 				let schedulerTimer = 0;
-				let nextStepAt = 0;
-				let stepIndex = 0;
+				let nextBarAt = 0;
+				let barIndex = 0;
 				let isPlaying = false;
 
 				const midiToFreq = (midi) => 440 * Math.pow(2, (midi - 69) / 12);
@@ -757,15 +756,15 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 				const createPadVoice = (detune) => {
 					const oscA = context.createOscillator();
-					oscA.type = 'triangle';
+					oscA.type = 'sine';
 					oscA.detune.value = detune;
 					const oscB = context.createOscillator();
-					oscB.type = 'sawtooth';
+					oscB.type = 'triangle';
 					oscB.detune.value = detune * 0.62;
 					const gainA = context.createGain();
-					gainA.gain.value = 0.024;
+					gainA.gain.value = 0.017;
 					const gainB = context.createGain();
-					gainB.gain.value = 0.009;
+					gainB.gain.value = 0.006;
 					oscA.connect(gainA);
 					oscB.connect(gainB);
 					gainA.connect(padFilter);
@@ -781,58 +780,72 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 					master = context.createGain();
 					master.gain.value = 0.0001;
+					const masterCut = context.createBiquadFilter();
+					masterCut.type = 'highpass';
+					masterCut.frequency.value = 34;
 					const masterTone = context.createBiquadFilter();
 					masterTone.type = 'lowpass';
-					masterTone.frequency.value = 4200;
-					masterTone.Q.value = 0.42;
-					master.connect(masterTone);
-					masterTone.connect(context.destination);
+					masterTone.frequency.value = 2900;
+					masterTone.Q.value = 0.22;
+					const compressor = context.createDynamicsCompressor();
+					compressor.threshold.value = -22;
+					compressor.knee.value = 14;
+					compressor.ratio.value = 2.4;
+					compressor.attack.value = 0.06;
+					compressor.release.value = 0.5;
+					master.connect(masterCut);
+					masterCut.connect(masterTone);
+					masterTone.connect(compressor);
+					compressor.connect(context.destination);
 
 					padFilter = context.createBiquadFilter();
 					padFilter.type = 'lowpass';
-					padFilter.frequency.value = 960;
-					padFilter.Q.value = 0.54;
+					padFilter.frequency.value = 1040;
+					padFilter.Q.value = 0.28;
 
 					padBus = context.createGain();
 					padBus.gain.value = 0.0001;
 					padFilter.connect(padBus);
 					padBus.connect(master);
 
-					padVoices = [createPadVoice(-7), createPadVoice(0), createPadVoice(7)];
+					padVoices = [createPadVoice(-8), createPadVoice(-2), createPadVoice(3), createPadVoice(9)];
 
 					bassOsc = context.createOscillator();
-					bassOsc.type = 'sine';
+					bassOsc.type = 'triangle';
 					const bassFilter = context.createBiquadFilter();
 					bassFilter.type = 'lowpass';
-					bassFilter.frequency.value = 260;
+					bassFilter.frequency.value = 180;
 					const bassGain = context.createGain();
-					bassGain.gain.value = 0.022;
+					bassGain.gain.value = 0.011;
 					bassOsc.connect(bassFilter);
 					bassFilter.connect(bassGain);
 					bassGain.connect(master);
 					bassOsc.start();
 
-					arpOsc = context.createOscillator();
-					arpOsc.type = 'triangle';
-					const arpFilter = context.createBiquadFilter();
-					arpFilter.type = 'lowpass';
-					arpFilter.frequency.value = 1700;
-					arpFilter.Q.value = 0.38;
-					arpGain = context.createGain();
-					arpGain.gain.value = 0.0001;
-					arpOsc.connect(arpFilter);
-					arpFilter.connect(arpGain);
-					arpGain.connect(master);
+					shimmerOsc = context.createOscillator();
+					shimmerOsc.type = 'sine';
+					const shimmerFilter = context.createBiquadFilter();
+					shimmerFilter.type = 'highpass';
+					shimmerFilter.frequency.value = 880;
+					shimmerGain = context.createGain();
+					shimmerGain.gain.value = 0.0001;
+					shimmerOsc.connect(shimmerFilter);
+					shimmerFilter.connect(shimmerGain);
+					shimmerGain.connect(master);
+					shimmerOsc.start();
 
 					const delay = context.createDelay(1.2);
-					delay.delayTime.value = 0.36;
+					delay.delayTime.value = 0.42;
 					const feedback = context.createGain();
-					feedback.gain.value = 0.24;
+					feedback.gain.value = 0.16;
 					const delayFilter = context.createBiquadFilter();
 					delayFilter.type = 'lowpass';
-					delayFilter.frequency.value = 1400;
-					arpGain.connect(delay);
-					padFilter.connect(delay);
+					delayFilter.frequency.value = 1200;
+					const spaceSend = context.createGain();
+					spaceSend.gain.value = 0.22;
+					padBus.connect(spaceSend);
+					shimmerGain.connect(spaceSend);
+					spaceSend.connect(delay);
 					delay.connect(delayFilter);
 					delayFilter.connect(feedback);
 					feedback.connect(delay);
@@ -840,61 +853,70 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 					const motion = context.createOscillator();
 					motion.type = 'sine';
-					motion.frequency.value = 0.085;
+					motion.frequency.value = 0.045;
 					const motionDepth = context.createGain();
-					motionDepth.gain.value = 160;
+					motionDepth.gain.value = 44;
 					motion.connect(motionDepth);
 					motionDepth.connect(padFilter.frequency);
 					motion.start();
 
-					arpOsc.start();
+					const flutter = context.createOscillator();
+					flutter.type = 'sine';
+					flutter.frequency.value = 0.11;
+					const flutterDepth = context.createGain();
+					flutterDepth.gain.value = 0.0038;
+					flutter.connect(flutterDepth);
+					flutterDepth.connect(master.gain);
+					flutter.start();
 				};
 
 				const scheduleChord = (time, chord) => {
 					if (!context || !padVoices.length || !padBus || !padFilter || !bassOsc) return;
-					const spread = [chord[0] - 12, chord[1], chord[2] + 12];
 
 					padVoices.forEach((voice, index) => {
-						const freq = midiToFreq(spread[index]);
-						voice.oscA.frequency.setTargetAtTime(freq, time, 1.1);
-						voice.oscB.frequency.setTargetAtTime(freq * 1.0014, time, 1.1);
+						const midi = chord[index % chord.length];
+						const freq = midiToFreq(midi);
+						voice.oscA.frequency.setTargetAtTime(freq, time, 1.6);
+						voice.oscB.frequency.setTargetAtTime(freq * 1.0018, time, 1.9);
 					});
 
-					bassOsc.frequency.setTargetAtTime(midiToFreq(chord[0] - 24), time, 0.42);
+					bassOsc.frequency.setTargetAtTime(midiToFreq(chord[0] - 24), time, 1.3);
 
-					padFilter.frequency.setTargetAtTime(840, time, 0.72);
-					padFilter.frequency.setTargetAtTime(1120, time + stepSeconds * 3.6, 1.45);
+					padFilter.frequency.setTargetAtTime(880, time, 1.2);
+					padFilter.frequency.setTargetAtTime(1060, time + barSeconds * 0.72, 2.2);
 
 					padBus.gain.cancelScheduledValues(time);
 					padBus.gain.setValueAtTime(Math.max(padBus.gain.value, 0.0001), time);
-					padBus.gain.linearRampToValueAtTime(0.092, time + 1.2);
-					padBus.gain.linearRampToValueAtTime(0.066, time + stepSeconds * 8);
+					padBus.gain.linearRampToValueAtTime(0.054, time + 1.7);
+					padBus.gain.linearRampToValueAtTime(0.042, time + barSeconds * 0.92);
 				};
 
-				const scheduleArp = (time, chord, step) => {
-					if (!arpOsc || !arpGain) return;
-					const idx = arpPattern[step % arpPattern.length];
-					const octaveLift = step % 16 === 12 ? 12 : 0;
-					const note = chord[idx] + 12 + octaveLift;
-					arpOsc.frequency.setValueAtTime(midiToFreq(note), time);
-					arpGain.gain.cancelScheduledValues(time);
-					arpGain.gain.setValueAtTime(0.0001, time);
-					arpGain.gain.linearRampToValueAtTime(0.024, time + 0.03);
-					arpGain.gain.exponentialRampToValueAtTime(0.0001, time + stepSeconds * 0.8);
+				const scheduleShimmer = (time, chord, cycle) => {
+					if (!shimmerOsc || !shimmerGain) return;
+					const topNote = chord[Math.max(0, chord.length - 1)];
+					const accent = cycle % 4 === 2 ? 2 : 0;
+					const shimmerNote = topNote + 24 + accent;
+					shimmerOsc.frequency.setValueAtTime(midiToFreq(shimmerNote), time);
+					shimmerGain.gain.cancelScheduledValues(time);
+					shimmerGain.gain.setValueAtTime(0.0001, time);
+					shimmerGain.gain.linearRampToValueAtTime(0.0068, time + 0.38);
+					shimmerGain.gain.exponentialRampToValueAtTime(0.00012, time + barSeconds * 0.86);
 				};
 
 				const scheduler = () => {
 					if (!context || !isPlaying) return;
 
-					while (nextStepAt < context.currentTime + scheduleAhead) {
-						const chord = progression[Math.floor(stepIndex / 8) % progression.length];
-						if (stepIndex % 8 === 0) scheduleChord(nextStepAt, chord);
-						scheduleArp(nextStepAt, chord, stepIndex);
-						stepIndex += 1;
-						nextStepAt += stepSeconds;
+					while (nextBarAt < context.currentTime + scheduleAhead) {
+						const chord = progression[barIndex % progression.length];
+						scheduleChord(nextBarAt, chord);
+						if (barIndex % 2 === 1) {
+							scheduleShimmer(nextBarAt + barSeconds * 0.34, chord, barIndex);
+						}
+						barIndex += 1;
+						nextBarAt += barSeconds;
 					}
 
-					schedulerTimer = window.setTimeout(scheduler, 36);
+					schedulerTimer = window.setTimeout(scheduler, 120);
 				};
 
 				const stopMusic = () => {
@@ -914,12 +936,12 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					const now = context.currentTime;
 					master.gain.cancelScheduledValues(now);
 					master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), now);
-					master.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
+					master.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
 
 					window.setTimeout(() => {
 						if (!context || isPlaying || context.state !== 'running') return;
 						context.suspend();
-					}, 920);
+					}, 1280);
 				};
 
 				const startMusic = async () => {
@@ -931,12 +953,12 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 					isPlaying = true;
 					setToggleState(true);
-					nextStepAt = context.currentTime + 0.08;
-					stepIndex = 0;
+					nextBarAt = context.currentTime + 0.08;
+					barIndex = 0;
 
 					master.gain.cancelScheduledValues(context.currentTime);
 					master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), context.currentTime);
-					master.gain.linearRampToValueAtTime(0.52, context.currentTime + 1.9);
+					master.gain.linearRampToValueAtTime(0.24, context.currentTime + 2.4);
 
 					if (schedulerTimer) clearTimeout(schedulerTimer);
 					scheduler();
