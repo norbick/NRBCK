@@ -52,6 +52,24 @@ const projects: Project[] = [
 		],
 		cta: { pl: 'Otwórz LooLoot', en: 'Open LooLoot' },
 	},
+	{
+		id: '03',
+		previewId: 'portfolio',
+		name: 'Ta strona',
+		live: 'https://norbick.github.io/NRBCK/',
+		theme: 'theme-violet',
+		role: { pl: 'Portfolio osobiste / landing page', en: 'Personal portfolio / landing page' },
+		blurb: {
+			pl: 'Aktualna strona portfolio NRBCK, na której jesteś teraz: eksperymentalny layout, animacje i prezentacja projektów w jednym miejscu.',
+			en: 'The current NRBCK portfolio page you are browsing now: an experimental layout, motion, and project storytelling in one place.',
+		},
+		tags: [
+			{ pl: 'Astro', en: 'Astro' },
+			{ pl: 'Motion UI', en: 'Motion UI' },
+			{ pl: 'Brand showcase', en: 'Brand showcase' },
+		],
+		cta: { pl: 'Otwórz tę stronę', en: 'Open this page' },
+	},
 ];
 
 const sellingPoints: Localized[] = [
@@ -1271,7 +1289,7 @@ const signalTrack = [...signals, ...signals];
 		z-index: 1;
 		width: 100%;
 		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 0.95rem;
 	}
 
@@ -1362,6 +1380,10 @@ const signalTrack = [...signals, ...signals];
 
 	.theme-orange .project-title {
 		color: var(--pink);
+	}
+
+	.theme-violet .project-title {
+		color: var(--violet);
 	}
 
 	.panel-value {
