@@ -8,8 +8,8 @@
 
 ## 2) Brand Context (do wklejenia)
 - Marka: NRBCK
-- Rola: Freelance Web Designer + Webflow Developer
-- Model pracy: jedna osoba od całości (strategia, design, Webflow, publikacja)
+- Rola: Freelance Web Designer + Frontend Developer
+- Model pracy: jedna osoba od całości (strategia, design, frontend, publikacja)
 - Klient docelowy: małe i średnie firmy, marki osobiste, twórcy, startupy
 - Cel strony: więcej zapytań i lepsza jakość leadów
 - Ton: konkretny, ludzki, pewny, bez korpo-jargonu
@@ -20,7 +20,7 @@
 ### Hero – nagłówek (opcje)
 - Strony, które wyglądają mocno i sprzedają jeszcze mocniej.
 - Projektuję strony, które od pierwszej sekundy mówią: "tu warto zostać".
-- Design i Webflow spięte w jeden, szybki proces.
+- Design i frontend spięte w jeden, szybki proces.
 - Twoja marka zasługuje na stronę, która pracuje 24/7.
 - Robię strony, które prowadzą do kontaktu, nie do chaosu.
 - Nie szablon. Nie przypadek. Tylko strona, która ma cel.
@@ -57,7 +57,7 @@
 ### Hero – headline options
 - Websites that look bold and convert even better.
 - I design websites that make people stay from second one.
-- Design and Webflow in one fast, focused workflow.
+- Design and frontend in one fast, focused workflow.
 - Your brand deserves a website that works 24/7.
 - I build websites that drive contact, not confusion.
 - No template noise. Just a website with a clear job.
@@ -85,7 +85,7 @@
 
 ### CTA options
 - Got an idea? Send it and I will map the best path.
-- Need a website that performs, not just looks nice? Let us talk.
+- Need a website that performs, not just looks nice? Let's talk.
 - Share your goal and I will come back with a practical plan.
 - We start with a call and end with a live website.
 
@@ -93,11 +93,11 @@
 Skopiuj i wklej:
 
 """
-Jesteś senior copywriterem SEO dla branży web design / Webflow.
+Jesteś senior copywriterem SEO dla branży web design / frontend.
 Napisz treści na portfolio freelancera (NRBCK) w języku {PL/EN}.
 
 Kontekst:
-- Freelance Web Designer + Webflow Developer
+- Freelance Web Designer + Frontend Developer
 - Jedna osoba od strategii, designu, wdrożenia i publikacji
 - Klienci: małe i średnie firmy, marki osobiste, startupy
 - Cel: zwiększyć liczbę jakościowych zapytań
@@ -106,7 +106,7 @@ Kontekst:
 Wymagania:
 1. Daj 3 warianty dla każdej sekcji: hero headline, hero subheadline, why work with me, project intros, contact CTA.
 2. Każdy wariant ma być krótki i dynamiczny.
-3. Użyj naturalnych słów kluczowych związanych z: web design, Webflow, projektowanie stron, strony internetowe, konwersja.
+3. Użyj naturalnych słów kluczowych związanych z: web design, frontend, projektowanie stron, strony internetowe, konwersja.
 4. Unikaj banałów i pustych obietnic.
 5. Zadbaj o język prosty dla osób nietechnicznych.
 
