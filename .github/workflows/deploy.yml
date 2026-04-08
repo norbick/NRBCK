@@ -19,8 +19,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      PUBLIC_SITE_URL: https://norbick.github.io
-      PUBLIC_BASE_PATH: /NRBCK
+      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://norbick.github.io' }}
+      PUBLIC_BASE_PATH: ${{ vars.PUBLIC_BASE_PATH || '/NRBCK' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
