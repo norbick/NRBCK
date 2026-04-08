@@ -1,4 +1,4 @@
-# build output
+﻿# build output
 dist/
 
 # generated types
@@ -6,7 +6,6 @@ dist/
 
 # dependencies
 node_modules/
-.codex/
 
 # logs
 npm-debug.log*
@@ -18,8 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
-# macOS-specific files
-.DS_Store
+# local tools
+.codex/
 
-# jetbrains setting folder
+# OS and IDE
+.DS_Store
 .idea/

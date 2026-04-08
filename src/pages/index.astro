@@ -1,864 +1,240 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
 
-const beltWords = [
-	"CHROMA",
-	"NOISE",
-	"ECHO",
-	"VELVET",
-	"BLAZE",
-	"MIRAGE",
-	"SYNTH",
-	"DISCO",
-	"PLAZMA",
-	"GLASS",
-];
-
-const tiles = [
+const projects = [
 	{
-		title: "Kaskada Pigmentu",
-		text: "Farba płynie po geometrii bez pytania o sens.",
-		className: "tile-a",
+		name: 'm2_stage',
+		subtitle: 'Event platform MVP',
+		description:
+			'Platform concept focused on event pages, flow testing and early UX validation.',
+		tags: ['Astro', 'TypeScript', 'UI Experiments'],
+		repo: 'https://github.com/norbick/m2_stage',
 	},
 	{
-		title: "Cytrusowy Glitch",
-		text: "Kontury drżą, jakby monitor oddychał.",
-		className: "tile-b",
+		name: 'LooLoot',
+		subtitle: 'Collectible drop concept',
+		description:
+			'Visual concept around item drops and collectible mechanics, currently iterated as a private build.',
+		tags: ['Web App', 'Product Design', 'Game Economy'],
+		repo: 'https://github.com/norbick/LooLoot',
 	},
-	{
-		title: "Stroboskop Chmur",
-		text: "Miękkie mgły i ostre krawędzie tańczą jednocześnie.",
-		className: "tile-c",
-	},
-	{
-		title: "Basen Światła",
-		text: "Rytm odbija się od szkła i wraca jako neon.",
-		className: "tile-d",
-	},
-	{
-		title: "Papierowy Horyzont",
-		text: "Tło wygląda jak kolaż z przyszłości i bazaru.",
-		className: "tile-e",
-	},
-	{
-		title: "Przester Ciepła",
-		text: "Pastel i ogień w jednym kadrze.",
-		className: "tile-f",
-	},
-	{
-		title: "Kryształowy Hałas",
-		text: "Chaos ma tu własną typografię.",
-		className: "tile-g",
-	},
-	{
-		title: "Miasto Bez Użyteczności",
-		text: "To tylko estetyka. I dokładnie o to chodzi.",
-		className: "tile-h",
-	},
-];
-
-const mantras = [
-	"Mniej celu, więcej koloru.",
-	"Forma krzyczy głośniej niż funkcja.",
-	"Niech piksele tańczą, nie raportują.",
-	"Przesada jest tutaj stylem bazowym.",
-	"To nie UI. To cyfrowy plakat, który żyje.",
-	"Każdy klik to kolejna warstwa absurdu.",
 ];
 ---
 
-<Layout title="XAERO // Chroma Carnival" description="Szalony eksperyment estetyczny w Astro. Zero praktyczności, maksimum klimatu.">
+<Layout title="NRBCK | Portfolio" description="Pierwsza iteracja portfolio z projektami m2_stage i LooLoot.">
 	<main class="page">
-		<div class="grain" aria-hidden="true"></div>
-
-		<section class="hero reveal reveal-1">
-			<p class="eyebrow">ESTETYKA &gt; UŻYTECZNOŚĆ</p>
-			<h1>Chroma Carnival</h1>
+		<header class="hero">
+			<p class="eyebrow">NRBCK</p>
+			<h1>Building digital products with clean logic and strong visuals.</h1>
 			<p class="lead">
-				Zaoraliśmy wszystko i zbudowaliśmy neonowy plakat, który udaje stronę internetową.
-				To ma wyglądać, pulsować i przesadzać. Niczego nie tłumaczyć.
+				This is iteration 1 of my portfolio. The goal for this version is simple: clear project cards,
+				fast load, and a clean base we can expand later.
 			</p>
-			<p class="js-status" id="js-status">JS: uruchamianie...</p>
-			<p class="action-log" id="action-log">Tryb: spokojny // Paleta: 1/4</p>
-			<div class="actions">
-				<button type="button" id="chaos-btn" class="btn btn-primary">Wstrząśnij sceną</button>
-				<button type="button" id="palette-btn" class="btn btn-secondary">Przekręć paletę</button>
+			<div class="hero-actions">
+				<a class="button button-primary" href="#projects">View projects</a>
+				<a class="button button-ghost" href="mailto:norbick@gmail.com">Contact</a>
 			</div>
-		</section>
+		</header>
 
-		<section class="belt reveal reveal-2" aria-label="Płynący pasek klimatu">
-			<div class="belt-track" aria-hidden="true">
-				{[...beltWords, ...beltWords, ...beltWords].map((word, index) => (
-					<span class="belt-chip">{word} {String(index + 1).padStart(2, "0")}</span>
+		<section id="projects" class="projects">
+			<h2>Projects</h2>
+			<div class="grid">
+				{projects.map((project) => (
+					<article class="card">
+						<p class="card-subtitle">{project.subtitle}</p>
+						<h3>{project.name}</h3>
+						<p>{project.description}</p>
+						<ul class="tags" aria-label={`Tech tags for ${project.name}`}>
+							{project.tags.map((tag) => (
+								<li>{tag}</li>
+							))}
+						</ul>
+						<a class="repo-link" href={project.repo} target="_blank" rel="noreferrer">Open repository</a>
+					</article>
 				))}
 			</div>
 		</section>
 
-		<section class="mosaic reveal reveal-3">
-			{tiles.map((tile, index) => (
-				<article class={`tile ${tile.className}`}>
-					<p class="tile-index">{String(index + 1).padStart(2, "0")}</p>
-					<h2>{tile.title}</h2>
-					<p>{tile.text}</p>
-				</article>
-			))}
-		</section>
-
-		<section class="altar reveal reveal-4">
-			<p class="altar-label">WYROCZNIA HAŁASU</p>
-			<p class="mantra" id="mantra-output">{mantras[0]}</p>
-			<button type="button" id="mantra-btn" class="btn btn-primary">Nowa mantra</button>
-		</section>
-
-		<section class="orbits reveal reveal-5" aria-label="Animowane orbity dekoracyjne">
-			<div class="orbit orbit-a"><span></span></div>
-			<div class="orbit orbit-b"><span></span></div>
-			<div class="orbit orbit-c"><span></span></div>
-			<div class="orbit orbit-d"><span></span></div>
-		</section>
+		<footer class="footer">
+			<p>NRBCK portfolio - Astro + GitHub Pages</p>
+		</footer>
 	</main>
-
-	<script type="application/json" id="mantra-data" set:html={JSON.stringify(mantras)}></script>
-	<script is:inline>
-		const root = document.documentElement;
-		const body = document.body;
-		const status = document.getElementById("js-status");
-		const actionLog = document.getElementById("action-log");
-		const mantrasElement = document.getElementById("mantra-data");
-		const availableMantras = mantrasElement?.textContent ? JSON.parse(mantrasElement.textContent) : [];
-		const mantraOutput = document.getElementById("mantra-output");
-		const mantraButton = document.getElementById("mantra-btn");
-		const chaosButton = document.getElementById("chaos-btn");
-		const paletteButton = document.getElementById("palette-btn");
-
-		const palettes = [
-			{
-				name: "Acid Pop",
-				filter: "none",
-				vars: {
-					"--acid": "#d4ff2a",
-					"--citrus": "#ff9e2c",
-					"--melon": "#ff5d57",
-					"--lagoon": "#1fc9ff",
-					"--mint": "#5df6b2",
-				},
-			},
-			{
-				name: "Sunset Riot",
-				filter: "hue-rotate(26deg) saturate(1.28) contrast(1.05)",
-				vars: {
-					"--acid": "#ffe36d",
-					"--citrus": "#ff6f3c",
-					"--melon": "#ff3f81",
-					"--lagoon": "#34d5ff",
-					"--mint": "#84ffa5",
-				},
-			},
-			{
-				name: "Hyper Lemon",
-				filter: "hue-rotate(-18deg) saturate(1.45) contrast(1.08)",
-				vars: {
-					"--acid": "#cbff3d",
-					"--citrus": "#ffb347",
-					"--melon": "#ff5a5f",
-					"--lagoon": "#00c2ff",
-					"--mint": "#7df9d1",
-				},
-			},
-			{
-				name: "Blue Inferno",
-				filter: "hue-rotate(140deg) saturate(1.35) contrast(1.1)",
-				vars: {
-					"--acid": "#7de8ff",
-					"--citrus": "#6f9bff",
-					"--melon": "#3f72ff",
-					"--lagoon": "#34ffd8",
-					"--mint": "#84ffa5",
-				},
-			},
-		];
-
-		let lastMantraIndex = 0;
-		let paletteIndex = 0;
-		let chaosClicks = 0;
-
-		const setStatus = (text) => {
-			if (status) status.textContent = text;
-		};
-
-		const setLog = (text) => {
-			if (actionLog) actionLog.textContent = text;
-		};
-
-		const applyPalette = (index) => {
-			const activePalette = palettes[index];
-			Object.entries(activePalette.vars).forEach(([name, value]) => {
-				root.style.setProperty(name, value);
-			});
-			body.style.filter = activePalette.filter;
-			paletteButton.textContent = `Paleta: ${activePalette.name}`;
-		};
-
-		const rollMantra = () => {
-			if (!availableMantras.length || !mantraOutput) return;
-			let nextIndex = lastMantraIndex;
-			if (availableMantras.length > 1) {
-				while (nextIndex === lastMantraIndex) {
-					nextIndex = Math.floor(Math.random() * availableMantras.length);
-				}
-			}
-			mantraOutput.textContent = availableMantras[nextIndex];
-			mantraOutput.classList.remove("flash");
-			void mantraOutput.offsetWidth;
-			mantraOutput.classList.add("flash");
-			lastMantraIndex = nextIndex;
-		};
-
-		mantraButton?.addEventListener("click", () => {
-			rollMantra();
-			setLog(`Tryb: ${body.classList.contains("ultra-chaos") ? "chaos" : "spokojny"} // Paleta: ${paletteIndex + 1}/${palettes.length}`);
-		});
-
-		chaosButton?.addEventListener("click", () => {
-			chaosClicks += 1;
-			body.classList.toggle("chaos");
-			body.classList.toggle("ultra-chaos");
-			body.classList.add("impact");
-			setTimeout(() => body.classList.remove("impact"), 320);
-			chaosButton.textContent = body.classList.contains("ultra-chaos") ? "Wyłącz chaos" : "Wstrząśnij sceną";
-			rollMantra();
-			setStatus(`JS: aktywny // chaos x${chaosClicks}`);
-			setLog(`Tryb: ${body.classList.contains("ultra-chaos") ? "chaos" : "spokojny"} // Paleta: ${paletteIndex + 1}/${palettes.length}`);
-		});
-
-		paletteButton?.addEventListener("click", () => {
-			paletteIndex = (paletteIndex + 1) % palettes.length;
-			applyPalette(paletteIndex);
-			setStatus(`JS: aktywny // paleta ${paletteIndex + 1}/${palettes.length}`);
-			setLog(`Tryb: ${body.classList.contains("ultra-chaos") ? "chaos" : "spokojny"} // Paleta: ${paletteIndex + 1}/${palettes.length}`);
-		});
-
-		window.addEventListener(
-			"pointermove",
-			(event) => {
-				const x = (event.clientX / window.innerWidth) * 100;
-				const y = (event.clientY / window.innerHeight) * 100;
-				root.style.setProperty("--pointer-x", `${x.toFixed(2)}%`);
-				root.style.setProperty("--pointer-y", `${y.toFixed(2)}%`);
-			},
-			{ passive: true },
-		);
-
-		setInterval(() => {
-			body.classList.add("pulse");
-			setTimeout(() => body.classList.remove("pulse"), 450);
-		}, 9000);
-
-		applyPalette(paletteIndex);
-		setStatus("JS: aktywny");
-	</script>
 </Layout>
 
 <style>
-	@import url("https://fonts.googleapis.com/css2?family=Monoton&family=Syne:wght@400;500;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap");
-
-	:global(:root) {
-		--paper: #fff7e1;
-		--ink: #1f1a1b;
-		--ink-soft: #4f4744;
-		--acid: #d4ff2a;
-		--citrus: #ff9e2c;
-		--melon: #ff5d57;
-		--lagoon: #1fc9ff;
-		--mint: #5df6b2;
-		--sun: #ffe56b;
-		--line: rgba(30, 20, 10, 0.15);
-		--panel: rgba(255, 255, 255, 0.67);
-		--pointer-x: 50%;
-		--pointer-y: 50%;
+	:root {
+		--bg: #f4efe5;
+		--bg-soft: #fffaf2;
+		--ink: #161616;
+		--ink-soft: #545454;
+		--line: #d9cfc1;
+		--accent: #ef5e28;
+		--accent-dark: #c44515;
 	}
 
 	:global(body) {
-		font-family: "Syne", "Trebuchet MS", sans-serif;
+		font-family: 'Segoe UI', 'Trebuchet MS', sans-serif;
 		color: var(--ink);
 		background:
-			radial-gradient(58rem 33rem at var(--pointer-x) var(--pointer-y), rgb(255 255 255 / 0.44), transparent 62%),
-			radial-gradient(37rem 28rem at 11% 8%, rgb(255 174 72 / 0.45), transparent 63%),
-			radial-gradient(36rem 28rem at 85% 17%, rgb(50 213 255 / 0.4), transparent 64%),
-			linear-gradient(132deg, #fff5dc 0%, #ffefc9 43%, #ffe4bd 100%);
-		transition: background 600ms ease;
-	}
-
-	:global(body)::before {
-		content: "";
-		position: fixed;
-		inset: -30vh -20vw;
-		pointer-events: none;
-		opacity: 0.25;
-		background:
-			repeating-linear-gradient(115deg, rgb(0 0 0 / 0) 0 24px, rgb(255 255 255 / 0.33) 25px 27px),
-			repeating-linear-gradient(-25deg, rgb(0 0 0 / 0) 0 34px, rgb(0 0 0 / 0.05) 35px 36px);
-		animation: sheet-drift 24s linear infinite;
-		z-index: 0;
+			radial-gradient(circle at 18% 12%, #ffe6b8 0%, transparent 35%),
+			radial-gradient(circle at 88% 6%, #e5f7ff 0%, transparent 28%),
+			var(--bg);
 	}
 
 	.page {
-		position: relative;
-		z-index: 1;
-		max-width: 1100px;
+		max-width: 1040px;
 		margin: 0 auto;
-		padding: 1.4rem 1rem 3.2rem;
-	}
-
-	.grain {
-		position: fixed;
-		inset: 0;
-		z-index: 0;
-		pointer-events: none;
-		background-image:
-			radial-gradient(rgb(0 0 0 / 0.14) 0.4px, transparent 0.5px),
-			radial-gradient(rgb(255 255 255 / 0.16) 0.5px, transparent 0.6px);
-		background-size: 5px 5px, 6px 6px;
-		background-position: 0 0, 2px 3px;
-		mix-blend-mode: soft-light;
-		opacity: 0.6;
+		padding: 2.2rem 1rem 3rem;
 	}
 
 	.hero {
-		position: relative;
-		overflow: hidden;
-		border-radius: 28px;
+		background: var(--bg-soft);
 		border: 1px solid var(--line);
-		padding: clamp(1rem, 2vw, 2rem);
-		background: linear-gradient(118deg, rgb(255 255 255 / 0.74) 0%, rgb(255 240 188 / 0.55) 100%);
-		box-shadow: 0 24px 50px rgb(86 42 0 / 0.13);
-	}
-
-	.hero::after {
-		content: "";
-		position: absolute;
-		width: 13rem;
-		aspect-ratio: 1;
-		right: -3rem;
-		top: -3rem;
-		border-radius: 50%;
-		background: radial-gradient(circle, rgb(255 255 255 / 0.9) 0%, rgb(255 255 255 / 0) 70%);
-		transform: rotate(12deg);
+		border-radius: 20px;
+		padding: 1.4rem;
+		box-shadow: 0 18px 30px rgb(80 59 30 / 0.08);
 	}
 
 	.eyebrow {
-		font-family: "IBM Plex Mono", "Consolas", monospace;
-		text-transform: uppercase;
-		letter-spacing: 0.15em;
-		font-size: 0.75rem;
 		margin: 0 0 0.7rem;
+		font-size: 0.78rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
 		color: var(--ink-soft);
 	}
 
 	h1 {
-		font-family: "Monoton", "Impact", fantasy;
-		font-weight: 400;
-		font-size: clamp(2rem, 7vw, 5rem);
+		margin: 0;
+		font-size: clamp(1.8rem, 4vw, 3.2rem);
 		line-height: 1.05;
-		margin: 0 0 0.85rem;
-		text-transform: uppercase;
-		text-wrap: balance;
-		text-shadow:
-			0 0 0 var(--ink),
-			3px 4px 0 rgb(255 255 255 / 0.65),
-			7px 8px 0 rgb(255 93 87 / 0.25);
-	}
-
-	h2 {
-		margin-top: 0;
-		margin-bottom: 0.65rem;
+		max-width: 22ch;
 	}
 
 	.lead {
-		max-width: 60ch;
+		margin-top: 0.9rem;
+		max-width: 64ch;
 		color: var(--ink-soft);
-		font-size: clamp(1rem, 1.8vw, 1.2rem);
+		line-height: 1.55;
 	}
 
-	.js-status {
-		margin: 0.25rem 0 0.95rem;
-		display: inline-flex;
-		align-items: center;
-		gap: 0.45rem;
-		padding: 0.38rem 0.72rem;
-		border: 1px solid var(--line);
-		border-radius: 999px;
-		font-family: "IBM Plex Mono", "Consolas", monospace;
-		font-size: 0.7rem;
-		letter-spacing: 0.06em;
-		background: rgb(255 255 255 / 0.7);
-	}
-
-	.action-log {
-		margin: 0 0 0.95rem;
-		padding: 0.34rem 0.72rem;
-		display: inline-flex;
-		border: 1px solid var(--line);
-		border-radius: 999px;
-		font-family: "IBM Plex Mono", "Consolas", monospace;
-		font-size: 0.69rem;
-		letter-spacing: 0.05em;
-		background: rgb(255 255 255 / 0.66);
-		color: var(--ink-soft);
-	}
-
-	.actions {
+	.hero-actions {
 		display: flex;
 		gap: 0.7rem;
 		flex-wrap: wrap;
 		margin-top: 1.2rem;
 	}
 
-	.btn {
+	.button {
 		display: inline-block;
-		border-radius: 999px;
-		padding: 0.72rem 1.2rem;
-		font-family: "IBM Plex Mono", "Consolas", monospace;
-		letter-spacing: 0.01em;
-		font-weight: 700;
 		text-decoration: none;
-		border: 1px solid var(--line);
-		cursor: pointer;
-		transition: transform 180ms ease, box-shadow 180ms ease, background-color 220ms ease, color 220ms ease;
+		border-radius: 999px;
+		padding: 0.62rem 1rem;
+		font-weight: 700;
+		border: 1px solid transparent;
+		transition: transform 140ms ease, box-shadow 160ms ease, background-color 160ms ease;
 	}
 
-	.btn:hover {
-		transform: translateY(-2px) scale(1.02);
+	.button:hover {
+		transform: translateY(-1px);
 	}
 
-	.btn-primary {
-		background: linear-gradient(140deg, var(--melon) 0%, var(--citrus) 100%);
-		color: #fffdfa;
-		box-shadow: 0 11px 24px rgb(255 93 87 / 0.28);
+	.button-primary {
+		background: var(--accent);
+		color: #fff;
+		box-shadow: 0 8px 16px rgb(239 94 40 / 0.26);
 	}
 
-	.btn-primary:hover {
-		box-shadow: 0 14px 26px rgb(255 93 87 / 0.36);
+	.button-primary:hover {
+		background: var(--accent-dark);
 	}
 
-	.btn-secondary {
-		background: rgb(255 255 255 / 0.72);
+	.button-ghost {
+		border-color: var(--line);
 		color: var(--ink);
+		background: #fff;
 	}
 
-	.belt {
-		margin-top: 1rem;
-		overflow: hidden;
-		border-radius: 999px;
-		border: 1px solid var(--line);
-		background: rgb(255 255 255 / 0.65);
-		box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.6);
+	.projects {
+		margin-top: 1.2rem;
 	}
 
-	.belt-track {
-		display: flex;
-		gap: 0.65rem;
-		width: max-content;
-		padding: 0.7rem 0.6rem;
-		animation: belt-scroll 22s linear infinite;
+	h2 {
+		font-size: 1.4rem;
+		margin: 0 0 0.9rem;
 	}
 
-	.belt-chip {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-width: 7.6rem;
-		padding: 0.5rem 0.85rem;
-		border-radius: 999px;
-		border: 1px solid var(--line);
-		background: linear-gradient(125deg, rgb(255 255 255 / 0.92) 0%, rgb(255 243 215 / 0.86) 100%);
-		font-family: "IBM Plex Mono", "Consolas", monospace;
-		font-size: 0.76rem;
-		font-weight: 600;
-		letter-spacing: 0.08em;
-	}
-
-	.mosaic {
+	.grid {
 		display: grid;
-		grid-template-columns: repeat(12, minmax(0, 1fr));
-		gap: 0.75rem;
-		margin-top: 1rem;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.85rem;
 	}
 
-	.tile {
-		position: relative;
-		overflow: hidden;
-		border-radius: 20px;
+	.card {
+		background: var(--bg-soft);
 		border: 1px solid var(--line);
+		border-radius: 16px;
 		padding: 1rem;
-		min-height: 11rem;
-		backdrop-filter: blur(2px);
-		box-shadow: 0 16px 30px rgb(80 40 0 / 0.08);
-		isolation: isolate;
+		display: grid;
+		gap: 0.75rem;
 	}
 
-	.tile::before {
-		content: "";
-		position: absolute;
-		inset: -30%;
-		background: conic-gradient(from 120deg, rgb(255 255 255 / 0) 0%, rgb(255 255 255 / 0.4) 40%, rgb(255 255 255 / 0) 78%);
-		animation: shimmer 7s linear infinite;
-		z-index: -1;
-	}
-
-	.tile-index {
-		margin: 0 0 0.5rem;
-		font-family: "IBM Plex Mono", "Consolas", monospace;
-		font-size: 0.72rem;
-		letter-spacing: 0.11em;
-		color: rgb(10 10 10 / 0.62);
-	}
-
-	.tile h2 {
-		font-size: clamp(1.2rem, 2.4vw, 1.8rem);
-		line-height: 1.05;
-	}
-
-	.tile p {
-		max-width: 30ch;
-		margin-bottom: 0;
-		color: rgb(34 24 20 / 0.82);
-	}
-
-	.tile-a {
-		grid-column: span 4;
-		background: linear-gradient(145deg, rgb(255 255 255 / 0.78), rgb(212 255 42 / 0.58));
-	}
-
-	.tile-b {
-		grid-column: span 4;
-		background: linear-gradient(130deg, rgb(255 158 44 / 0.6), rgb(255 255 255 / 0.78));
-	}
-
-	.tile-c {
-		grid-column: span 4;
-		background: linear-gradient(130deg, rgb(31 201 255 / 0.54), rgb(255 255 255 / 0.8));
-	}
-
-	.tile-d {
-		grid-column: span 5;
-		background: linear-gradient(138deg, rgb(255 93 87 / 0.57), rgb(255 243 207 / 0.84));
-	}
-
-	.tile-e {
-		grid-column: span 3;
-		background: linear-gradient(150deg, rgb(255 229 107 / 0.58), rgb(255 255 255 / 0.85));
-	}
-
-	.tile-f {
-		grid-column: span 4;
-		background: linear-gradient(130deg, rgb(93 246 178 / 0.58), rgb(255 255 255 / 0.82));
-	}
-
-	.tile-g {
-		grid-column: span 6;
-		background: linear-gradient(132deg, rgb(255 183 71 / 0.54), rgb(31 201 255 / 0.41));
-	}
-
-	.tile-h {
-		grid-column: span 6;
-		background: linear-gradient(125deg, rgb(255 255 255 / 0.74), rgb(255 93 87 / 0.34));
-	}
-
-	.altar {
-		margin-top: 1rem;
-		border-radius: 22px;
-		border: 1px solid var(--line);
-		padding: clamp(1rem, 2.2vw, 1.6rem);
-		background: linear-gradient(135deg, rgb(255 255 255 / 0.76) 0%, rgb(255 224 129 / 0.58) 100%);
-		box-shadow: 0 22px 34px rgb(86 42 0 / 0.1);
-	}
-
-	.altar-label {
+	.card-subtitle {
 		margin: 0;
-		font-family: "IBM Plex Mono", "Consolas", monospace;
-		font-size: 0.72rem;
-		letter-spacing: 0.14em;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
 		color: var(--ink-soft);
 	}
 
-	.mantra {
-		margin: 0.65rem 0 1rem;
-		font-size: clamp(1.3rem, 3.2vw, 2rem);
-		font-weight: 800;
-		line-height: 1.12;
-		max-width: 25ch;
+	h3 {
+		margin: 0;
+		font-size: 1.45rem;
 	}
 
-	.mantra.flash {
-		animation: mantra-flash 360ms ease;
+	.card p {
+		margin: 0;
+		color: #3a3a3a;
+		line-height: 1.5;
 	}
 
-	.orbits {
-		position: relative;
-		height: 16rem;
-		margin-top: 1rem;
-		border-radius: 24px;
+	.tags {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+	}
+
+	.tags li {
+		font-size: 0.76rem;
+		padding: 0.34rem 0.58rem;
+		border-radius: 999px;
 		border: 1px solid var(--line);
-		background: radial-gradient(circle at center, rgb(255 255 255 / 0.62) 0%, rgb(255 255 255 / 0.28) 54%, rgb(255 255 255 / 0.08) 100%);
-		overflow: hidden;
+		background: #fff;
 	}
 
-	.orbit {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		border-radius: 50%;
-		border: 1px dashed rgb(0 0 0 / 0.16);
-		transform: translate(-50%, -50%);
+	.repo-link {
+		justify-self: start;
+		font-weight: 700;
+		color: var(--accent-dark);
+		text-decoration: none;
 	}
 
-	.orbit span {
-		position: absolute;
-		width: 1rem;
-		aspect-ratio: 1;
-		border-radius: 50%;
-		top: calc(50% - 0.5rem);
-		left: -0.5rem;
-		background: var(--citrus);
-		box-shadow: 0 0 0 6px rgb(255 255 255 / 0.55);
+	.repo-link:hover {
+		text-decoration: underline;
 	}
 
-	.orbit-a {
-		width: 6rem;
-		aspect-ratio: 1;
-		animation: spin 6s linear infinite;
+	.footer {
+		margin-top: 1.2rem;
+		padding: 0.8rem 0;
+		color: var(--ink-soft);
+		font-size: 0.9rem;
 	}
 
-	.orbit-b {
-		width: 10rem;
-		aspect-ratio: 1;
-		animation: spin 10s linear reverse infinite;
-	}
-
-	.orbit-b span {
-		background: var(--lagoon);
-	}
-
-	.orbit-c {
-		width: 14rem;
-		aspect-ratio: 1;
-		animation: spin 14s linear infinite;
-	}
-
-	.orbit-c span {
-		background: var(--melon);
-	}
-
-	.orbit-d {
-		width: 19rem;
-		aspect-ratio: 1;
-		animation: spin 18s linear reverse infinite;
-	}
-
-	.orbit-d span {
-		background: var(--mint);
-	}
-
-	.reveal {
-		opacity: 0;
-		transform: translateY(18px) scale(0.99);
-		animation: reveal-up 760ms cubic-bezier(0.2, 1, 0.2, 1) forwards;
-	}
-
-	.reveal-1 {
-		animation-delay: 110ms;
-	}
-
-	.reveal-2 {
-		animation-delay: 200ms;
-	}
-
-	.reveal-3 {
-		animation-delay: 300ms;
-	}
-
-	.reveal-4 {
-		animation-delay: 390ms;
-	}
-
-	.reveal-5 {
-		animation-delay: 500ms;
-	}
-
-	:global(body.chaos) {
-		background:
-			radial-gradient(58rem 33rem at var(--pointer-x) var(--pointer-y), rgb(255 255 255 / 0.52), transparent 62%),
-			radial-gradient(39rem 29rem at 9% 10%, rgb(255 86 86 / 0.43), transparent 63%),
-			radial-gradient(33rem 26rem at 86% 19%, rgb(27 215 252 / 0.43), transparent 64%),
-			linear-gradient(128deg, #fff3ca 0%, #ffe4b3 40%, #ffd4b8 100%);
-	}
-
-	:global(body.chaos) h1 {
-		letter-spacing: 0.06em;
-	}
-
-	:global(body.chaos) .belt-track {
-		animation-duration: 9s;
-	}
-
-	:global(body.chaos) .tile {
-		animation-duration: 2.1s;
-		filter: saturate(1.14);
-	}
-
-	:global(body.ultra-chaos) {
-		filter: hue-rotate(75deg) saturate(1.42) contrast(1.08);
-	}
-
-	:global(body.ultra-chaos) .page {
-		animation: quake 380ms ease;
-	}
-
-	:global(body.impact) .hero,
-	:global(body.impact) .altar,
-	:global(body.impact) .mosaic {
-		transform: scale(1.015) rotate(-0.35deg);
-	}
-
-	:global(body.pulse) .hero,
-	:global(body.pulse) .altar {
-		transform: scale(1.01);
-	}
-
-	@keyframes reveal-up {
-		to {
-			opacity: 1;
-			transform: translateY(0) scale(1);
-		}
-	}
-
-	@keyframes belt-scroll {
-		to {
-			transform: translateX(-33.333%);
-		}
-	}
-
-	@keyframes shimmer {
-		from {
-			transform: rotate(0deg) translateY(0);
-		}
-		to {
-			transform: rotate(360deg) translateY(0);
-		}
-	}
-
-	@keyframes spin {
-		to {
-			transform: translate(-50%, -50%) rotate(360deg);
-		}
-	}
-
-	@keyframes mantra-flash {
-		0% {
-			transform: scale(1);
-			filter: saturate(1);
-		}
-		40% {
-			transform: scale(1.04);
-			filter: saturate(1.35);
-		}
-		100% {
-			transform: scale(1);
-			filter: saturate(1);
-		}
-	}
-
-	@keyframes quake {
-		0% {
-			transform: translate(0, 0) rotate(0deg);
-		}
-		20% {
-			transform: translate(-4px, 2px) rotate(-0.35deg);
-		}
-		45% {
-			transform: translate(4px, -2px) rotate(0.35deg);
-		}
-		70% {
-			transform: translate(-2px, 2px) rotate(-0.2deg);
-		}
-		100% {
-			transform: translate(0, 0) rotate(0deg);
-		}
-	}
-
-	@keyframes sheet-drift {
-		to {
-			transform: translate3d(6vw, 4vh, 0);
-		}
-	}
-
-	@media (max-width: 960px) {
-		h1 {
-			font-size: clamp(2rem, 12vw, 4rem);
-		}
-
-		.tile-a,
-		.tile-b,
-		.tile-c,
-		.tile-d,
-		.tile-e,
-		.tile-f,
-		.tile-g,
-		.tile-h {
-			grid-column: span 6;
-		}
-
-		.orbit-d {
-			width: 16rem;
-		}
-	}
-
-	@media (max-width: 640px) {
-		.page {
-			padding: 0.9rem 0.65rem 2.4rem;
-		}
-
-		.actions {
-			gap: 0.5rem;
-		}
-
-		.btn {
-			width: 100%;
-			text-align: center;
-		}
-
-		.tile-a,
-		.tile-b,
-		.tile-c,
-		.tile-d,
-		.tile-e,
-		.tile-f,
-		.tile-g,
-		.tile-h {
-			grid-column: span 12;
-		}
-
-		.orbits {
-			height: 13rem;
-		}
-
-		.orbit-c {
-			width: 12rem;
-		}
-
-		.orbit-d {
-			width: 14rem;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		*,
-		*::before,
-		*::after {
-			animation-duration: 1ms !important;
-			animation-iteration-count: 1 !important;
-			transition-duration: 1ms !important;
+	@media (max-width: 760px) {
+		.grid {
+			grid-template-columns: 1fr;
 		}
 	}
 </style>
