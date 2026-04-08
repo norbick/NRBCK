@@ -118,6 +118,7 @@ const signals: Localized[] = [
 
 const signalTrack = [...signals, ...signals];
 const contactRecipient = 'norbick@gmail.com';
+const contactAction = `https://formsubmit.co/${contactRecipient}`;
 ---
 
 <Layout title="NRBCK | Portfolio" description="Portfolio NRBCK: design i frontend.">
@@ -302,15 +303,26 @@ const contactRecipient = 'norbick@gmail.com';
 							<span data-l10n="en">Have an idea for a website, WordPress theme, or web app? Tell me what you need.</span>
 						</h3>
 						<p class="contact-copy t-block">
-							<span data-l10n="pl">Po kliknięciu otworzy się gotowy draft maila w Gmailu.</span>
-							<span data-l10n="en">After submit, a prefilled Gmail draft will open.</span>
+							<span data-l10n="pl">Formularz wysyła wiadomość bezpośrednio na norbick@gmail.com.</span>
+							<span data-l10n="en">This form sends messages directly to norbick@gmail.com.</span>
 						</p>
 					</div>
 
-					<form class="contact-form ghost-frame" id="contact-form" novalidate data-recipient={contactRecipient}>
+					<form
+						class="contact-form ghost-frame"
+						id="contact-form"
+						method="POST"
+						action={contactAction}
+						target="contact-submit-frame"
+						novalidate
+						data-recipient={contactRecipient}
+					>
 						<input class="contact-honeypot" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
 						<input type="hidden" name="_captcha" value="false" />
 						<input type="hidden" name="_template" value="table" />
+						<input type="hidden" name="_subject" value="Nowe zapytanie z nrbck.pl" data-contact-subject />
+						<input type="hidden" name="_next" value="https://nrbck.pl/" />
+						<input type="hidden" name="timeline_label" value="" data-timeline-label />
 
 						<label class="field">
 							<span class="field-label t-inline">
@@ -356,6 +368,14 @@ const contactRecipient = 'norbick@gmail.com';
 
 						<p class="contact-status" id="contact-status" aria-live="polite"></p>
 					</form>
+					<iframe
+						class="contact-submit-frame"
+						id="contact-submit-frame"
+						name="contact-submit-frame"
+						title="Form submission transport"
+						aria-hidden="true"
+						tabindex="-1"
+					></iframe>
 				</div>
 			</article>
 		</section>
@@ -598,28 +618,41 @@ const contactRecipient = 'norbick@gmail.com';
 		if (contactForm instanceof HTMLFormElement && contactStatus instanceof HTMLElement) {
 			const submitButton = contactForm.querySelector('button[type="submit"]');
 			const recipient = contactForm.dataset.recipient || 'norbick@gmail.com';
+			const subjectField = contactForm.querySelector('[data-contact-subject]');
+			const timelineLabelField = contactForm.querySelector('[data-timeline-label]');
+			const submitFrame = document.getElementById('contact-submit-frame');
+			contactForm.method = 'POST';
+			contactForm.action = `https://formsubmit.co/${recipient}`;
+			contactForm.target = 'contact-submit-frame';
 			const timelineLabels = {
 				asap: isPolish ? 'Jak najszybciej' : 'ASAP',
 				'this-month': isPolish ? 'W tym miesiącu' : 'This month',
 				'next-month': isPolish ? 'W przyszłym miesiącu' : 'Next month',
 			};
 			let isSending = false;
+			let waitingForFrameLoad = false;
 
 			const setStatus = (message, state) => {
 				contactStatus.textContent = message;
 				contactStatus.setAttribute('data-state', state);
 			};
 
-			const openEmailFallback = (subject, body) => {
-				const gmailCompose = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
-					recipient,
-				)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-				const popup = window.open(gmailCompose, '_blank', 'noopener,noreferrer');
-				if (!popup) {
-					const mailto = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-					window.location.href = mailto;
-				}
-			};
+			if (submitFrame instanceof HTMLIFrameElement) {
+				submitFrame.addEventListener('load', () => {
+					if (!waitingForFrameLoad) return;
+					waitingForFrameLoad = false;
+					isSending = false;
+					contactForm.removeAttribute('aria-busy');
+					if (submitButton instanceof HTMLButtonElement) submitButton.disabled = false;
+					contactForm.reset();
+					setStatus(
+						isPolish
+							? 'Wiadomość wysłana. Dzięki, odezwę się najszybciej jak się da.'
+							: 'Message sent. Thanks, I will get back to you as soon as I can.',
+						'success',
+					);
+				});
+			}
 
 			contactForm.addEventListener('submit', (event) => {
 				event.preventDefault();
@@ -644,30 +677,31 @@ const contactRecipient = 'norbick@gmail.com';
 
 				const timelineLabel = timelineLabels[timeline] || timeline;
 				const subject = isPolish ? `Nowe zapytanie od ${name}` : `New inquiry from ${name}`;
-				const body = isPolish
-					? `Imię: ${name}\nE-mail: ${email}\nTermin: ${timelineLabel}\n\nOpis projektu:\n${message}`
-					: `Name: ${name}\nEmail: ${email}\nTimeline: ${timelineLabel}\n\nProject details:\n${message}`;
 
 				isSending = true;
+				waitingForFrameLoad = true;
 				contactForm.setAttribute('aria-busy', 'true');
 				if (submitButton instanceof HTMLButtonElement) submitButton.disabled = true;
-				setStatus(
-					isPolish ? 'Otwieram gotowego maila w Gmailu...' : 'Opening a prefilled email in Gmail...',
-					'pending',
-				);
+				setStatus(isPolish ? 'Wysyłam wiadomość...' : 'Sending your message...', 'pending');
 
-				openEmailFallback(subject, body);
-				setStatus(
-					isPolish
-						? 'Gotowe. Sprawdź kartę Gmail i kliknij Wyślij.'
-						: 'Done. Check the Gmail tab and click Send.',
-					'success',
-				);
-				contactForm.reset();
+				if (subjectField instanceof HTMLInputElement) subjectField.value = subject;
+				if (timelineLabelField instanceof HTMLInputElement) timelineLabelField.value = timelineLabel;
 
-				isSending = false;
-				contactForm.removeAttribute('aria-busy');
-				if (submitButton instanceof HTMLButtonElement) submitButton.disabled = false;
+				window.setTimeout(() => {
+					if (!waitingForFrameLoad) return;
+					waitingForFrameLoad = false;
+					isSending = false;
+					contactForm.removeAttribute('aria-busy');
+					if (submitButton instanceof HTMLButtonElement) submitButton.disabled = false;
+					setStatus(
+						isPolish
+							? 'Coś poszło nie tak przy wysyłce. Spróbuj ponownie za chwilę.'
+							: 'Something went wrong while sending. Please try again in a moment.',
+						'error',
+					);
+				}, 12000);
+
+				HTMLFormElement.prototype.submit.call(contactForm);
 			});
 		}
 	</script>
@@ -1711,6 +1745,15 @@ const contactRecipient = 'norbick@gmail.com';
 		height: 1px;
 		opacity: 0;
 		pointer-events: none;
+	}
+
+	.contact-submit-frame {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+		pointer-events: none;
+		border: 0;
 	}
 
 	.contact-status {
