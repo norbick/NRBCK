@@ -215,9 +215,9 @@ const signalTrack = [...signals, ...signals];
 						<iframe
 							class="project-preview-frame"
 							data-preview-id={project.previewId}
-							src={project.live}
+							data-src={project.live}
 							title={`${project.name} preview`}
-							loading="eager"
+							loading="lazy"
 							referrerpolicy="no-referrer"
 							tabindex="-1"
 						></iframe>
@@ -394,8 +394,20 @@ const signalTrack = [...signals, ...signals];
 		const projectCards = Array.from(document.querySelectorAll('.project-frame[data-preview-target]'));
 
 		if (previewBg instanceof HTMLElement && previewFrames.length > 0 && projectCards.length > 0) {
+			const ensurePreviewLoaded = (previewId) => {
+				if (!previewId) return;
+				previewFrames.forEach((frame) => {
+					const iframe = /** @type {HTMLIFrameElement} */ (frame);
+					if (iframe.dataset.previewId !== previewId) return;
+					if (iframe.hasAttribute('src')) return;
+					const src = iframe.dataset.src;
+					if (src) iframe.src = src;
+				});
+			};
+
 			const setPreview = (previewId) => {
 				const isActive = Boolean(previewId) && desktop.matches;
+				if (isActive) ensurePreviewLoaded(previewId);
 				previewBg.classList.toggle('is-active', isActive);
 				previewFrames.forEach((frame) => {
 					const iframe = /** @type {HTMLElement} */ (frame);
@@ -560,6 +572,7 @@ const signalTrack = [...signals, ...signals];
 		document.querySelectorAll('.selling-card').forEach((card) => {
 			const element = /** @type {HTMLElement} */ (card);
 			element.addEventListener('pointermove', (event) => {
+				if (!desktop.matches) return;
 				const e = /** @type {PointerEvent} */ (event);
 				const rect = element.getBoundingClientRect();
 				const x = (e.clientX - rect.left) / rect.width - 0.5;
@@ -2901,16 +2914,12 @@ const signalTrack = [...signals, ...signals];
 			display: none;
 		}
 
-		.shell::before {
-			opacity: 0.36;
-			inset: -24vh -34vw;
-			transform: perspective(760px) rotateX(74deg) translateY(43vh) scale(1.62);
-		}
-
+		.orb,
+		.scanlines,
+		.scroll-brighten,
+		.shell::before,
 		.shell::after {
-			width: min(128vw, 38rem);
-			bottom: 8vh;
-			opacity: calc(0.34 + (var(--scroll-progress) * 0.18));
+			display: none;
 		}
 
 		.rail {
@@ -2958,6 +2967,11 @@ const signalTrack = [...signals, ...signals];
 				0 0 36px rgb(157 139 255 / 0.28);
 		}
 
+		.glitch-line::before,
+		.glitch-line::after {
+			display: none;
+		}
+
 		.hero-bottom {
 			grid-template-columns: 1fr;
 			gap: 0.72rem;
@@ -2975,6 +2989,28 @@ const signalTrack = [...signals, ...signals];
 		.logo-face {
 			font-size: clamp(1.96rem, 11.6vw, 4rem);
 			letter-spacing: 0.09em;
+		}
+
+		.logo-stage,
+		.logo-stage::before,
+		.logo-stage::after,
+		.logo-core,
+		.logo-core::before,
+		.logo-orbit,
+		.logo-grid,
+		.logo-flare,
+		.glitch-line,
+		.hero-copy,
+		.value-intro,
+		.reveal,
+		.global-signal-track {
+			animation: none !important;
+		}
+
+		.logo-stage::before,
+		.logo-stage::after,
+		.logo-core {
+			filter: none;
 		}
 
 		.hero-copy {
@@ -2995,6 +3031,15 @@ const signalTrack = [...signals, ...signals];
 		.project-frame {
 			padding: 1rem 0.95rem 1.02rem;
 			border-radius: 18px;
+		}
+
+		.project-frame,
+		.selling-card,
+		.project-link,
+		.contact-submit,
+		.ghost-frame::before,
+		.ghost-frame::after {
+			transition: none !important;
 		}
 
 		.project-frame:hover {
@@ -3104,12 +3149,13 @@ const signalTrack = [...signals, ...signals];
 
 		.global-signal {
 			background: linear-gradient(90deg, rgb(20 11 46 / 0.96), rgb(8 18 46 / 0.95));
+			backdrop-filter: none;
 		}
 
 		.global-signal-track {
 			gap: 0.5rem;
 			padding: 0.5rem 0.62rem;
-			animation-duration: 22s;
+			animation: none !important;
 		}
 
 		.signal-chip {
