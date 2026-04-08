@@ -139,6 +139,25 @@ const signalTrack = [...signals, ...signals];
 					</span>
 				</h1>
 
+				<div class="hero-logo-void" aria-hidden="true">
+					<div class="logo-stage" id="nrbck-logo-stage">
+						<div class="logo-core">
+							<span class="logo-depth depth-1">NRBCK</span>
+							<span class="logo-depth depth-2">NRBCK</span>
+							<span class="logo-depth depth-3">NRBCK</span>
+							<span class="logo-depth depth-4">NRBCK</span>
+							<span class="logo-depth depth-5">NRBCK</span>
+							<span class="logo-face">NRBCK</span>
+						</div>
+						<span class="logo-orbit orbit-a"></span>
+						<span class="logo-orbit orbit-b"></span>
+						<span class="logo-orbit orbit-c"></span>
+						<span class="logo-grid"></span>
+						<span class="logo-flare flare-a"></span>
+						<span class="logo-flare flare-b"></span>
+					</div>
+				</div>
+
 				<div class="hero-bottom">
 					<p class="t-block hero-copy">
 						<span data-l10n="pl">
@@ -427,6 +446,34 @@ const signalTrack = [...signals, ...signals];
 			updateProgress();
 		}
 
+		const logoStage = document.getElementById('nrbck-logo-stage');
+		const heroPanel = document.querySelector('.panel-hero');
+
+		if (logoStage instanceof HTMLElement && heroPanel instanceof HTMLElement) {
+			const resetLogo = () => {
+				logoStage.style.setProperty('--logo-tilt-x', '0deg');
+				logoStage.style.setProperty('--logo-tilt-y', '0deg');
+				logoStage.style.setProperty('--logo-shift-x', '0px');
+				logoStage.style.setProperty('--logo-shift-y', '0px');
+			};
+
+			heroPanel.addEventListener('pointermove', (event) => {
+				if (!desktop.matches) return;
+				const e = /** @type {PointerEvent} */ (event);
+				const rect = heroPanel.getBoundingClientRect();
+				const x = (e.clientX - rect.left) / rect.width - 0.5;
+				const y = (e.clientY - rect.top) / rect.height - 0.5;
+				logoStage.style.setProperty('--logo-tilt-x', `${(-y * 16).toFixed(2)}deg`);
+				logoStage.style.setProperty('--logo-tilt-y', `${(x * 18).toFixed(2)}deg`);
+				logoStage.style.setProperty('--logo-shift-x', `${(x * 14).toFixed(2)}px`);
+				logoStage.style.setProperty('--logo-shift-y', `${(-y * 8).toFixed(2)}px`);
+			});
+
+			heroPanel.addEventListener('pointerleave', resetLogo);
+			desktop.addEventListener('change', () => {
+				if (!desktop.matches) resetLogo();
+			});
+		}
 		document.querySelectorAll('.selling-card').forEach((card) => {
 			const element = /** @type {HTMLElement} */ (card);
 			element.addEventListener('pointermove', (event) => {
@@ -775,8 +822,171 @@ const signalTrack = [...signals, ...signals];
 
 	.panel-hero {
 		display: grid;
-		grid-template-rows: auto auto;
-		align-content: space-between;
+		grid-template-rows: auto minmax(clamp(7rem, 18vh, 14rem), 1fr) auto;
+		align-content: stretch;
+		gap: clamp(0.35rem, 1.2vh, 1.2rem);
+	}
+	.hero-logo-void {
+		position: relative;
+		display: grid;
+		place-items: center;
+		align-self: center;
+		min-height: clamp(8rem, 20vh, 14rem);
+		perspective: 1400px;
+	}
+
+	.logo-stage {
+		position: relative;
+		width: clamp(19rem, 54vw, 52rem);
+		aspect-ratio: 4.8 / 1.32;
+		transform-style: preserve-3d;
+		--logo-tilt-x: 0deg;
+		--logo-tilt-y: 0deg;
+		--logo-shift-x: 0px;
+		--logo-shift-y: 0px;
+		transform:
+			translate3d(var(--logo-shift-x), var(--logo-shift-y), 0)
+			rotateX(var(--logo-tilt-x))
+			rotateY(var(--logo-tilt-y));
+		transition: transform var(--dur-sm) var(--ease-organic);
+		animation: logo-stage-float 9.8s var(--ease-organic) infinite;
+	}
+
+	.logo-core {
+		position: absolute;
+		inset: 18% 3% 18% 3%;
+		display: grid;
+		place-items: center;
+		transform-style: preserve-3d;
+		animation: logo-core-spin 10.5s var(--ease-organic) infinite;
+		filter:
+			drop-shadow(0 0 20px rgb(113 232 255 / 0.22))
+			drop-shadow(0 0 32px rgb(255 130 86 / 0.16));
+	}
+
+	.logo-depth,
+	.logo-face {
+		position: absolute;
+		margin: 0;
+		font-family: 'Archivo Black', 'Impact', sans-serif;
+		font-size: clamp(2.4rem, 8.2vw, 6.8rem);
+		line-height: 0.8;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		white-space: nowrap;
+		user-select: none;
+	}
+
+	.logo-depth {
+		mix-blend-mode: screen;
+		opacity: 0.74;
+		text-shadow: 0 0 12px rgb(241 244 255 / 0.18);
+	}
+
+	.depth-1 {
+		transform: translateZ(-70px);
+		color: rgb(86 173 255 / 0.66);
+	}
+
+	.depth-2 {
+		transform: translateZ(-54px);
+		color: rgb(255 131 83 / 0.58);
+	}
+
+	.depth-3 {
+		transform: translateZ(-40px);
+		color: rgb(188 154 255 / 0.56);
+	}
+
+	.depth-4 {
+		transform: translateZ(-26px);
+		color: rgb(117 241 218 / 0.56);
+	}
+
+	.depth-5 {
+		transform: translateZ(-14px);
+		color: rgb(255 220 141 / 0.62);
+	}
+
+	.logo-face {
+		color: transparent;
+		background: linear-gradient(104deg, #89f8ef 0%, #ffe9a2 31%, #ff96b9 58%, #bb9dff 82%, #89f8ef 100%);
+		background-size: 210% 100%;
+		-webkit-background-clip: text;
+		background-clip: text;
+		text-shadow:
+			0 0 18px rgb(137 248 239 / 0.26),
+			0 0 28px rgb(187 157 255 / 0.2);
+		animation: logo-face-shift 7.2s linear infinite;
+	}
+
+	.logo-orbit {
+		position: absolute;
+		inset: 14% 6%;
+		border-radius: 999px;
+		border: 1px solid rgb(169 205 255 / 0.38);
+		mix-blend-mode: screen;
+		pointer-events: none;
+	}
+
+	.orbit-a {
+		transform: rotateX(70deg) rotateY(-14deg) translateZ(4px);
+		border-color: rgb(106 224 255 / 0.56);
+		animation: logo-orbit-a 6.4s linear infinite;
+	}
+
+	.orbit-b {
+		inset: 23% 10%;
+		transform: rotateX(-70deg) rotateY(16deg) translateZ(-2px);
+		border-color: rgb(255 166 112 / 0.5);
+		animation: logo-orbit-b 7.6s linear infinite reverse;
+	}
+
+	.orbit-c {
+		inset: 9% 18%;
+		transform: rotateX(8deg) rotateY(68deg) translateZ(2px);
+		border-color: rgb(191 155 255 / 0.52);
+		animation: logo-orbit-c 8.8s linear infinite;
+	}
+
+	.logo-grid {
+		position: absolute;
+		left: 8%;
+		right: 8%;
+		bottom: 10%;
+		height: 38%;
+		background:
+			repeating-linear-gradient(90deg, rgb(159 191 255 / 0.12) 0 1px, transparent 1px 16px),
+			repeating-linear-gradient(0deg, rgb(159 191 255 / 0.14) 0 1px, transparent 1px 12px);
+		transform: rotateX(72deg) translateZ(-38px);
+		opacity: 0.58;
+		mask-image: linear-gradient(to top, #000 0%, rgb(0 0 0 / 0.12) 84%, transparent 100%);
+		animation: logo-grid-scan 4.8s var(--ease-organic) infinite;
+	}
+
+	.logo-flare {
+		position: absolute;
+		border-radius: 999px;
+		pointer-events: none;
+		filter: blur(0.2px);
+	}
+
+	.flare-a {
+		width: clamp(1.6rem, 2.4vw, 2.6rem);
+		height: clamp(1.6rem, 2.4vw, 2.6rem);
+		left: 16%;
+		top: 58%;
+		background: radial-gradient(circle, rgb(112 230 255 / 0.9) 0%, rgb(112 230 255 / 0) 70%);
+		animation: logo-flare-a 3.6s var(--ease-organic) infinite;
+	}
+
+	.flare-b {
+		width: clamp(1.2rem, 2vw, 2rem);
+		height: clamp(1.2rem, 2vw, 2rem);
+		right: 19%;
+		top: 24%;
+		background: radial-gradient(circle, rgb(255 170 112 / 0.84) 0%, rgb(255 170 112 / 0) 72%);
+		animation: logo-flare-b 4.2s var(--ease-organic) infinite;
 	}
 
 	.headline {
@@ -1440,6 +1650,106 @@ const signalTrack = [...signals, ...signals];
 		}
 	}
 
+	@keyframes logo-stage-float {
+		0%,
+		100% {
+			transform:
+				translate3d(var(--logo-shift-x), calc(var(--logo-shift-y) + 0px), 0)
+				rotateX(var(--logo-tilt-x))
+				rotateY(var(--logo-tilt-y));
+		}
+		50% {
+			transform:
+				translate3d(var(--logo-shift-x), calc(var(--logo-shift-y) - 7px), 0)
+				rotateX(calc(var(--logo-tilt-x) + 1.5deg))
+				rotateY(calc(var(--logo-tilt-y) - 1.8deg));
+		}
+	}
+
+	@keyframes logo-core-spin {
+		0%,
+		100% {
+			transform: rotateX(-7deg) rotateY(0deg) rotateZ(0deg);
+		}
+		42% {
+			transform: rotateX(6deg) rotateY(8deg) rotateZ(-1.2deg);
+		}
+		72% {
+			transform: rotateX(-5deg) rotateY(-8deg) rotateZ(1deg);
+		}
+	}
+
+	@keyframes logo-face-shift {
+		0% {
+			background-position: 0% 50%;
+		}
+		100% {
+			background-position: 210% 50%;
+		}
+	}
+
+	@keyframes logo-orbit-a {
+		0% {
+			transform: rotateX(70deg) rotateY(-14deg) rotateZ(0deg) translateZ(4px);
+		}
+		100% {
+			transform: rotateX(70deg) rotateY(-14deg) rotateZ(360deg) translateZ(4px);
+		}
+	}
+
+	@keyframes logo-orbit-b {
+		0% {
+			transform: rotateX(-70deg) rotateY(16deg) rotateZ(0deg) translateZ(-2px);
+		}
+		100% {
+			transform: rotateX(-70deg) rotateY(16deg) rotateZ(360deg) translateZ(-2px);
+		}
+	}
+
+	@keyframes logo-orbit-c {
+		0% {
+			transform: rotateX(8deg) rotateY(68deg) rotateZ(0deg) translateZ(2px);
+		}
+		100% {
+			transform: rotateX(8deg) rotateY(68deg) rotateZ(360deg) translateZ(2px);
+		}
+	}
+
+	@keyframes logo-grid-scan {
+		0%,
+		100% {
+			opacity: 0.5;
+			transform: rotateX(72deg) translateZ(-38px) translateY(0);
+		}
+		50% {
+			opacity: 0.78;
+			transform: rotateX(72deg) translateZ(-38px) translateY(4px);
+		}
+	}
+
+	@keyframes logo-flare-a {
+		0%,
+		100% {
+			transform: scale(1) translate3d(0, 0, 0);
+			opacity: 0.72;
+		}
+		50% {
+			transform: scale(1.4) translate3d(4px, -2px, 0);
+			opacity: 1;
+		}
+	}
+
+	@keyframes logo-flare-b {
+		0%,
+		100% {
+			transform: scale(1) translate3d(0, 0, 0);
+			opacity: 0.58;
+		}
+		45% {
+			transform: scale(1.26) translate3d(-5px, 3px, 0);
+			opacity: 0.94;
+		}
+	}
 	@keyframes headline-rainbow {
 		0% {
 			background-position: 0% 50%;
@@ -1714,6 +2024,20 @@ const signalTrack = [...signals, ...signals];
 			grid-template-columns: 1fr;
 		}
 
+		.hero-logo-void {
+			min-height: clamp(7rem, 22vh, 10rem);
+		}
+
+		.logo-stage {
+			width: min(96%, 31rem);
+		}
+
+		.logo-depth,
+		.logo-face {
+			font-size: clamp(2.1rem, 12vw, 4.2rem);
+			letter-spacing: 0.09em;
+		}
+
 		.project-grid {
 			grid-template-columns: 1fr;
 		}
@@ -1738,7 +2062,3 @@ const signalTrack = [...signals, ...signals];
 		}
 	}
 </style>
-
-
-
-
