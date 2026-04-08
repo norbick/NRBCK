@@ -1,6 +1,6 @@
-# XAERO - Astro Practice
+# XAERO // Chroma Carnival
 
-This repository contains a starter Astro project for learning.
+Szalony, kompletnie niepraktyczny eksperyment estetyczny zbudowany w Astro.
 
 ## Start
 
@@ -9,18 +9,14 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:4321`.
-
-## Useful commands
+## Build
 
 ```bash
-npm run dev
 npm run build
 npm run preview
 ```
 
-## Notes
+## Gdzie edytować
 
-- Main page: `src/pages/index.astro`
-- Reusable components: `src/components`
-- Static files: `public`
+- `src/pages/index.astro` - cała kompozycja wizualna
+- `src/layouts/Layout.astro` - meta, HTML shell, podstawowy layout
