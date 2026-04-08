@@ -1,4 +1,4 @@
-﻿# SEO Snippets Pack (NRBCK)
+# SEO Snippets Pack (NRBCK)
 
 Ten plik to baza pod narzędzie SEO/copy oparta na aktualnej treści live.
 Źródło prawdy: `src/pages/index.astro`.
@@ -8,59 +8,57 @@ Ten plik to baza pod narzędzie SEO/copy oparta na aktualnej treści live.
 ### Hero (PL)
 - FREELANCE WEB DESIGNER
 - & FRONTEND DEVELOPER
-- Projektuję strony, które zatrzymują uwagę w 3 sekundy i prowadzą prosto do zapytania.
-- Łączę strategię, design i frontend w jeden szybki flow, żeby Twoja marka wyglądała mocno i sprzedawała konkretnie.
+- Tworzę strony internetowe, motywy WordPress i aplikacje webowe, które dobrze wyglądają, szybko działają i jasno pokazują, co masz do zaoferowania.
+- Projektuję i wdrażam całość tak, żeby strona była prosta w odbiorze, wygodna w użyciu i pomagała ludziom szybko zrobić kolejny krok.
 
 ### Hero (EN)
 - FREELANCE WEB DESIGNER
 - & FRONTEND DEVELOPER
-- I craft websites that grab attention in three seconds and lead straight to inquiry.
-- I blend strategy, design, and frontend into one fast flow so your brand looks bold and converts with clarity.
+- I build websites, WordPress themes, and web apps that look good, run fast, and clearly show what you offer.
+- I design and develop the whole thing so it feels simple, works smoothly, and helps people take the next step without confusion.
 
 ### Projekty (PL)
 - m2_stage: Strona dla projektu eventowego.
-- Miejsce, w którym organizator pokazuje wydarzenie, a użytkownik od razu wie co, kiedy i jak dołączyć.
-- Tagi: Czytelny układ, MVP, Szybkie wdrożenie.
+- Strona, na której od razu wiadomo, co to za wydarzenie, kiedy się odbywa i jak można do niego dołączyć.
+- Tagi: Czytelny układ, Szybkie wdrożenie, Jasny przekaz.
 
 - LooLoot: Projekt strony pod produkt cyfrowy.
-- Mocny, charakterystyczny styl z naciskiem na emocje, zrozumiały flow i szybkie przejście do działania.
-- Tagi: Wyrazisty styl, Płynna nawigacja, Lepsza konwersja.
+- Mocny styl, prosty układ i szybka droga od pierwszego wrażenia do kliknięcia tam, gdzie trzeba.
+- Tagi: Wyrazisty styl, Prosta nawigacja, Jasne CTA.
 
 ### Projects (EN)
 - m2_stage: Website for an event project.
-- A place where the organizer presents the event and the user instantly sees what, when and how to join.
-- Tags: Clear layout, MVP, Fast launch.
+- A website that makes it clear right away what the event is, when it happens, and how to join.
+- Tags: Clear layout, Fast launch, Straightforward message.
 
 - LooLoot: Website concept for a digital product.
-- A bold visual style focused on emotion, understandable flow and a fast path to action.
-- Tags: Bold style, Smooth navigation, Better conversion.
+- A bold style, a simple layout, and a quick path from first impression to the right click.
+- Tags: Bold style, Simple navigation, Clear CTA.
 
 ### Why Me / Dlaczego warto (PL)
 - Dlaczego warto
-- Jedna osoba. Jeden kierunek. Konkretny efekt.
-- Nie sprzedaję Ci korpo-slajdów. Projektuję stronę, która mówi językiem Twojego klienta i prowadzi go do zapytania.
-- Mówisz, czego potrzebujesz, a ja przekładam to na stronę, którą łatwo zrozumieć.
-- Jedna osoba od całości: design, frontend i wdrożenie bez przepychanek.
-- Nie znikam na tydzień. Regularnie pokazuję postęp i konkretne decyzje.
-- Układ i treść prowadzą odwiedzającego prosto do kontaktu, bez błądzenia.
-- Każdy projekt ma własny charakter, zero generycznych gotowców.
-- Mówię prosto: co robimy teraz, co dalej i po co to jest.
+- Jedna osoba. Mniej zamieszania. Lepszy efekt.
+- Pracujesz bezpośrednio ze mną, więc nic nie ginie między pomysłem, projektem i wdrożeniem.
+- Robię strony, które nie tylko dobrze wyglądają, ale też są czytelne i łatwe w użyciu.
+- Nie komplikuję. Tłumaczę jasno, co robimy, na jakim jesteśmy etapie i co będzie dalej.
+- Regularnie pokazuję postęp, więc nie musisz się domyślać, czy coś w ogóle się dzieje.
+- Nie wrzucam każdej marki w ten sam szablon. Strona ma pasować do Ciebie, a nie do gotowca.
+- Zależy mi na tym, żeby końcowy efekt był po prostu dobry: spójny, szybki i sensowny.
 
 ### Why Me (EN)
 - Why me
-- One person. One direction. Real results.
-- No buzzword decks. I build websites that speak your client's language and lead them to inquiry.
-- You tell me what you need, and I turn it into a website people instantly understand.
-- One person for the whole flow: design, frontend, and launch without handoff chaos.
-- I do not disappear for a week. You get regular progress and clear decisions.
-- Layout and copy guide visitors straight to contact, without confusion.
-- Every project gets its own character, never a generic template look.
-- I keep it simple: what we do now, what comes next, and why it matters.
+- One person. Less back and forth. Better end result.
+- You work directly with me, so nothing gets lost between the idea, the design, and the build.
+- I create websites that not only look good, but also feel clear and easy to use.
+- I keep things simple. You always know what we are doing, where the project stands, and what comes next.
+- I share progress regularly, so you are never left wondering if anything is moving.
+- I do not force every brand into the same template. The website should fit you, not the other way around.
+- What matters to me is a final result that feels solid, fast, and genuinely well made.
 
 ### Kontakt / Contact
 - Kontakt / Contact
-- Masz pomysł na stronę? Napisz, czego potrzebujesz.
-- Have a website idea? Tell me what you need.
+- Masz pomysł na stronę, motyw WordPress albo aplikację webową? Napisz, czego potrzebujesz.
+- Have an idea for a website, WordPress theme, or web app? Tell me what you need.
 - To wersja testowa: formularz otworzy maila z gotową treścią.
 - This is a demo version: the form opens your email app with a prefilled message.
 - Wyślij zapytanie / Send inquiry
@@ -79,6 +77,8 @@ Ważne zasady:
 3. Pisz prostym językiem dla osób nietechnicznych.
 4. Dla każdej sekcji daj 3 warianty: bardziej spokojny, bardziej odważny, bardziej premium.
 5. Maksymalnie 1-2 zdania na snippet.
+6. Unikaj kalek z angielskiego, korpo-bzdur i sztucznie brzmiącego marketingowego języka.
+7. Pisz językiem korzyści, ale naturalnie i po ludzku.
 
 Sekcje do rewrite:
 - Hero headline

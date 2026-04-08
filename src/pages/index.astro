@@ -22,13 +22,13 @@ const projects: Project[] = [
 		theme: 'theme-blue',
 		role: { pl: 'Strona dla projektu eventowego', en: 'Website for an event project' },
 		blurb: {
-			pl: 'Miejsce, w którym organizator pokazuje wydarzenie, a użytkownik od razu wie co, kiedy i jak dołączyć.',
-			en: 'A place where the organizer presents the event and the user instantly sees what, when and how to join.',
+			pl: 'Strona, na której od razu wiadomo, co to za wydarzenie, kiedy się odbywa i jak można do niego dołączyć.',
+			en: 'A website that makes it clear right away what the event is, when it happens, and how to join.',
 		},
 		tags: [
 			{ pl: 'Czytelny układ', en: 'Clear layout' },
-			{ pl: 'MVP', en: 'MVP' },
 			{ pl: 'Szybkie wdrożenie', en: 'Fast launch' },
+			{ pl: 'Jasny przekaz', en: 'Straightforward message' },
 		],
 		cta: { pl: 'Zobacz repozytorium', en: 'View repository' },
 	},
@@ -39,13 +39,13 @@ const projects: Project[] = [
 		theme: 'theme-orange',
 		role: { pl: 'Projekt strony pod produkt cyfrowy', en: 'Website concept for a digital product' },
 		blurb: {
-			pl: 'Mocny, charakterystyczny styl z naciskiem na emocje, zrozumiały flow i szybkie przejście do działania.',
-			en: 'A bold visual style focused on emotion, understandable flow and a fast path to action.',
+			pl: 'Mocny styl, prosty układ i szybka droga od pierwszego wrażenia do kliknięcia tam, gdzie trzeba.',
+			en: 'A bold style, a simple layout, and a quick path from first impression to the right click.',
 		},
 		tags: [
 			{ pl: 'Wyrazisty styl', en: 'Bold style' },
-			{ pl: 'Płynna nawigacja', en: 'Smooth navigation' },
-			{ pl: 'Lepsza konwersja', en: 'Better conversion' },
+			{ pl: 'Prosta nawigacja', en: 'Simple navigation' },
+			{ pl: 'Jasne CTA', en: 'Clear CTA' },
 		],
 		cta: { pl: 'Zobacz repozytorium', en: 'View repository' },
 	},
@@ -53,28 +53,28 @@ const projects: Project[] = [
 
 const sellingPoints: Localized[] = [
 	{
-		pl: 'Mówisz, czego potrzebujesz, a ja przekładam to na stronę, którą łatwo zrozumieć.',
-		en: 'You tell me what you need, and I turn it into a website people instantly understand.',
+		pl: 'Pracujesz bezpośrednio ze mną, więc nic nie ginie między pomysłem, projektem i wdrożeniem.',
+		en: 'You work directly with me, so nothing gets lost between the idea, the design, and the build.',
 	},
 	{
-		pl: 'Jedna osoba od całości: design, frontend i wdrożenie bez przepychanek.',
-		en: 'One person for the whole flow: design, frontend, and launch without handoff chaos.',
+		pl: 'Robię strony, które nie tylko dobrze wyglądają, ale też są czytelne i łatwe w użyciu.',
+		en: 'I create websites that not only look good, but also feel clear and easy to use.',
 	},
 	{
-		pl: 'Nie znikam na tydzień. Regularnie pokazuję postęp i konkretne decyzje.',
-		en: 'I do not disappear for a week. You get regular progress and clear decisions.',
+		pl: 'Nie komplikuję. Tłumaczę jasno, co robimy, na jakim jesteśmy etapie i co będzie dalej.',
+		en: 'I keep things simple. You always know what we are doing, where the project stands, and what comes next.',
 	},
 	{
-		pl: 'Układ i treść prowadzą odwiedzającego prosto do kontaktu, bez błądzenia.',
-		en: 'Layout and copy guide visitors straight to contact, without confusion.',
+		pl: 'Regularnie pokazuję postęp, więc nie musisz się domyślać, czy coś w ogóle się dzieje.',
+		en: 'I share progress regularly, so you are never left wondering if anything is moving.',
 	},
 	{
-		pl: 'Każdy projekt ma własny charakter, zero generycznych gotowców.',
-		en: 'Every project gets its own character, never a generic template look.',
+		pl: 'Nie wrzucam każdej marki w ten sam szablon. Strona ma pasować do Ciebie, a nie do gotowca.',
+		en: 'I do not force every brand into the same template. The website should fit you, not the other way around.',
 	},
 	{
-		pl: 'Mówię prosto: co robimy teraz, co dalej i po co to jest.',
-		en: 'I keep it simple: what we do now, what comes next, and why it matters.',
+		pl: 'Zależy mi na tym, żeby końcowy efekt był po prostu dobry: spójny, szybki i sensowny.',
+		en: 'What matters to me is a final result that feels solid, fast, and genuinely well made.',
 	},
 ];
 
@@ -142,18 +142,18 @@ const signalTrack = [...signals, ...signals];
 				<div class="hero-bottom">
 					<p class="t-block hero-copy">
 						<span data-l10n="pl">
-							Projektuję strony, które <span class="hero-spark">zatrzymują uwagę w 3 sekundy</span> i prowadzą prosto do zapytania.
+							Tworzę strony internetowe, motywy WordPress i aplikacje webowe, które dobrze wyglądają, szybko działają i jasno pokazują, co masz do zaoferowania.
 						</span>
 						<span data-l10n="en">
-							I craft websites that <span class="hero-spark">grab attention in three seconds</span> and lead straight to inquiry.
+							I build websites, WordPress themes, and web apps that look good, run fast, and clearly show what you offer.
 						</span>
 					</p>
 					<p class="t-block hero-copy">
 						<span data-l10n="pl">
-							Łączę strategię, design i frontend w jeden szybki flow, żeby Twoja marka wyglądała mocno i sprzedawała konkretnie.
+							Projektuję i wdrażam całość tak, żeby strona była prosta w odbiorze, wygodna w użyciu i pomagała ludziom szybko zrobić kolejny krok.
 						</span>
 						<span data-l10n="en">
-							I blend strategy, design, and frontend into one fast flow so your brand looks bold and converts with clarity.
+							I design and develop the whole thing so it feels simple, works smoothly, and helps people take the next step without confusion.
 						</span>
 					</p>
 				</div>
@@ -198,15 +198,15 @@ const signalTrack = [...signals, ...signals];
 							<span data-l10n="en">Why me</span>
 						</p>
 						<h3 class="value-title t-block">
-							<span data-l10n="pl">Jedna osoba. Jeden kierunek. Konkretny efekt.</span>
-							<span data-l10n="en">One person. One direction. Real results.</span>
+							<span data-l10n="pl">Jedna osoba. Mniej zamieszania. Lepszy efekt.</span>
+							<span data-l10n="en">One person. Less back and forth. Better end result.</span>
 						</h3>
 						<p class="value-copy t-block">
 							<span data-l10n="pl">
-								Nie sprzedaję Ci korpo-slajdów. Projektuję stronę, która mówi językiem Twojego klienta i prowadzi go do zapytania.
+								Pracujesz bezpośrednio ze mną, więc nic nie ginie między pomysłem, projektem i wdrożeniem.
 							</span>
 							<span data-l10n="en">
-								No buzzword decks. I build websites that speak your client's language and lead them to inquiry.
+								You work directly with me, so nothing gets lost between the idea, the design, and the build.
 							</span>
 						</p>
 					</div>
@@ -232,8 +232,8 @@ const signalTrack = [...signals, ...signals];
 							<span data-l10n="en">Contact</span>
 						</p>
 						<h3 class="contact-title t-block">
-							<span data-l10n="pl">Masz pomysł na stronę? Napisz, czego potrzebujesz.</span>
-							<span data-l10n="en">Have a website idea? Tell me what you need.</span>
+							<span data-l10n="pl">Masz pomysł na stronę, motyw WordPress albo aplikację webową? Napisz, czego potrzebujesz.</span>
+							<span data-l10n="en">Have an idea for a website, WordPress theme, or web app? Tell me what you need.</span>
 						</h3>
 						<p class="contact-copy t-block">
 							<span data-l10n="pl">To wersja testowa: formularz otworzy maila z gotową treścią.</span>
@@ -1713,5 +1713,6 @@ const signalTrack = [...signals, ...signals];
 		}
 	}
 </style>
+
 
 
