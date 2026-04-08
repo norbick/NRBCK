@@ -138,6 +138,17 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		<div class="scroll-brighten" aria-hidden="true"></div>
 		<div class="scanlines" aria-hidden="true"></div>
 		<div class="vignette" aria-hidden="true"></div>
+		<button class="music-toggle" id="music-toggle" type="button" aria-pressed="false">
+			<span class="music-led" aria-hidden="true"></span>
+			<span class="music-text music-off t-inline">
+				<span data-l10n="pl">MUZYKA OFF</span>
+				<span data-l10n="en">MUSIC OFF</span>
+			</span>
+			<span class="music-text music-on t-inline">
+				<span data-l10n="pl">MUZYKA ON</span>
+				<span data-l10n="en">MUSIC ON</span>
+			</span>
+		</button>
 
 		<div class="scroll-hint" id="scroll-hint" aria-hidden="true">
 			<svg class="hint-ring" viewBox="0 0 180 180" aria-hidden="true">
@@ -704,6 +715,243 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				HTMLFormElement.prototype.submit.call(contactForm);
 			});
 		}
+
+		const musicToggle = document.getElementById('music-toggle');
+
+		if (musicToggle instanceof HTMLButtonElement) {
+			const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+
+			if (!AudioContextClass) {
+				musicToggle.disabled = true;
+				musicToggle.classList.add('is-disabled');
+			} else {
+				const progression = [
+					[57, 60, 64],
+					[53, 57, 60],
+					[48, 52, 55],
+					[50, 55, 59],
+				];
+				const arpPattern = [0, 2, 1, 2, 0, 1, 2, 1];
+				const bpm = 74;
+				const stepSeconds = (60 / bpm) / 2;
+				const scheduleAhead = 0.2;
+				let context = null;
+				let master = null;
+				let padBus = null;
+				let padFilter = null;
+				let bassOsc = null;
+				let arpOsc = null;
+				let arpGain = null;
+				let padVoices = [];
+				let schedulerTimer = 0;
+				let nextStepAt = 0;
+				let stepIndex = 0;
+				let isPlaying = false;
+
+				const midiToFreq = (midi) => 440 * Math.pow(2, (midi - 69) / 12);
+
+				const setToggleState = (state) => {
+					musicToggle.classList.toggle('is-on', state);
+					musicToggle.setAttribute('aria-pressed', state ? 'true' : 'false');
+				};
+
+				const createPadVoice = (detune) => {
+					const oscA = context.createOscillator();
+					oscA.type = 'triangle';
+					oscA.detune.value = detune;
+					const oscB = context.createOscillator();
+					oscB.type = 'sawtooth';
+					oscB.detune.value = detune * 0.62;
+					const gainA = context.createGain();
+					gainA.gain.value = 0.024;
+					const gainB = context.createGain();
+					gainB.gain.value = 0.009;
+					oscA.connect(gainA);
+					oscB.connect(gainB);
+					gainA.connect(padFilter);
+					gainB.connect(padFilter);
+					oscA.start();
+					oscB.start();
+					return { oscA, oscB };
+				};
+
+				const ensureAudio = () => {
+					if (context) return;
+					context = new AudioContextClass();
+
+					master = context.createGain();
+					master.gain.value = 0.0001;
+					const masterTone = context.createBiquadFilter();
+					masterTone.type = 'lowpass';
+					masterTone.frequency.value = 4200;
+					masterTone.Q.value = 0.42;
+					master.connect(masterTone);
+					masterTone.connect(context.destination);
+
+					padFilter = context.createBiquadFilter();
+					padFilter.type = 'lowpass';
+					padFilter.frequency.value = 960;
+					padFilter.Q.value = 0.54;
+
+					padBus = context.createGain();
+					padBus.gain.value = 0.0001;
+					padFilter.connect(padBus);
+					padBus.connect(master);
+
+					padVoices = [createPadVoice(-7), createPadVoice(0), createPadVoice(7)];
+
+					bassOsc = context.createOscillator();
+					bassOsc.type = 'sine';
+					const bassFilter = context.createBiquadFilter();
+					bassFilter.type = 'lowpass';
+					bassFilter.frequency.value = 260;
+					const bassGain = context.createGain();
+					bassGain.gain.value = 0.022;
+					bassOsc.connect(bassFilter);
+					bassFilter.connect(bassGain);
+					bassGain.connect(master);
+					bassOsc.start();
+
+					arpOsc = context.createOscillator();
+					arpOsc.type = 'triangle';
+					const arpFilter = context.createBiquadFilter();
+					arpFilter.type = 'lowpass';
+					arpFilter.frequency.value = 1700;
+					arpFilter.Q.value = 0.38;
+					arpGain = context.createGain();
+					arpGain.gain.value = 0.0001;
+					arpOsc.connect(arpFilter);
+					arpFilter.connect(arpGain);
+					arpGain.connect(master);
+
+					const delay = context.createDelay(1.2);
+					delay.delayTime.value = 0.36;
+					const feedback = context.createGain();
+					feedback.gain.value = 0.24;
+					const delayFilter = context.createBiquadFilter();
+					delayFilter.type = 'lowpass';
+					delayFilter.frequency.value = 1400;
+					arpGain.connect(delay);
+					padFilter.connect(delay);
+					delay.connect(delayFilter);
+					delayFilter.connect(feedback);
+					feedback.connect(delay);
+					delayFilter.connect(master);
+
+					const motion = context.createOscillator();
+					motion.type = 'sine';
+					motion.frequency.value = 0.085;
+					const motionDepth = context.createGain();
+					motionDepth.gain.value = 160;
+					motion.connect(motionDepth);
+					motionDepth.connect(padFilter.frequency);
+					motion.start();
+
+					arpOsc.start();
+				};
+
+				const scheduleChord = (time, chord) => {
+					if (!context || !padVoices.length || !padBus || !padFilter || !bassOsc) return;
+					const spread = [chord[0] - 12, chord[1], chord[2] + 12];
+
+					padVoices.forEach((voice, index) => {
+						const freq = midiToFreq(spread[index]);
+						voice.oscA.frequency.setTargetAtTime(freq, time, 1.1);
+						voice.oscB.frequency.setTargetAtTime(freq * 1.0014, time, 1.1);
+					});
+
+					bassOsc.frequency.setTargetAtTime(midiToFreq(chord[0] - 24), time, 0.42);
+
+					padFilter.frequency.setTargetAtTime(840, time, 0.72);
+					padFilter.frequency.setTargetAtTime(1120, time + stepSeconds * 3.6, 1.45);
+
+					padBus.gain.cancelScheduledValues(time);
+					padBus.gain.setValueAtTime(Math.max(padBus.gain.value, 0.0001), time);
+					padBus.gain.linearRampToValueAtTime(0.092, time + 1.2);
+					padBus.gain.linearRampToValueAtTime(0.066, time + stepSeconds * 8);
+				};
+
+				const scheduleArp = (time, chord, step) => {
+					if (!arpOsc || !arpGain) return;
+					const idx = arpPattern[step % arpPattern.length];
+					const octaveLift = step % 16 === 12 ? 12 : 0;
+					const note = chord[idx] + 12 + octaveLift;
+					arpOsc.frequency.setValueAtTime(midiToFreq(note), time);
+					arpGain.gain.cancelScheduledValues(time);
+					arpGain.gain.setValueAtTime(0.0001, time);
+					arpGain.gain.linearRampToValueAtTime(0.024, time + 0.03);
+					arpGain.gain.exponentialRampToValueAtTime(0.0001, time + stepSeconds * 0.8);
+				};
+
+				const scheduler = () => {
+					if (!context || !isPlaying) return;
+
+					while (nextStepAt < context.currentTime + scheduleAhead) {
+						const chord = progression[Math.floor(stepIndex / 8) % progression.length];
+						if (stepIndex % 8 === 0) scheduleChord(nextStepAt, chord);
+						scheduleArp(nextStepAt, chord, stepIndex);
+						stepIndex += 1;
+						nextStepAt += stepSeconds;
+					}
+
+					schedulerTimer = window.setTimeout(scheduler, 36);
+				};
+
+				const stopMusic = () => {
+					if (!context || !master) {
+						isPlaying = false;
+						setToggleState(false);
+						return;
+					}
+
+					isPlaying = false;
+					setToggleState(false);
+					if (schedulerTimer) {
+						clearTimeout(schedulerTimer);
+						schedulerTimer = 0;
+					}
+
+					const now = context.currentTime;
+					master.gain.cancelScheduledValues(now);
+					master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), now);
+					master.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
+
+					window.setTimeout(() => {
+						if (!context || isPlaying || context.state !== 'running') return;
+						context.suspend();
+					}, 920);
+				};
+
+				const startMusic = async () => {
+					if (isPlaying) return;
+					ensureAudio();
+					if (!context || !master) return;
+
+					if (context.state === 'suspended') await context.resume();
+
+					isPlaying = true;
+					setToggleState(true);
+					nextStepAt = context.currentTime + 0.08;
+					stepIndex = 0;
+
+					master.gain.cancelScheduledValues(context.currentTime);
+					master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), context.currentTime);
+					master.gain.linearRampToValueAtTime(0.52, context.currentTime + 1.9);
+
+					if (schedulerTimer) clearTimeout(schedulerTimer);
+					scheduler();
+				};
+
+				musicToggle.addEventListener('click', () => {
+					if (isPlaying) stopMusic();
+					else startMusic();
+				});
+
+				document.addEventListener('visibilitychange', () => {
+					if (document.hidden && isPlaying) stopMusic();
+				});
+			}
+		}
 	</script>
 </Layout>
 
@@ -865,6 +1113,90 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		pointer-events: none;
 		z-index: 1;
 		box-shadow: inset 0 0 180px rgb(0 0 0 / calc(0.62 - (var(--scroll-progress) * 0.34)));
+	}
+
+	.music-toggle {
+		position: fixed;
+		top: 1rem;
+		right: 1rem;
+		z-index: 11;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.56rem;
+		padding: 0.5rem 0.82rem;
+		border-radius: 999px;
+		border: 1px solid rgb(179 203 255 / 0.32);
+		background:
+			linear-gradient(132deg, rgb(12 21 47 / 0.9), rgb(24 10 56 / 0.86));
+		color: rgb(235 240 255 / 0.92);
+		font-family: 'IBM Plex Mono', 'Consolas', monospace;
+		font-size: 0.68rem;
+		font-weight: 600;
+		letter-spacing: 0.11em;
+		text-transform: uppercase;
+		cursor: pointer;
+		backdrop-filter: blur(6px);
+		box-shadow:
+			0 10px 22px rgb(0 0 0 / 0.34),
+			inset 0 0 0 1px rgb(174 144 255 / 0.16);
+		transition:
+			transform var(--dur-sm) var(--ease-organic),
+			box-shadow var(--dur-sm) var(--ease-organic),
+			border-color var(--dur-sm) var(--ease-organic);
+	}
+
+	.music-toggle:hover {
+		transform: translateY(-2px);
+		box-shadow:
+			0 14px 28px rgb(0 0 0 / 0.42),
+			0 0 24px rgb(97 216 255 / 0.25),
+			inset 0 0 0 1px rgb(190 226 255 / 0.22);
+	}
+
+	.music-toggle:disabled,
+	.music-toggle.is-disabled {
+		opacity: 0.45;
+		cursor: not-allowed;
+	}
+
+	.music-led {
+		width: 0.56rem;
+		height: 0.56rem;
+		border-radius: 999px;
+		background: rgb(137 153 191 / 0.76);
+		box-shadow:
+			0 0 0 1px rgb(224 237 255 / 0.26),
+			0 0 10px rgb(88 130 210 / 0.3);
+		transition: background var(--dur-sm) var(--ease-organic), box-shadow var(--dur-sm) var(--ease-organic);
+	}
+
+	.music-text {
+		line-height: 1;
+	}
+
+	.music-on {
+		display: none;
+	}
+
+	.music-toggle.is-on {
+		border-color: rgb(140 248 216 / 0.52);
+	}
+
+	.music-toggle.is-on .music-off {
+		display: none;
+	}
+
+	.music-toggle.is-on .music-on {
+		display: inline;
+	}
+
+	.music-toggle.is-on .music-led {
+		background: rgb(148 255 232 / 0.96);
+		box-shadow:
+			0 0 0 1px rgb(213 255 242 / 0.52),
+			0 0 18px rgb(129 255 220 / 0.66),
+			0 0 30px rgb(132 231 255 / 0.32);
+		animation: music-led-breathe 1.8s var(--ease-organic) infinite;
 	}
 
 	.scroll-hint {
@@ -1903,6 +2235,18 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		}
 		50% {
 			transform: translateY(-4px);
+		}
+	}
+
+	@keyframes music-led-breathe {
+		0%,
+		100% {
+			transform: scale(1);
+			opacity: 0.9;
+		}
+		50% {
+			transform: scale(1.22);
+			opacity: 1;
 		}
 	}
 
@@ -3063,6 +3407,21 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 		.scroll-hint {
 			display: none;
+		}
+
+		.music-toggle {
+			top: 0.62rem;
+			right: 0.62rem;
+			padding: 0.42rem 0.66rem;
+			font-size: 0.6rem;
+			gap: 0.44rem;
+			border-color: rgb(180 228 255 / 0.28);
+			background: linear-gradient(132deg, rgb(11 19 46 / 0.86), rgb(24 8 53 / 0.82));
+		}
+
+		.music-led {
+			width: 0.48rem;
+			height: 0.48rem;
 		}
 
 		.orb,
