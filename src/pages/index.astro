@@ -726,18 +726,18 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				musicToggle.classList.add('is-disabled');
 			} else {
 				const chordProgression = [
-					{ root: 45, notes: [45, 52, 57, 60, 64] }, // Am9
-					{ root: 41, notes: [41, 48, 53, 57, 60] }, // Fmaj9
-					{ root: 48, notes: [48, 55, 60, 64, 67] }, // Cmaj9
-					{ root: 43, notes: [43, 50, 55, 59, 62] }, // G9sus flavor
+					{ root: 48, notes: [48, 52, 55, 59, 62] }, // Cmaj9
+					{ root: 55, notes: [55, 59, 62, 67, 69] }, // Gadd9
+					{ root: 57, notes: [57, 60, 64, 67, 71] }, // Am9
+					{ root: 53, notes: [53, 57, 60, 65, 69] }, // Fmaj9
 				];
-				const leadPattern = [3, null, 4, null, 2, null, 1, null, 2, null, 3, null, 4, null, 2, null];
-				const bassPattern = [0, null, 0, null, 7, null, 5, null, 0, null, 10, null, 7, null, 5, null];
-				const bpm = 90;
+				const leadPattern = [4, null, 3, null, 2, 3, 1, null, 2, null, 3, 4, 2, null, 1, 2];
+				const bassPattern = [0, null, 7, null, 0, null, 10, null, 0, null, 7, null, 5, null, 7, null];
+				const bpm = 106;
 				const stepSeconds = (60 / bpm) / 4;
 				const stepsPerBar = 16;
 				const barSeconds = stepSeconds * stepsPerBar;
-				const scheduleAhead = 0.24;
+				const scheduleAhead = 0.2;
 				let context = null;
 				let master = null;
 				let musicBus = null;
@@ -818,11 +818,11 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					compressor.connect(context.destination);
 
 					musicBus = context.createGain();
-					musicBus.gain.value = 0.88;
+					musicBus.gain.value = 0.9;
 					musicBus.connect(master);
 
 					drumBus = context.createGain();
-					drumBus.gain.value = 0.56;
+					drumBus.gain.value = 0.72;
 					drumBus.connect(master);
 
 					padFilter = context.createBiquadFilter();
@@ -856,16 +856,16 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					bassOsc.start();
 
 					fxSend = context.createGain();
-					fxSend.gain.value = 0.18;
+					fxSend.gain.value = 0.24;
 					padBus.connect(fxSend);
 
 					const delay = context.createDelay(1.4);
-					delay.delayTime.value = stepSeconds * 3;
+					delay.delayTime.value = stepSeconds * 4;
 					const feedback = context.createGain();
-					feedback.gain.value = 0.22;
+					feedback.gain.value = 0.26;
 					const delayFilter = context.createBiquadFilter();
 					delayFilter.type = 'lowpass';
-					delayFilter.frequency.value = 2100;
+					delayFilter.frequency.value = 2400;
 					fxSend.connect(delay);
 					delay.connect(delayFilter);
 					delayFilter.connect(feedback);
@@ -923,19 +923,19 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 					padVoices.forEach((voice, index) => {
 						const freq = midiToFreq(spread[index % spread.length]);
-						voice.oscA.frequency.setTargetAtTime(freq, time, 0.95);
-						voice.oscB.frequency.setTargetAtTime(freq * 1.0012, time, 1.05);
+						voice.oscA.frequency.setTargetAtTime(freq, time, 0.72);
+						voice.oscB.frequency.setTargetAtTime(freq * 1.0012, time, 0.82);
 					});
 
-					bassOsc.frequency.setTargetAtTime(midiToFreq(chord.root - 12), time, 0.32);
+					bassOsc.frequency.setTargetAtTime(midiToFreq(chord.root - 12), time, 0.26);
 
-					padFilter.frequency.setTargetAtTime(1380, time, 0.66);
-					padFilter.frequency.setTargetAtTime(1640, time + barSeconds * 0.64, 1.5);
+					padFilter.frequency.setTargetAtTime(1460, time, 0.42);
+					padFilter.frequency.setTargetAtTime(1860, time + barSeconds * 0.58, 1.12);
 
 					padBus.gain.cancelScheduledValues(time);
 					padBus.gain.setValueAtTime(Math.max(padBus.gain.value, 0.0001), time);
-					padBus.gain.linearRampToValueAtTime(0.041, time + 0.62);
-					padBus.gain.linearRampToValueAtTime(0.032, time + barSeconds * 0.92);
+					padBus.gain.linearRampToValueAtTime(0.034, time + 0.42);
+					padBus.gain.linearRampToValueAtTime(0.026, time + barSeconds * 0.92);
 				};
 
 				const triggerKick = (time, velocity = 1) => {
@@ -944,13 +944,13 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					osc.type = 'sine';
 					const tone = context.createBiquadFilter();
 					tone.type = 'lowpass';
-					tone.frequency.value = 220;
+					tone.frequency.value = 260;
 					const env = context.createGain();
 					env.gain.setValueAtTime(0.0001, time);
-					env.gain.linearRampToValueAtTime(0.052 * velocity, time + 0.008);
-					env.gain.exponentialRampToValueAtTime(0.0001, time + 0.26);
-					osc.frequency.setValueAtTime(130, time);
-					osc.frequency.exponentialRampToValueAtTime(44, time + 0.24);
+					env.gain.linearRampToValueAtTime(0.064 * velocity, time + 0.006);
+					env.gain.exponentialRampToValueAtTime(0.0001, time + 0.24);
+					osc.frequency.setValueAtTime(142, time);
+					osc.frequency.exponentialRampToValueAtTime(52, time + 0.22);
 					osc.connect(tone);
 					tone.connect(env);
 					env.connect(drumBus);
@@ -964,11 +964,11 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					noise.buffer = noiseBuffer;
 					const noiseFilter = context.createBiquadFilter();
 					noiseFilter.type = 'highpass';
-					noiseFilter.frequency.value = 2100;
+					noiseFilter.frequency.value = 2400;
 					const noiseGain = context.createGain();
 					noiseGain.gain.setValueAtTime(0.0001, time);
-					noiseGain.gain.linearRampToValueAtTime(0.018 * velocity, time + 0.01);
-					noiseGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.13);
+					noiseGain.gain.linearRampToValueAtTime(0.024 * velocity, time + 0.008);
+					noiseGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.12);
 					noise.connect(noiseFilter);
 					noiseFilter.connect(noiseGain);
 					noiseGain.connect(drumBus);
@@ -979,14 +979,36 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					body.type = 'triangle';
 					const bodyGain = context.createGain();
 					bodyGain.gain.setValueAtTime(0.0001, time);
-					bodyGain.gain.linearRampToValueAtTime(0.008 * velocity, time + 0.008);
+					bodyGain.gain.linearRampToValueAtTime(0.01 * velocity, time + 0.008);
 					bodyGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.11);
-					body.frequency.setValueAtTime(180, time);
-					body.frequency.exponentialRampToValueAtTime(118, time + 0.11);
+					body.frequency.setValueAtTime(194, time);
+					body.frequency.exponentialRampToValueAtTime(132, time + 0.11);
 					body.connect(bodyGain);
 					bodyGain.connect(drumBus);
 					body.start(time);
 					body.stop(time + 0.12);
+				};
+
+				const triggerClap = (time, velocity = 1) => {
+					if (!context || !drumBus || !noiseBuffer) return;
+					[0, 0.018, 0.034].forEach((offset, i) => {
+						const noise = context.createBufferSource();
+						noise.buffer = noiseBuffer;
+						const filter = context.createBiquadFilter();
+						filter.type = 'bandpass';
+						filter.frequency.value = 1700 + i * 220;
+						filter.Q.value = 0.72;
+						const gain = context.createGain();
+						const startAt = time + offset;
+						gain.gain.setValueAtTime(0.0001, startAt);
+						gain.gain.linearRampToValueAtTime((0.011 - i * 0.0022) * velocity, startAt + 0.004);
+						gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.06);
+						noise.connect(filter);
+						filter.connect(gain);
+						gain.connect(drumBus);
+						noise.start(startAt);
+						noise.stop(startAt + 0.07);
+					});
 				};
 
 				const triggerHat = (time, velocity = 1) => {
@@ -995,11 +1017,11 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					noise.buffer = noiseBuffer;
 					const hatFilter = context.createBiquadFilter();
 					hatFilter.type = 'highpass';
-					hatFilter.frequency.value = 6200;
+					hatFilter.frequency.value = 6800;
 					const hatGain = context.createGain();
 					hatGain.gain.setValueAtTime(0.0001, time);
-					hatGain.gain.linearRampToValueAtTime(0.008 * velocity, time + 0.004);
-					hatGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.05);
+					hatGain.gain.linearRampToValueAtTime(0.01 * velocity, time + 0.003);
+					hatGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.042);
 					noise.connect(hatFilter);
 					hatFilter.connect(hatGain);
 					hatGain.connect(drumBus);
@@ -1008,14 +1030,13 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				};
 
 				const scheduleDrums = (time, stepInBar) => {
-					if (stepInBar === 0 || stepInBar === 8) triggerKick(time, 1);
-					if (stepInBar === 6 || stepInBar === 14) triggerKick(time, 0.44);
-					if (stepInBar === 4 || stepInBar === 12) triggerSnare(time, 1);
-					if (stepInBar % 2 === 0) {
-						const velocity = stepInBar % 4 === 0 ? 0.45 : 0.31;
-						triggerHat(time, velocity);
+					if (stepInBar % 4 === 0) triggerKick(time, stepInBar === 0 ? 1.06 : 0.92);
+					if (stepInBar === 4 || stepInBar === 12) {
+						triggerSnare(time, 0.9);
+						triggerClap(time + 0.004, 0.78);
 					}
-					if (stepInBar === 15) triggerHat(time, 0.22);
+					if (stepInBar === 2 || stepInBar === 6 || stepInBar === 10 || stepInBar === 14) triggerHat(time, 0.74);
+					if (stepInBar % 2 === 1) triggerHat(time, 0.22);
 				};
 
 				const scheduleBass = (time, chord, stepInBar) => {
@@ -1023,12 +1044,12 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					const offset = bassPattern[stepInBar];
 					if (offset === null || offset === undefined) return;
 					const note = chord.root - 12 + offset;
-					const velocity = stepInBar % 8 === 0 ? 1 : 0.78;
+					const velocity = stepInBar % 8 === 0 ? 1.06 : 0.86;
 					bassOsc.frequency.setValueAtTime(midiToFreq(note), time);
 					bassGain.gain.cancelScheduledValues(time);
 					bassGain.gain.setValueAtTime(0.0001, time);
-					bassGain.gain.linearRampToValueAtTime(0.014 * velocity, time + 0.014);
-					bassGain.gain.exponentialRampToValueAtTime(0.0001, time + stepSeconds * 1.55);
+					bassGain.gain.linearRampToValueAtTime(0.017 * velocity, time + 0.012);
+					bassGain.gain.exponentialRampToValueAtTime(0.0001, time + stepSeconds * 1.7);
 				};
 
 				const triggerLead = (time, midi, velocity = 1) => {
@@ -1044,19 +1065,19 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 					const tone = context.createBiquadFilter();
 					tone.type = 'lowpass';
-					tone.frequency.setValueAtTime(2500, time);
-					tone.Q.value = 0.55;
-					tone.frequency.exponentialRampToValueAtTime(920, time + 0.36);
+					tone.frequency.setValueAtTime(3000, time);
+					tone.Q.value = 0.62;
+					tone.frequency.exponentialRampToValueAtTime(1160, time + 0.34);
 
 					const env = context.createGain();
 					env.gain.setValueAtTime(0.0001, time);
-					env.gain.linearRampToValueAtTime(0.0052 * velocity, time + 0.01);
-					env.gain.exponentialRampToValueAtTime(0.0001, time + 0.42);
+					env.gain.linearRampToValueAtTime(0.0064 * velocity, time + 0.008);
+					env.gain.exponentialRampToValueAtTime(0.0001, time + 0.36);
 
 					const dry = context.createGain();
 					dry.gain.value = 1;
 					const wet = context.createGain();
-					wet.gain.value = 0.72;
+					wet.gain.value = 0.9;
 
 					oscMain.connect(tone);
 					oscSub.connect(tone);
@@ -1068,15 +1089,15 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 					oscMain.start(time);
 					oscSub.start(time);
-					oscMain.stop(time + 0.46);
-					oscSub.stop(time + 0.46);
+					oscMain.stop(time + 0.4);
+					oscSub.stop(time + 0.4);
 				};
 
 				const scheduleLead = (time, chord, stepInBar) => {
 					const noteIndex = leadPattern[stepInBar];
 					if (noteIndex === null || noteIndex === undefined) return;
 					const note = chord.notes[Math.max(0, Math.min(chord.notes.length - 1, noteIndex))] + 12;
-					const velocity = stepInBar % 4 === 0 ? 1 : 0.72;
+					const velocity = stepInBar % 4 === 0 ? 1.08 : 0.8;
 					triggerLead(time, note, velocity);
 				};
 
@@ -1137,7 +1158,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 					master.gain.cancelScheduledValues(context.currentTime);
 					master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), context.currentTime);
-					master.gain.linearRampToValueAtTime(0.17, context.currentTime + 1.6);
+					master.gain.linearRampToValueAtTime(0.19, context.currentTime + 1.4);
 
 					if (schedulerTimer) clearTimeout(schedulerTimer);
 					scheduler();
