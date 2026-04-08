@@ -118,20 +118,6 @@ const signalTrack = [...signals, ...signals];
 		<div class="scroll-brighten" aria-hidden="true"></div>
 		<div class="scanlines" aria-hidden="true"></div>
 		<div class="vignette" aria-hidden="true"></div>
-		<div class="project-preview-bg" id="project-preview-bg" aria-hidden="true">
-			{projects.map((project) => (
-				<iframe
-					class="project-preview-frame"
-					data-preview-id={project.previewId}
-					src={project.live}
-					title={`${project.name} preview`}
-					loading="eager"
-					referrerpolicy="no-referrer"
-					tabindex="-1"
-				></iframe>
-			))}
-			<div class="project-preview-overlay"></div>
-		</div>
 
 		<div class="scroll-hint" id="scroll-hint" aria-hidden="true">
 			<svg class="hint-ring" viewBox="0 0 180 180" aria-hidden="true">
@@ -206,6 +192,21 @@ const signalTrack = [...signals, ...signals];
 			</article>
 
 			<article id="projects" class="panel panel-projects reveal reveal-2">
+				<div class="project-preview-bg" id="project-preview-bg" aria-hidden="true">
+					{projects.map((project) => (
+						<iframe
+							class="project-preview-frame"
+							data-preview-id={project.previewId}
+							src={project.live}
+							title={`${project.name} preview`}
+							loading="eager"
+							referrerpolicy="no-referrer"
+							tabindex="-1"
+						></iframe>
+					))}
+					<div class="project-preview-overlay"></div>
+				</div>
+
 				<div class="project-grid">
 					{projects.map((project) => (
 						<article class={`project-frame ghost-frame ${project.theme}`} data-preview-target={project.previewId}>
@@ -1259,11 +1260,15 @@ const signalTrack = [...signals, ...signals];
 	}
 
 	.panel-projects {
+		position: relative;
 		display: flex;
 		align-items: center;
+		overflow: hidden;
 	}
 
 	.project-grid {
+		position: relative;
+		z-index: 1;
 		width: 100%;
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2207,12 +2212,13 @@ const signalTrack = [...signals, ...signals];
 	}
 
 	.project-preview-bg {
-		position: fixed;
+		position: absolute;
 		inset: 0;
-		z-index: 1;
+		z-index: 0;
 		opacity: 0;
 		pointer-events: none;
 		overflow: hidden;
+		border-radius: inherit;
 		transition: opacity 420ms var(--ease-organic);
 	}
 
