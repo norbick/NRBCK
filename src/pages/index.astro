@@ -756,7 +756,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				const barSeconds = stepSeconds * stepsPerBar;
 				const scheduleAhead = 0.2;
 				const minMasterGain = 0.0001;
-				const maxMasterGain = 0.43;
+				const maxMasterGain = 0.9;
 				let context = null;
 				let master = null;
 				let musicBus = null;
@@ -791,8 +791,8 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 				const targetGain = () => {
 					if (!isPlaying || isMuted) return minMasterGain;
-					const level = clamp(volumeLevel, 0, 1);
-					const loudnessCurve = level < 0.5 ? level * 1.4 : 0.7 + (level - 0.5) * 0.6;
+					const level = clamp(volumeLevel, 0.2, 1);
+					const loudnessCurve = level < 0.5 ? 0.42 + level * 0.8 : 0.82 + (level - 0.5) * 0.36;
 					return Math.max(minMasterGain, maxMasterGain * loudnessCurve);
 				};
 
@@ -842,9 +842,9 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					oscB.type = 'triangle';
 					oscB.detune.value = detune * 0.72;
 					const gainA = context.createGain();
-					gainA.gain.value = 0.009;
+					gainA.gain.value = 0.024;
 					const gainB = context.createGain();
-					gainB.gain.value = 0.005;
+					gainB.gain.value = 0.014;
 					oscA.connect(gainA);
 					oscB.connect(gainB);
 					gainA.connect(padFilter);
@@ -887,7 +887,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					musicBus.connect(master);
 
 					drumBus = context.createGain();
-					drumBus.gain.value = 0.72;
+					drumBus.gain.value = 1.16;
 					drumBus.connect(master);
 
 					padFilter = context.createBiquadFilter();
@@ -999,8 +999,8 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 					padBus.gain.cancelScheduledValues(time);
 					padBus.gain.setValueAtTime(Math.max(padBus.gain.value, 0.0001), time);
-					padBus.gain.linearRampToValueAtTime(0.034, time + 0.42);
-					padBus.gain.linearRampToValueAtTime(0.026, time + barSeconds * 0.92);
+					padBus.gain.linearRampToValueAtTime(0.086, time + 0.42);
+					padBus.gain.linearRampToValueAtTime(0.062, time + barSeconds * 0.92);
 				};
 
 				const triggerKick = (time, velocity = 1) => {
@@ -1012,7 +1012,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					tone.frequency.value = 260;
 					const env = context.createGain();
 					env.gain.setValueAtTime(0.0001, time);
-					env.gain.linearRampToValueAtTime(0.064 * velocity, time + 0.006);
+					env.gain.linearRampToValueAtTime(0.086 * velocity, time + 0.006);
 					env.gain.exponentialRampToValueAtTime(0.0001, time + 0.24);
 					osc.frequency.setValueAtTime(142, time);
 					osc.frequency.exponentialRampToValueAtTime(52, time + 0.22);
@@ -1032,7 +1032,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					noiseFilter.frequency.value = 2400;
 					const noiseGain = context.createGain();
 					noiseGain.gain.setValueAtTime(0.0001, time);
-					noiseGain.gain.linearRampToValueAtTime(0.024 * velocity, time + 0.008);
+					noiseGain.gain.linearRampToValueAtTime(0.036 * velocity, time + 0.008);
 					noiseGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.12);
 					noise.connect(noiseFilter);
 					noiseFilter.connect(noiseGain);
@@ -1044,7 +1044,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					body.type = 'triangle';
 					const bodyGain = context.createGain();
 					bodyGain.gain.setValueAtTime(0.0001, time);
-					bodyGain.gain.linearRampToValueAtTime(0.01 * velocity, time + 0.008);
+					bodyGain.gain.linearRampToValueAtTime(0.015 * velocity, time + 0.008);
 					bodyGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.11);
 					body.frequency.setValueAtTime(194, time);
 					body.frequency.exponentialRampToValueAtTime(132, time + 0.11);
@@ -1066,7 +1066,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 						const gain = context.createGain();
 						const startAt = time + offset;
 						gain.gain.setValueAtTime(0.0001, startAt);
-						gain.gain.linearRampToValueAtTime((0.011 - i * 0.0022) * velocity, startAt + 0.004);
+						gain.gain.linearRampToValueAtTime((0.018 - i * 0.0032) * velocity, startAt + 0.004);
 						gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.06);
 						noise.connect(filter);
 						filter.connect(gain);
@@ -1085,7 +1085,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					hatFilter.frequency.value = 6800;
 					const hatGain = context.createGain();
 					hatGain.gain.setValueAtTime(0.0001, time);
-					hatGain.gain.linearRampToValueAtTime(0.01 * velocity, time + 0.003);
+					hatGain.gain.linearRampToValueAtTime(0.014 * velocity, time + 0.003);
 					hatGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.042);
 					noise.connect(hatFilter);
 					hatFilter.connect(hatGain);
@@ -1113,7 +1113,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					bassOsc.frequency.setValueAtTime(midiToFreq(note), time);
 					bassGain.gain.cancelScheduledValues(time);
 					bassGain.gain.setValueAtTime(0.0001, time);
-					bassGain.gain.linearRampToValueAtTime(0.017 * velocity, time + 0.012);
+					bassGain.gain.linearRampToValueAtTime(0.042 * velocity, time + 0.012);
 					bassGain.gain.exponentialRampToValueAtTime(0.0001, time + stepSeconds * 1.7);
 				};
 
@@ -1136,7 +1136,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 					const env = context.createGain();
 					env.gain.setValueAtTime(0.0001, time);
-					env.gain.linearRampToValueAtTime(0.0064 * velocity, time + 0.008);
+					env.gain.linearRampToValueAtTime(0.017 * velocity, time + 0.008);
 					env.gain.exponentialRampToValueAtTime(0.0001, time + 0.36);
 
 					const dry = context.createGain();
@@ -1229,7 +1229,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				};
 
 				const nudgeVolume = (delta) => {
-					volumeLevel = clamp(volumeLevel + delta, 0, 1);
+					volumeLevel = clamp(volumeLevel + delta, 0.2, 1);
 					if (isMuted) isMuted = false;
 					updatePlayerUi();
 					if (isPlaying) applyMasterGain(0.14);
