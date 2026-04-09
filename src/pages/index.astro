@@ -155,16 +155,26 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		</button>
 		<div class="music-player" id="music-player" aria-hidden="true">
 			<div class="music-player-head">
-				<p class="music-player-track">MIDNIGHT VICE DRIVE</p>
+				<div class="music-marquee" aria-label="Track title">
+					<p class="music-player-track">
+						<span>NEON HORIZON CRUISE • NEON HORIZON CRUISE • </span>
+						<span aria-hidden="true">NEON HORIZON CRUISE • NEON HORIZON CRUISE • </span>
+					</p>
+				</div>
 				<p class="music-player-author">NRBCK</p>
 			</div>
 			<div class="music-player-controls">
-				<button class="music-control" id="music-vol-down" type="button" aria-label="Volume down">-</button>
 				<button class="music-control music-mute" id="music-mute" type="button">MUTE</button>
-				<button class="music-control" id="music-vol-up" type="button" aria-label="Volume up">+</button>
-			</div>
-			<div class="music-meter" aria-hidden="true">
-				<span class="music-meter-fill" id="music-meter-fill"></span>
+				<input
+					class="music-slider"
+					id="music-slider"
+					type="range"
+					min="0"
+					max="100"
+					value="50"
+					step="1"
+					aria-label="Volume slider"
+				/>
 			</div>
 			<p class="music-level" id="music-level">VOLUME 50%</p>
 		</div>
@@ -725,10 +735,8 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 		const musicToggle = document.getElementById('music-toggle');
 		const musicPlayer = document.getElementById('music-player');
-		const musicVolDown = document.getElementById('music-vol-down');
 		const musicMute = document.getElementById('music-mute');
-		const musicVolUp = document.getElementById('music-vol-up');
-		const musicMeterFill = document.getElementById('music-meter-fill');
+		const musicSlider = document.getElementById('music-slider');
 		const musicLevel = document.getElementById('music-level');
 
 		if (musicToggle instanceof HTMLButtonElement) {
@@ -757,7 +765,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				const scheduleAhead = 0.2;
 				const minMasterGain = 0.0001;
 				const maxMasterGain = 1.9;
-				const minVolumeLevel = 0.05;
+				const minVolumeLevel = 0;
 				const maxVolumeLevel = 1;
 				let context = null;
 				let master = null;
@@ -813,9 +821,12 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				};
 
 				const updatePlayerUi = () => {
-					const percent = Math.round((isMuted ? 0 : volumeLevel) * 100);
-					if (musicMeterFill instanceof HTMLElement) {
-						musicMeterFill.style.width = `${Math.max(0, percent)}%`;
+					const clampedLevel = clamp(volumeLevel, minVolumeLevel, maxVolumeLevel);
+					const percent = Math.round(clampedLevel * 100);
+					if (musicSlider instanceof HTMLInputElement) {
+						musicSlider.value = String(percent);
+						musicSlider.style.setProperty('--slider-fill', `${percent}%`);
+						musicSlider.classList.toggle('is-muted', isMuted);
 					}
 					if (musicLevel instanceof HTMLElement) {
 						const prefix = isPolish ? 'GŁOŚNOŚĆ' : 'VOLUME';
@@ -1231,19 +1242,15 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					scheduler();
 				};
 
-				const nudgeVolume = (delta) => {
-					volumeLevel = clamp(volumeLevel + delta, minVolumeLevel, maxVolumeLevel);
-					if (isMuted) isMuted = false;
-					updatePlayerUi();
-					if (isPlaying) applyMasterGain(0.14);
-				};
-
-				if (musicVolDown instanceof HTMLButtonElement) {
-					musicVolDown.addEventListener('click', () => nudgeVolume(-0.2));
-				}
-
-				if (musicVolUp instanceof HTMLButtonElement) {
-					musicVolUp.addEventListener('click', () => nudgeVolume(0.2));
+				if (musicSlider instanceof HTMLInputElement) {
+					musicSlider.addEventListener('input', () => {
+						const next = Number(musicSlider.value) / 100;
+						if (Number.isNaN(next)) return;
+						volumeLevel = clamp(next, minVolumeLevel, maxVolumeLevel);
+						if (isMuted) isMuted = false;
+						updatePlayerUi();
+						if (isPlaying) applyMasterGain(0.08);
+					});
 				}
 
 				if (musicMute instanceof HTMLButtonElement) {
@@ -1552,12 +1559,29 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 	}
 
 	.music-player-head {
-		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-		gap: 0.72rem;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 0.56rem;
 		padding-bottom: 0.42rem;
 		border-bottom: 1px solid rgb(168 196 255 / 0.2);
+	}
+
+	.music-marquee {
+		min-width: 0;
+		overflow: hidden;
+		border-radius: 7px;
+		border: 1px solid rgb(147 175 236 / 0.24);
+		background:
+			repeating-linear-gradient(
+				to bottom,
+				rgb(138 165 223 / 0.08) 0,
+				rgb(138 165 223 / 0.08) 1px,
+				rgb(0 0 0 / 0) 1px,
+				rgb(0 0 0 / 0) 3px
+			),
+			linear-gradient(90deg, rgb(14 22 48 / 0.9), rgb(20 11 48 / 0.78));
+		box-shadow: inset 0 0 0 1px rgb(115 143 214 / 0.12);
 	}
 
 	.music-player-track,
@@ -1568,10 +1592,21 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 	}
 
 	.music-player-track {
-		font-size: 0.74rem;
+		display: inline-flex;
+		min-width: max-content;
+		font-size: 0.68rem;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		color: rgb(223 236 255 / 0.94);
+		color: rgb(223 236 255 / 0.86);
+		animation: music-marquee-scroll 11s linear infinite;
+	}
+
+	.music-player-track > span {
+		padding: 0.22rem 0.56rem 0.26rem 0.54rem;
+	}
+
+	.music-marquee:hover .music-player-track {
+		animation-play-state: paused;
 	}
 
 	.music-player-author {
@@ -1582,8 +1617,9 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 	.music-player-controls {
 		display: grid;
-		grid-template-columns: 2.2rem minmax(0, 1fr) 2.2rem;
-		gap: 0.4rem;
+		grid-template-columns: auto minmax(0, 1fr);
+		align-items: center;
+		gap: 0.56rem;
 		margin-top: 0.58rem;
 	}
 
@@ -1600,6 +1636,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		letter-spacing: 0.06em;
 		line-height: 1;
 		min-height: 2rem;
+		padding: 0 0.58rem;
 		cursor: pointer;
 		transition:
 			transform var(--dur-xs) var(--ease-organic),
@@ -1630,23 +1667,84 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		box-shadow: 0 0 0 1px rgb(255 176 130 / 0.24) inset;
 	}
 
-	.music-meter {
-		position: relative;
-		height: 0.46rem;
-		margin-top: 0.6rem;
-		border-radius: 999px;
-		border: 1px solid rgb(151 176 233 / 0.3);
-		background: linear-gradient(90deg, rgb(14 24 52 / 0.9), rgb(13 17 33 / 0.78));
-		overflow: hidden;
+	.music-slider {
+		--slider-fill: 50%;
+		appearance: none;
+		width: 100%;
+		height: 1.46rem;
+		margin: 0;
+		padding: 0;
+		background: transparent;
+		cursor: pointer;
 	}
 
-	.music-meter-fill {
-		display: block;
-		height: 100%;
-		width: 50%;
+	.music-slider:focus-visible {
+		outline: none;
+	}
+
+	.music-slider::-webkit-slider-runnable-track {
+		height: 0.46rem;
+		border-radius: 999px;
+		border: 1px solid rgb(151 176 233 / 0.34);
+		background:
+			linear-gradient(
+				90deg,
+				#7ec3ff 0%,
+				#8ff8ef 34%,
+				#ffe596 68%,
+				#ff97c4 var(--slider-fill),
+				rgb(15 24 49 / 0.95) var(--slider-fill),
+				rgb(11 15 33 / 0.84) 100%
+			);
+		box-shadow:
+			inset 0 0 0 1px rgb(155 184 247 / 0.16),
+			0 0 10px rgb(110 218 255 / 0.16);
+	}
+
+	.music-slider::-webkit-slider-thumb {
+		appearance: none;
+		width: 0.94rem;
+		height: 0.94rem;
+		margin-top: -0.28rem;
+		border-radius: 50%;
+		border: 1px solid rgb(180 229 255 / 0.85);
+		background:
+			radial-gradient(circle at 30% 30%, rgb(235 248 255 / 0.96), rgb(134 202 255 / 0.9) 68%, rgb(99 152 255 / 0.84));
+		box-shadow:
+			0 0 0 2px rgb(19 24 50 / 0.85),
+			0 0 12px rgb(118 219 255 / 0.45);
+	}
+
+	.music-slider::-moz-range-track {
+		height: 0.46rem;
+		border-radius: 999px;
+		border: 1px solid rgb(151 176 233 / 0.34);
+		background: linear-gradient(90deg, rgb(15 24 49 / 0.95), rgb(11 15 33 / 0.84));
+	}
+
+	.music-slider::-moz-range-progress {
+		height: 0.46rem;
+		border-radius: 999px;
 		background: linear-gradient(90deg, #7ec3ff 0%, #8ff8ef 34%, #ffe596 68%, #ff97c4 100%);
-		box-shadow: 0 0 12px rgb(143 248 239 / 0.38);
-		transition: width 180ms var(--ease-organic);
+	}
+
+	.music-slider::-moz-range-thumb {
+		width: 0.94rem;
+		height: 0.94rem;
+		border-radius: 50%;
+		border: 1px solid rgb(180 229 255 / 0.85);
+		background:
+			radial-gradient(circle at 30% 30%, rgb(235 248 255 / 0.96), rgb(134 202 255 / 0.9) 68%, rgb(99 152 255 / 0.84));
+		box-shadow:
+			0 0 0 2px rgb(19 24 50 / 0.85),
+			0 0 12px rgb(118 219 255 / 0.45);
+	}
+
+	.music-slider.is-muted::-webkit-slider-thumb,
+	.music-slider.is-muted::-moz-range-thumb {
+		border-color: rgb(255 197 130 / 0.88);
+		background:
+			radial-gradient(circle at 30% 30%, rgb(255 243 218 / 0.96), rgb(255 184 118 / 0.9) 68%, rgb(255 142 112 / 0.84));
 	}
 
 	.music-level {
@@ -2705,6 +2803,15 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		50% {
 			transform: scale(1.22);
 			opacity: 1;
+		}
+	}
+
+	@keyframes music-marquee-scroll {
+		0% {
+			transform: translateX(0);
+		}
+		100% {
+			transform: translateX(-50%);
 		}
 	}
 
@@ -3900,18 +4007,34 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		}
 
 		.music-player-controls {
-			grid-template-columns: 1.9rem minmax(0, 1fr) 1.9rem;
-			gap: 0.34rem;
-			margin-top: 0.5rem;
+			grid-template-columns: auto minmax(0, 1fr);
+			gap: 0.42rem;
+			margin-top: 0.46rem;
 		}
 
 		.music-control {
-			min-height: 1.74rem;
-			font-size: 0.74rem;
+			min-height: 1.58rem;
+			font-size: 0.62rem;
+			padding: 0 0.46rem;
 		}
 
 		.music-mute {
 			font-size: 0.64rem;
+		}
+
+		.music-slider {
+			height: 1.26rem;
+		}
+
+		.music-slider::-webkit-slider-thumb {
+			width: 0.84rem;
+			height: 0.84rem;
+			margin-top: -0.21rem;
+		}
+
+		.music-slider::-moz-range-thumb {
+			width: 0.84rem;
+			height: 0.84rem;
 		}
 
 		.orb,
