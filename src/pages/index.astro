@@ -153,6 +153,21 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				<span data-l10n="en">TURN MUSIC OFF</span>
 			</span>
 		</button>
+		<div class="music-player" id="music-player" aria-hidden="true">
+			<div class="music-player-head">
+				<p class="music-player-track">MIDNIGHT VICE DRIVE</p>
+				<p class="music-player-author">NRBCK</p>
+			</div>
+			<div class="music-player-controls">
+				<button class="music-control" id="music-vol-down" type="button" aria-label="Volume down">-</button>
+				<button class="music-control music-mute" id="music-mute" type="button">MUTE</button>
+				<button class="music-control" id="music-vol-up" type="button" aria-label="Volume up">+</button>
+			</div>
+			<div class="music-meter" aria-hidden="true">
+				<span class="music-meter-fill" id="music-meter-fill"></span>
+			</div>
+			<p class="music-level" id="music-level">VOLUME 90%</p>
+		</div>
 
 		<div class="scroll-hint" id="scroll-hint" aria-hidden="true">
 			<svg class="hint-ring" viewBox="0 0 180 180" aria-hidden="true">
@@ -709,6 +724,12 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		}
 
 		const musicToggle = document.getElementById('music-toggle');
+		const musicPlayer = document.getElementById('music-player');
+		const musicVolDown = document.getElementById('music-vol-down');
+		const musicMute = document.getElementById('music-mute');
+		const musicVolUp = document.getElementById('music-vol-up');
+		const musicMeterFill = document.getElementById('music-meter-fill');
+		const musicLevel = document.getElementById('music-level');
 
 		if (musicToggle instanceof HTMLButtonElement) {
 			const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -716,6 +737,10 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 			if (!AudioContextClass) {
 				musicToggle.disabled = true;
 				musicToggle.classList.add('is-disabled');
+				if (musicPlayer instanceof HTMLElement) {
+					musicPlayer.classList.remove('is-open');
+					musicPlayer.setAttribute('aria-hidden', 'true');
+				}
 			} else {
 				const chordProgression = [
 					{ root: 48, notes: [48, 52, 55, 59, 62] }, // Cmaj9
@@ -730,6 +755,8 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				const stepsPerBar = 16;
 				const barSeconds = stepSeconds * stepsPerBar;
 				const scheduleAhead = 0.2;
+				const minMasterGain = 0.0001;
+				const maxMasterGain = 0.37;
 				let context = null;
 				let master = null;
 				let musicBus = null;
@@ -745,12 +772,56 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				let nextStepAt = 0;
 				let stepIndex = 0;
 				let isPlaying = false;
+				let volumeLevel = 0.9;
+				let isMuted = false;
 
 				const midiToFreq = (midi) => 440 * Math.pow(2, (midi - 69) / 12);
+				const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
 				const setToggleState = (state) => {
 					musicToggle.classList.toggle('is-on', state);
 					musicToggle.setAttribute('aria-pressed', state ? 'true' : 'false');
+				};
+
+				const setPlayerOpen = (state) => {
+					if (!(musicPlayer instanceof HTMLElement)) return;
+					musicPlayer.classList.toggle('is-open', state);
+					musicPlayer.setAttribute('aria-hidden', state ? 'false' : 'true');
+				};
+
+				const targetGain = () => {
+					if (!isPlaying || isMuted) return minMasterGain;
+					return Math.max(minMasterGain, maxMasterGain * volumeLevel);
+				};
+
+				const applyMasterGain = (rampSeconds = 0.22) => {
+					if (!context || !master) return;
+					const now = context.currentTime;
+					const to = targetGain();
+					master.gain.cancelScheduledValues(now);
+					master.gain.setValueAtTime(Math.max(master.gain.value, minMasterGain), now);
+					if (to <= minMasterGain * 1.01) {
+						master.gain.exponentialRampToValueAtTime(minMasterGain, now + Math.max(0.06, rampSeconds));
+						return;
+					}
+					master.gain.linearRampToValueAtTime(to, now + Math.max(0.06, rampSeconds));
+				};
+
+				const updatePlayerUi = () => {
+					const percent = Math.round((isMuted ? 0 : volumeLevel) * 100);
+					if (musicMeterFill instanceof HTMLElement) {
+						musicMeterFill.style.width = `${Math.max(0, percent)}%`;
+					}
+					if (musicLevel instanceof HTMLElement) {
+						const prefix = isPolish ? 'GŁOŚNOŚĆ' : 'VOLUME';
+						const mutedText = isPolish ? ' (WYCISZONE)' : ' (MUTED)';
+						musicLevel.textContent = `${prefix} ${percent}%${isMuted ? mutedText : ''}`;
+					}
+					if (musicMute instanceof HTMLButtonElement) {
+						musicMute.textContent = isMuted ? 'UNMUTE' : 'MUTE';
+						musicMute.classList.toggle('is-muted', isMuted);
+						musicMute.setAttribute('aria-pressed', isMuted ? 'true' : 'false');
+					}
 				};
 
 				const createNoiseBuffer = () => {
@@ -786,7 +857,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					context = new AudioContextClass();
 
 					master = context.createGain();
-					master.gain.value = 0.0001;
+					master.gain.value = minMasterGain;
 
 					const masterHighpass = context.createBiquadFilter();
 					masterHighpass.type = 'highpass';
@@ -1115,20 +1186,19 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					if (!context || !master) {
 						isPlaying = false;
 						setToggleState(false);
+						setPlayerOpen(false);
 						return;
 					}
 
 					isPlaying = false;
 					setToggleState(false);
+					setPlayerOpen(false);
 					if (schedulerTimer) {
 						clearTimeout(schedulerTimer);
 						schedulerTimer = 0;
 					}
 
-					const now = context.currentTime;
-					master.gain.cancelScheduledValues(now);
-					master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), now);
-					master.gain.exponentialRampToValueAtTime(0.0001, now + 0.88);
+					applyMasterGain(0.88);
 
 					window.setTimeout(() => {
 						if (!context || isPlaying || context.state !== 'running') return;
@@ -1145,16 +1215,39 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 					isPlaying = true;
 					setToggleState(true);
+					setPlayerOpen(true);
+					updatePlayerUi();
 					nextStepAt = context.currentTime + 0.1;
 					stepIndex = 0;
 
-					master.gain.cancelScheduledValues(context.currentTime);
-					master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), context.currentTime);
-					master.gain.linearRampToValueAtTime(0.19, context.currentTime + 1.4);
+					applyMasterGain(1.2);
 
 					if (schedulerTimer) clearTimeout(schedulerTimer);
 					scheduler();
 				};
+
+				const nudgeVolume = (delta) => {
+					volumeLevel = clamp(volumeLevel + delta, 0.08, 1);
+					if (isMuted) isMuted = false;
+					updatePlayerUi();
+					if (isPlaying) applyMasterGain(0.14);
+				};
+
+				if (musicVolDown instanceof HTMLButtonElement) {
+					musicVolDown.addEventListener('click', () => nudgeVolume(-0.09));
+				}
+
+				if (musicVolUp instanceof HTMLButtonElement) {
+					musicVolUp.addEventListener('click', () => nudgeVolume(0.09));
+				}
+
+				if (musicMute instanceof HTMLButtonElement) {
+					musicMute.addEventListener('click', () => {
+						isMuted = !isMuted;
+						updatePlayerUi();
+						if (isPlaying) applyMasterGain(0.18);
+					});
+				}
 
 				musicToggle.addEventListener('click', () => {
 					if (isPlaying) stopMusic();
@@ -1164,6 +1257,8 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				document.addEventListener('visibilitychange', () => {
 					if (document.hidden && isPlaying) stopMusic();
 				});
+
+				updatePlayerUi();
 			}
 		}
 	</script>
@@ -1412,6 +1507,149 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 			0 0 18px rgb(129 255 220 / 0.66),
 			0 0 30px rgb(132 231 255 / 0.32);
 		animation: music-led-breathe 1.8s var(--ease-organic) infinite;
+	}
+
+	.music-player {
+		position: fixed;
+		top: 4.15rem;
+		right: 1rem;
+		z-index: 11;
+		width: min(19rem, calc(100vw - 2rem));
+		padding: 0.72rem 0.76rem 0.7rem;
+		border-radius: 14px;
+		border: 1px solid rgb(180 204 255 / 0.28);
+		background:
+			repeating-linear-gradient(
+				to bottom,
+				rgb(175 198 255 / 0.06) 0,
+				rgb(175 198 255 / 0.06) 1px,
+				rgb(0 0 0 / 0) 1px,
+				rgb(0 0 0 / 0) 3px
+			),
+			linear-gradient(136deg, rgb(13 24 54 / 0.92), rgb(20 11 53 / 0.9));
+		backdrop-filter: blur(7px);
+		box-shadow:
+			0 15px 26px rgb(0 0 0 / 0.4),
+			inset 0 0 0 1px rgb(182 154 255 / 0.14);
+		opacity: 0;
+		transform: translate3d(0, -8px, 0) scale(0.98);
+		pointer-events: none;
+		transition:
+			opacity var(--dur-sm) var(--ease-organic),
+			transform var(--dur-sm) var(--ease-bouncy),
+			box-shadow var(--dur-sm) var(--ease-organic);
+	}
+
+	.music-player.is-open {
+		opacity: 1;
+		transform: translate3d(0, 0, 0) scale(1);
+		pointer-events: auto;
+	}
+
+	.music-player-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.72rem;
+		padding-bottom: 0.42rem;
+		border-bottom: 1px solid rgb(168 196 255 / 0.2);
+	}
+
+	.music-player-track,
+	.music-player-author,
+	.music-level {
+		margin: 0;
+		font-family: 'IBM Plex Mono', 'Consolas', monospace;
+	}
+
+	.music-player-track {
+		font-size: 0.74rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: rgb(223 236 255 / 0.94);
+	}
+
+	.music-player-author {
+		font-size: 0.66rem;
+		letter-spacing: 0.1em;
+		color: rgb(135 248 223 / 0.94);
+	}
+
+	.music-player-controls {
+		display: grid;
+		grid-template-columns: 2.2rem minmax(0, 1fr) 2.2rem;
+		gap: 0.4rem;
+		margin-top: 0.58rem;
+	}
+
+	.music-control {
+		appearance: none;
+		border: 1px solid rgb(162 192 255 / 0.32);
+		border-radius: 8px;
+		background:
+			linear-gradient(135deg, rgb(18 31 67 / 0.9), rgb(36 16 70 / 0.86));
+		color: rgb(232 238 255 / 0.95);
+		font-family: 'IBM Plex Mono', 'Consolas', monospace;
+		font-size: 0.86rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		line-height: 1;
+		min-height: 2rem;
+		cursor: pointer;
+		transition:
+			transform var(--dur-xs) var(--ease-organic),
+			border-color var(--dur-xs) var(--ease-organic),
+			box-shadow var(--dur-xs) var(--ease-organic);
+	}
+
+	.music-control:hover {
+		transform: translateY(-1px);
+		border-color: rgb(142 240 226 / 0.58);
+		box-shadow:
+			0 4px 12px rgb(0 0 0 / 0.34),
+			0 0 14px rgb(98 225 255 / 0.2);
+	}
+
+	.music-control:active {
+		transform: translateY(0);
+	}
+
+	.music-mute {
+		font-size: 0.74rem;
+		letter-spacing: 0.08em;
+	}
+
+	.music-mute.is-muted {
+		color: rgb(255 211 141 / 0.98);
+		border-color: rgb(255 176 130 / 0.56);
+		box-shadow: 0 0 0 1px rgb(255 176 130 / 0.24) inset;
+	}
+
+	.music-meter {
+		position: relative;
+		height: 0.46rem;
+		margin-top: 0.6rem;
+		border-radius: 999px;
+		border: 1px solid rgb(151 176 233 / 0.3);
+		background: linear-gradient(90deg, rgb(14 24 52 / 0.9), rgb(13 17 33 / 0.78));
+		overflow: hidden;
+	}
+
+	.music-meter-fill {
+		display: block;
+		height: 100%;
+		width: 82%;
+		background: linear-gradient(90deg, #7ec3ff 0%, #8ff8ef 34%, #ffe596 68%, #ff97c4 100%);
+		box-shadow: 0 0 12px rgb(143 248 239 / 0.38);
+		transition: width 180ms var(--ease-organic);
+	}
+
+	.music-level {
+		margin-top: 0.48rem;
+		font-size: 0.66rem;
+		letter-spacing: 0.07em;
+		color: rgb(201 220 255 / 0.82);
+		text-transform: uppercase;
 	}
 
 	.scroll-hint {
@@ -3638,6 +3876,37 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		.music-led {
 			width: 0.58rem;
 			height: 0.58rem;
+		}
+
+		.music-player {
+			top: 3.12rem;
+			right: 0.62rem;
+			width: min(16.2rem, calc(100vw - 1.24rem));
+			padding: 0.6rem 0.62rem 0.56rem;
+		}
+
+		.music-player-track {
+			font-size: 0.66rem;
+		}
+
+		.music-player-author,
+		.music-level {
+			font-size: 0.6rem;
+		}
+
+		.music-player-controls {
+			grid-template-columns: 1.9rem minmax(0, 1fr) 1.9rem;
+			gap: 0.34rem;
+			margin-top: 0.5rem;
+		}
+
+		.music-control {
+			min-height: 1.74rem;
+			font-size: 0.74rem;
+		}
+
+		.music-mute {
+			font-size: 0.64rem;
 		}
 
 		.orb,
