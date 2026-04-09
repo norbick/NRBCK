@@ -156,10 +156,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		<div class="music-player" id="music-player" aria-hidden="true">
 			<div class="music-player-head">
 				<div class="music-marquee" aria-label="Track title">
-					<p class="music-player-track">
-						<span>NEON HORIZON CRUISE • NEON HORIZON CRUISE • </span>
-						<span aria-hidden="true">NEON HORIZON CRUISE • NEON HORIZON CRUISE • </span>
-					</p>
+					<p class="music-player-track"><span>NEON HORIZON CRUISE</span></p>
 				</div>
 				<p class="music-player-author">NRBCK</p>
 			</div>
@@ -1559,15 +1556,13 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 	}
 
 	.music-player-head {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) auto;
-		align-items: center;
-		gap: 0.56rem;
+		display: block;
 		padding-bottom: 0.42rem;
 		border-bottom: 1px solid rgb(168 196 255 / 0.2);
 	}
 
 	.music-marquee {
+		position: relative;
 		min-width: 0;
 		overflow: hidden;
 		border-radius: 7px;
@@ -1582,6 +1577,8 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 			),
 			linear-gradient(90deg, rgb(14 22 48 / 0.9), rgb(20 11 48 / 0.78));
 		box-shadow: inset 0 0 0 1px rgb(115 143 214 / 0.12);
+		-webkit-mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+		mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
 	}
 
 	.music-player-track,
@@ -1592,24 +1589,31 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 	}
 
 	.music-player-track {
-		display: inline-flex;
-		min-width: max-content;
+		display: block;
+		overflow: visible;
+		white-space: nowrap;
 		font-size: 0.68rem;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		color: rgb(223 236 255 / 0.86);
-		animation: music-marquee-scroll 11s linear infinite;
 	}
 
 	.music-player-track > span {
+		display: inline-block;
 		padding: 0.22rem 0.56rem 0.26rem 0.54rem;
+		white-space: nowrap;
+		animation: music-marquee-scroll 9.6s linear infinite;
+		will-change: transform;
 	}
 
-	.music-marquee:hover .music-player-track {
+	.music-marquee:hover .music-player-track > span {
 		animation-play-state: paused;
 	}
 
 	.music-player-author {
+		display: block;
+		margin-top: 0.3rem;
+		text-align: right;
 		font-size: 0.66rem;
 		letter-spacing: 0.1em;
 		color: rgb(135 248 223 / 0.94);
@@ -2808,10 +2812,10 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 	@keyframes music-marquee-scroll {
 		0% {
-			transform: translateX(0);
+			transform: translateX(102%);
 		}
 		100% {
-			transform: translateX(-50%);
+			transform: translateX(calc(-100% - 1.2rem));
 		}
 	}
 
