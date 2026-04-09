@@ -166,7 +166,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 			<div class="music-meter" aria-hidden="true">
 				<span class="music-meter-fill" id="music-meter-fill"></span>
 			</div>
-			<p class="music-level" id="music-level">VOLUME 90%</p>
+			<p class="music-level" id="music-level">VOLUME 50%</p>
 		</div>
 
 		<div class="scroll-hint" id="scroll-hint" aria-hidden="true">
@@ -756,7 +756,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				const barSeconds = stepSeconds * stepsPerBar;
 				const scheduleAhead = 0.2;
 				const minMasterGain = 0.0001;
-				const maxMasterGain = 0.37;
+				const maxMasterGain = 0.43;
 				let context = null;
 				let master = null;
 				let musicBus = null;
@@ -772,7 +772,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				let nextStepAt = 0;
 				let stepIndex = 0;
 				let isPlaying = false;
-				let volumeLevel = 0.9;
+				let volumeLevel = 0.5;
 				let isMuted = false;
 
 				const midiToFreq = (midi) => 440 * Math.pow(2, (midi - 69) / 12);
@@ -791,7 +791,9 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 				const targetGain = () => {
 					if (!isPlaying || isMuted) return minMasterGain;
-					return Math.max(minMasterGain, maxMasterGain * volumeLevel);
+					const level = clamp(volumeLevel, 0, 1);
+					const loudnessCurve = level < 0.5 ? level * 1.4 : 0.7 + (level - 0.5) * 0.6;
+					return Math.max(minMasterGain, maxMasterGain * loudnessCurve);
 				};
 
 				const applyMasterGain = (rampSeconds = 0.22) => {
@@ -1227,7 +1229,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				};
 
 				const nudgeVolume = (delta) => {
-					volumeLevel = clamp(volumeLevel + delta, 0.08, 1);
+					volumeLevel = clamp(volumeLevel + delta, 0, 1);
 					if (isMuted) isMuted = false;
 					updatePlayerUi();
 					if (isPlaying) applyMasterGain(0.14);
@@ -1638,7 +1640,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 	.music-meter-fill {
 		display: block;
 		height: 100%;
-		width: 82%;
+		width: 50%;
 		background: linear-gradient(90deg, #7ec3ff 0%, #8ff8ef 34%, #ffe596 68%, #ff97c4 100%);
 		box-shadow: 0 0 12px rgb(143 248 239 / 0.38);
 		transition: width 180ms var(--ease-organic);
