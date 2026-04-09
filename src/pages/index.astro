@@ -162,16 +162,19 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 			</div>
 			<div class="music-player-controls">
 				<button class="music-control music-mute" id="music-mute" type="button">MUTE</button>
-				<input
-					class="music-slider"
-					id="music-slider"
-					type="range"
-					min="0"
-					max="100"
-					value="50"
-					step="1"
-					aria-label="Volume slider"
-				/>
+				<div class="music-meter">
+					<span class="music-meter-fill" id="music-meter-fill" aria-hidden="true"></span>
+					<input
+						class="music-slider"
+						id="music-slider"
+						type="range"
+						min="0"
+						max="100"
+						value="50"
+						step="1"
+						aria-label="Volume slider"
+					/>
+				</div>
 			</div>
 			<p class="music-level" id="music-level">VOLUME 50%</p>
 		</div>
@@ -733,6 +736,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		const musicToggle = document.getElementById('music-toggle');
 		const musicPlayer = document.getElementById('music-player');
 		const musicMute = document.getElementById('music-mute');
+		const musicMeterFill = document.getElementById('music-meter-fill');
 		const musicSlider = document.getElementById('music-slider');
 		const musicLevel = document.getElementById('music-level');
 
@@ -820,9 +824,11 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				const updatePlayerUi = () => {
 					const clampedLevel = clamp(volumeLevel, minVolumeLevel, maxVolumeLevel);
 					const percent = Math.round(clampedLevel * 100);
+					if (musicMeterFill instanceof HTMLElement) {
+						musicMeterFill.style.width = `${percent}%`;
+					}
 					if (musicSlider instanceof HTMLInputElement) {
 						musicSlider.value = String(percent);
-						musicSlider.style.setProperty('--slider-fill', `${percent}%`);
 						musicSlider.classList.toggle('is-muted', isMuted);
 					}
 					if (musicLevel instanceof HTMLElement) {
@@ -1671,11 +1677,40 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		box-shadow: 0 0 0 1px rgb(255 176 130 / 0.24) inset;
 	}
 
+	.music-meter {
+		position: relative;
+		height: 0.46rem;
+		border-radius: 999px;
+		border: 1px solid rgb(151 176 233 / 0.34);
+		background: linear-gradient(90deg, rgb(15 24 49 / 0.95), rgb(11 15 33 / 0.84));
+		box-shadow:
+			inset 0 0 0 1px rgb(155 184 247 / 0.16),
+			0 0 10px rgb(110 218 255 / 0.16);
+		overflow: visible;
+	}
+
+	.music-meter-fill {
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		width: 50%;
+		border-radius: inherit;
+		background: linear-gradient(90deg, #7ec3ff 0%, #8ff8ef 34%, #ffe596 68%, #ff97c4 100%);
+		box-shadow: 0 0 12px rgb(143 248 239 / 0.34);
+		transition: width 120ms linear;
+		pointer-events: none;
+	}
+
 	.music-slider {
-		--slider-fill: 50%;
 		appearance: none;
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 50%;
+		transform: translateY(-50%);
 		width: 100%;
-		height: 1.46rem;
+		height: 1.42rem;
 		margin: 0;
 		padding: 0;
 		background: transparent;
@@ -1688,28 +1723,15 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 	.music-slider::-webkit-slider-runnable-track {
 		height: 0.46rem;
-		border-radius: 999px;
-		border: 1px solid rgb(151 176 233 / 0.34);
-		background:
-			linear-gradient(
-				90deg,
-				#7ec3ff 0%,
-				#8ff8ef 34%,
-				#ffe596 68%,
-				#ff97c4 var(--slider-fill),
-				rgb(15 24 49 / 0.95) var(--slider-fill),
-				rgb(11 15 33 / 0.84) 100%
-			);
-		box-shadow:
-			inset 0 0 0 1px rgb(155 184 247 / 0.16),
-			0 0 10px rgb(110 218 255 / 0.16);
+		background: transparent;
+		border: 0;
 	}
 
 	.music-slider::-webkit-slider-thumb {
 		appearance: none;
 		width: 0.94rem;
 		height: 0.94rem;
-		margin-top: -0.28rem;
+		margin-top: -0.24rem;
 		border-radius: 50%;
 		border: 1px solid rgb(180 229 255 / 0.85);
 		background:
@@ -1721,15 +1743,13 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 	.music-slider::-moz-range-track {
 		height: 0.46rem;
-		border-radius: 999px;
-		border: 1px solid rgb(151 176 233 / 0.34);
-		background: linear-gradient(90deg, rgb(15 24 49 / 0.95), rgb(11 15 33 / 0.84));
+		background: transparent;
+		border: 0;
 	}
 
 	.music-slider::-moz-range-progress {
 		height: 0.46rem;
-		border-radius: 999px;
-		background: linear-gradient(90deg, #7ec3ff 0%, #8ff8ef 34%, #ffe596 68%, #ff97c4 100%);
+		background: transparent;
 	}
 
 	.music-slider::-moz-range-thumb {
