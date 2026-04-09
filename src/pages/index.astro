@@ -6,6 +6,7 @@ type Localized = { pl: string; en: string };
 type Project = {
 	id: string;
 	previewId: string;
+	previewImage: string;
 	name: string;
 	live: string;
 	theme: string;
@@ -19,6 +20,7 @@ const projects: Project[] = [
 	{
 		id: '01',
 		previewId: 'm2',
+		previewImage: `${Astro.base}project-previews/m2-events.jpg`,
 		name: 'M2 Events',
 		live: 'https://m2-events.pl',
 		theme: 'theme-blue',
@@ -37,6 +39,7 @@ const projects: Project[] = [
 	{
 		id: '02',
 		previewId: 'looloot',
+		previewImage: `${Astro.base}project-previews/looloot.jpg`,
 		name: 'LooLoot',
 		live: 'https://looloot.norbick.workers.dev/',
 		theme: 'theme-orange',
@@ -55,6 +58,7 @@ const projects: Project[] = [
 	{
 		id: '03',
 		previewId: 'portfolio',
+		previewImage: `${Astro.base}project-previews/nrbck.jpg`,
 		name: 'Ta strona',
 		live: 'https://norbick.github.io/NRBCK/',
 		theme: 'theme-violet',
@@ -225,15 +229,15 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 			<article id="projects" class="panel panel-projects reveal reveal-2">
 				<div class="project-preview-bg" id="project-preview-bg" aria-hidden="true">
 					{projects.map((project) => (
-						<iframe
+						<img
 							class="project-preview-frame"
 							data-preview-id={project.previewId}
-							data-src={project.live}
-							title={`${project.name} preview`}
+							src={project.previewImage}
+							alt=""
 							loading="lazy"
-							referrerpolicy="no-referrer"
-							tabindex="-1"
-						></iframe>
+							decoding="async"
+							fetchpriority="low"
+						/>
 					))}
 					<div class="project-preview-overlay"></div>
 				</div>
@@ -430,24 +434,12 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		const projectCards = Array.from(document.querySelectorAll('.project-frame[data-preview-target]'));
 
 		if (previewBg instanceof HTMLElement && previewFrames.length > 0 && projectCards.length > 0) {
-			const ensurePreviewLoaded = (previewId) => {
-				if (!previewId) return;
-				previewFrames.forEach((frame) => {
-					const iframe = /** @type {HTMLIFrameElement} */ (frame);
-					if (iframe.dataset.previewId !== previewId) return;
-					if (iframe.hasAttribute('src')) return;
-					const src = iframe.dataset.src;
-					if (src) iframe.src = src;
-				});
-			};
-
 			const setPreview = (previewId) => {
 				const isActive = Boolean(previewId) && desktop.matches;
-				if (isActive) ensurePreviewLoaded(previewId);
 				previewBg.classList.toggle('is-active', isActive);
 				previewFrames.forEach((frame) => {
-					const iframe = /** @type {HTMLElement} */ (frame);
-					iframe.classList.toggle('is-active', isActive && iframe.dataset.previewId === previewId);
+					const image = /** @type {HTMLElement} */ (frame);
+					image.classList.toggle('is-active', isActive && image.dataset.previewId === previewId);
 				});
 			};
 
@@ -2964,7 +2956,8 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		inset: 0;
 		width: 100%;
 		height: 100%;
-		border: 0;
+		object-fit: cover;
+		object-position: center top;
 		opacity: 0;
 		transform: scale(1.035);
 		transform-origin: center center;
