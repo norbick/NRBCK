@@ -1,17 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import AboutPanel from '../components/portfolio/AboutPanel.astro';
 import PortfolioChrome from '../components/portfolio/PortfolioChrome.astro';
 import HeroPanel from '../components/portfolio/HeroPanel.astro';
 import ProjectsPanel from '../components/portfolio/ProjectsPanel.astro';
+import VisualBreakPanel from '../components/portfolio/VisualBreakPanel.astro';
 import ValuePanel from '../components/portfolio/ValuePanel.astro';
 import ContactPanel from '../components/portfolio/ContactPanel.astro';
 import SignalRail from '../components/portfolio/SignalRail.astro';
 import {
+	aboutSection,
 	contactAction,
 	contactRecipient,
 	projects,
 	sellingPoints,
 	signalTrack,
+	visualBreak,
 } from '../data/portfolio-content';
 import '../styles/portfolio.css';
 ---
@@ -33,8 +37,25 @@ import '../styles/portfolio.css';
 		<section class="rail" id="horizontal-rail">
 			<HeroPanel />
 			<ProjectsPanel projects={projects} />
+			<VisualBreakPanel
+				image={visualBreak.image}
+				kicker={visualBreak.kicker}
+				title={visualBreak.title}
+				blurb={visualBreak.blurb}
+				tags={visualBreak.tags}
+			/>
 			<ValuePanel sellingPoints={sellingPoints} />
 			<ContactPanel contactAction={contactAction} contactRecipient={contactRecipient} />
+			<AboutPanel
+				portraitImage={aboutSection.portraitImage}
+				portraitCardImage={aboutSection.portraitCardImage}
+				kicker={aboutSection.kicker}
+				title={aboutSection.title}
+				intro={aboutSection.intro}
+				paragraphs={aboutSection.paragraphs}
+				tags={aboutSection.tags}
+				metrics={aboutSection.metrics}
+			/>
 		</section>
 
 		<SignalRail signalTrack={signalTrack} />

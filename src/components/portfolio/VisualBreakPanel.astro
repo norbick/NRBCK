@@ -1,0 +1,51 @@
+---
+import type { Localized } from '../../data/portfolio-content';
+
+interface Props {
+	image: string;
+	kicker: Localized;
+	title: Localized;
+	blurb: Localized;
+	tags: Localized[];
+}
+
+const { image, kicker, title, blurb, tags } = Astro.props;
+---
+
+<article class="panel panel-break reveal reveal-3">
+	<div class="break-shell ghost-frame">
+		<div class="break-visual">
+			<img
+				class="break-image"
+				src={image}
+				alt="Retro-futuristic neon grid illustration"
+				loading="lazy"
+				decoding="async"
+			/>
+			<span class="break-glow" aria-hidden="true"></span>
+		</div>
+
+		<div class="break-copy">
+			<p class="break-kicker t-inline">
+				<span data-l10n="pl">{kicker.pl}</span>
+				<span data-l10n="en">{kicker.en}</span>
+			</p>
+			<h3 class="break-title t-block">
+				<span data-l10n="pl">{title.pl}</span>
+				<span data-l10n="en">{title.en}</span>
+			</h3>
+			<p class="break-blurb t-block">
+				<span data-l10n="pl">{blurb.pl}</span>
+				<span data-l10n="en">{blurb.en}</span>
+			</p>
+			<ul class="break-tags">
+				{tags.map((tag) => (
+					<li class="break-tag t-inline">
+						<span data-l10n="pl">{tag.pl}</span>
+						<span data-l10n="en">{tag.en}</span>
+					</li>
+				))}
+			</ul>
+		</div>
+	</div>
+</article>

@@ -1,0 +1,80 @@
+---
+import type { Localized, Metric } from '../../data/portfolio-content';
+
+interface Props {
+	portraitImage: string;
+	portraitCardImage: string;
+	kicker: Localized;
+	title: Localized;
+	intro: Localized;
+	paragraphs: Localized[];
+	tags: Localized[];
+	metrics: Metric[];
+}
+
+const { portraitImage, portraitCardImage, kicker, title, intro, paragraphs, tags, metrics } = Astro.props;
+---
+
+<article id="about" class="panel panel-about reveal reveal-6">
+	<div class="about-shell">
+		<figure class="about-portrait ghost-frame">
+			<img
+				class="about-portrait-main"
+				src={portraitImage}
+				alt="Stylized portrait of NRBCK in neon raster treatment"
+				loading="lazy"
+				decoding="async"
+			/>
+			<img class="about-portrait-card" src={portraitCardImage} alt="" loading="lazy" decoding="async" aria-hidden="true" />
+			<figcaption class="about-caption t-inline">
+				<span data-l10n="pl">NRBCK / studio mode</span>
+				<span data-l10n="en">NRBCK / studio mode</span>
+			</figcaption>
+		</figure>
+
+		<div class="about-content ghost-frame">
+			<p class="about-kicker t-inline">
+				<span data-l10n="pl">{kicker.pl}</span>
+				<span data-l10n="en">{kicker.en}</span>
+			</p>
+			<h3 class="about-title t-block">
+				<span data-l10n="pl">{title.pl}</span>
+				<span data-l10n="en">{title.en}</span>
+			</h3>
+			<p class="about-intro t-block">
+				<span data-l10n="pl">{intro.pl}</span>
+				<span data-l10n="en">{intro.en}</span>
+			</p>
+
+			<div class="about-paragraphs">
+				{paragraphs.map((paragraph) => (
+					<p class="about-paragraph t-block">
+						<span data-l10n="pl">{paragraph.pl}</span>
+						<span data-l10n="en">{paragraph.en}</span>
+					</p>
+				))}
+			</div>
+
+			<ul class="about-tags">
+				{tags.map((tag) => (
+					<li class="about-tag t-inline">
+						<span data-l10n="pl">{tag.pl}</span>
+						<span data-l10n="en">{tag.en}</span>
+					</li>
+				))}
+			</ul>
+
+			<div class="about-metrics">
+				{metrics.map((metric) => (
+					<article class="about-metric">
+						<p class="about-metric-value">{metric.value}</p>
+						<p class="about-metric-label t-block">
+							<span data-l10n="pl">{metric.label.pl}</span>
+							<span data-l10n="en">{metric.label.en}</span>
+						</p>
+					</article>
+				))}
+			</div>
+		</div>
+	</div>
+</article>

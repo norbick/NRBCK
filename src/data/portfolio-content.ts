@@ -13,6 +13,11 @@ export type Project = {
 	cta: Localized;
 };
 
+export type Metric = {
+	value: string;
+	label: Localized;
+};
+
 export const projects: Project[] = [
 	{
 		id: '01',
@@ -120,3 +125,59 @@ export const signals: Localized[] = [
 export const signalTrack = [...signals, ...signals];
 export const contactRecipient = 'norbick@gmail.com';
 export const contactAction = `https://formsubmit.co/${contactRecipient}`;
+
+export const visualBreak = {
+	image: 'about/neon-grid-break.webp',
+	kicker: {
+		pl: 'TRYB OPUS MAGNUM',
+		en: 'OPUS MAGNUM MODE',
+	},
+	title: {
+		pl: 'Design, który ma wejść do głowy od pierwszej sekundy.',
+		en: 'Design that sticks from the very first second.',
+	},
+	blurb: {
+		pl: 'Ta strona ma być pokazem stylu i warsztatu: neon, ruch, mocna typografia i narracja, która prowadzi użytkownika krok po kroku.',
+		en: 'This website is meant to be a style-and-craft showcase: neon mood, motion, bold typography, and storytelling that guides people step by step.',
+	},
+	tags: [
+		{ pl: 'ESTETYKA RETRO-FUTURO', en: 'RETRO-FUTURE AESTHETICS' },
+		{ pl: 'MOCNY CHARACTER', en: 'STRONG CHARACTER' },
+		{ pl: 'NIEPOWTARZALNY KLIMAT', en: 'UNMISTAKABLE MOOD' },
+	],
+};
+
+export const aboutSection = {
+	portraitImage: 'about/nrbck-portrait-stylized.webp',
+	portraitCardImage: 'about/nrbck-portrait-card.webp',
+	kicker: { pl: 'O MNIE', en: 'ABOUT ME' },
+	title: {
+		pl: 'Frontend, design i vibe. Jedna osoba, pełna odpowiedzialność.',
+		en: 'Frontend, design, and vibe. One person, full ownership.',
+	},
+	intro: {
+		pl: 'Lubię projekty, które mają charakter i zostają w głowie. Bez szablonowości, bez przypadkowych decyzji.',
+		en: 'I like projects with character that stay in memory. No template feel, no random decisions.',
+	},
+	paragraphs: [
+		{
+			pl: 'Najlepiej pracuje mi się tam, gdzie design i kod idą razem od pierwszego szkicu. Dzięki temu finalny efekt jest spójny i naprawdę “siedzi”.',
+			en: 'I work best where design and code move together from the very first sketch. That is how the final result feels cohesive and truly polished.',
+		},
+		{
+			pl: 'Dbam o to, żeby strona nie tylko wyglądała mocno, ale też prowadziła użytkownika dokładnie tam, gdzie trzeba.',
+			en: 'I care that a website not only looks strong, but also guides users exactly where they need to go.',
+		},
+	],
+	tags: [
+		{ pl: 'Kierunek kreatywny', en: 'Creative direction' },
+		{ pl: 'Web design i UI', en: 'Web design and UI' },
+		{ pl: 'Frontend wdrożeniowy', en: 'Production frontend' },
+		{ pl: 'Dopracowany detal', en: 'Crafted detail' },
+	],
+	metrics: [
+		{ value: '01', label: { pl: 'osoba odpowiedzialna za całość', en: 'person owning the whole process' } },
+		{ value: '∞', label: { pl: 'iteracji do momentu “to jest to”', en: 'iterations until it truly clicks' } },
+		{ value: '24/7', label: { pl: 'obsesja na punkcie detali', en: 'detail obsession mode' } },
+	] as Metric[],
+};
