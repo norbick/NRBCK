@@ -16,6 +16,12 @@ npm run build
 npm run preview
 ```
 
+## Tests
+
+```bash
+npm test
+```
+
 ## Deploy (GitHub Pages)
 
 A workflow is included at `.github/workflows/deploy.yml`.

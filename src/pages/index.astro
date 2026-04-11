@@ -432,9 +432,11 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 		</aside>
 	</main>
 
-		<script is:inline>
-		const root = document.documentElement;
-		const isPolish = root.classList.contains('lang-pl');
+		<script>
+			import { calculateTargetGain, getTimelineLabel, isValidEmail } from '../utils/portfolio-helpers.js';
+
+			const root = document.documentElement;
+			const isPolish = root.classList.contains('lang-pl');
 
 		document.querySelectorAll('[data-ph-pl]').forEach((node) => {
 			const element = /** @type {HTMLElement} */ (node);
@@ -652,11 +654,6 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 			contactForm.method = 'POST';
 			contactForm.action = `https://formsubmit.co/${recipient}`;
 			contactForm.target = 'contact-submit-frame';
-			const timelineLabels = {
-				asap: isPolish ? 'Jak najszybciej' : 'ASAP',
-				'this-month': isPolish ? 'W tym miesiącu' : 'This month',
-				'next-month': isPolish ? 'W przyszłym miesiącu' : 'Next month',
-			};
 			let isSending = false;
 			let waitingForFrameLoad = false;
 
@@ -691,7 +688,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				const email = String(formData.get('email') || '').trim();
 				const message = String(formData.get('message') || '').trim();
 				const timeline = String(formData.get('timeline') || '').trim();
-				const hasValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+				const hasValidEmail = isValidEmail(email);
 
 				if (!name || !email || !message || !timeline) {
 					setStatus(isPolish ? 'Uzupełnij proszę wszystkie pola.' : 'Please fill in all fields.', 'error');
@@ -703,7 +700,7 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 					return;
 				}
 
-				const timelineLabel = timelineLabels[timeline] || timeline;
+				const timelineLabel = getTimelineLabel(timeline, isPolish);
 				const subject = isPolish ? `Nowe zapytanie od ${name}` : `New inquiry from ${name}`;
 
 				isSending = true;
@@ -801,11 +798,15 @@ const contactAction = `https://formsubmit.co/${contactRecipient}`;
 				};
 
 				const targetGain = () => {
-					if (!isPlaying || isMuted) return minMasterGain;
-					const level = clamp(volumeLevel, minVolumeLevel, maxVolumeLevel);
-					const loudnessCurve = Math.pow(level, 0.55);
-					const mappedGain = minMasterGain + (maxMasterGain - minMasterGain) * loudnessCurve;
-					return Math.max(minMasterGain, mappedGain);
+					return calculateTargetGain({
+						isPlaying,
+						isMuted,
+						volumeLevel,
+						minMasterGain,
+						maxMasterGain,
+						minVolumeLevel,
+						maxVolumeLevel,
+					});
 				};
 
 				const applyMasterGain = (rampSeconds = 0.22) => {
