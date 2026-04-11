@@ -1,0 +1,122 @@
+export type Localized = { pl: string; en: string };
+
+export type Project = {
+	id: string;
+	previewId: string;
+	previewImage: string;
+	name: string;
+	live: string;
+	theme: string;
+	role: Localized;
+	blurb: Localized;
+	tags: Localized[];
+	cta: Localized;
+};
+
+export const projects: Project[] = [
+	{
+		id: '01',
+		previewId: 'm2',
+		previewImage: 'project-previews/m2-events.jpg',
+		name: 'M2 Events',
+		live: 'https://m2-events.pl',
+		theme: 'theme-blue',
+		role: { pl: 'Oficjalna strona M2 Events', en: 'Official M2 Events website' },
+		blurb: {
+			pl: 'Strona dla marki techniki eventowej: nagłośnienie, oświetlenie i scena. Priorytetem była czytelna oferta, mocne realizacje i prosty kontakt.',
+			en: 'A website for an event-tech brand focused on sound, lighting, and stage support. The goal was a clear offer, strong case studies, and easy contact.',
+		},
+		tags: [
+			{ pl: 'Oferta usług', en: 'Service offer' },
+			{ pl: 'Realizacje eventów', en: 'Event case studies' },
+			{ pl: 'Kontakt leadowy', en: 'Lead-focused contact' },
+		],
+		cta: { pl: 'Otwórz m2-events.pl', en: 'Open m2-events.pl' },
+	},
+	{
+		id: '02',
+		previewId: 'looloot',
+		previewImage: 'project-previews/looloot.jpg',
+		name: 'LooLoot',
+		live: 'https://looloot.norbick.workers.dev/',
+		theme: 'theme-orange',
+		role: { pl: 'Aplikacja webowa / PWA', en: 'Web app / PWA product' },
+		blurb: {
+			pl: 'Interaktywna aplikacja do śledzenia sesji pracy, czasu i progresu. Projekt skupiony na szybkim flow, statystykach i mobilnym UX.',
+			en: 'An interactive app for tracking work sessions, time, and progress. Designed around fast flow, clear stats, and mobile UX.',
+		},
+		tags: [
+			{ pl: 'Timer i sesje', en: 'Timer and sessions' },
+			{ pl: 'Statystyki i streaki', en: 'Stats and streaks' },
+			{ pl: 'PWA / mobile first', en: 'PWA / mobile first' },
+		],
+		cta: { pl: 'Otwórz LooLoot', en: 'Open LooLoot' },
+	},
+	{
+		id: '03',
+		previewId: 'portfolio',
+		previewImage: 'project-previews/nrbck.jpg',
+		name: 'Ta strona',
+		live: 'https://nrbck.pl/',
+		theme: 'theme-violet',
+		role: { pl: 'Portfolio osobiste / landing page', en: 'Personal portfolio / landing page' },
+		blurb: {
+			pl: 'Aktualna strona portfolio NRBCK, na której jesteś teraz: eksperymentalny layout, animacje i prezentacja projektów w jednym miejscu.',
+			en: 'The current NRBCK portfolio page you are browsing now: an experimental layout, motion, and project storytelling in one place.',
+		},
+		tags: [
+			{ pl: 'Astro', en: 'Astro' },
+			{ pl: 'Motion UI', en: 'Motion UI' },
+			{ pl: 'Brand showcase', en: 'Brand showcase' },
+		],
+		cta: { pl: 'Otwórz tę stronę', en: 'Open this page' },
+	},
+];
+
+export const sellingPoints: Localized[] = [
+	{
+		pl: 'Od pierwszej rozmowy dostajesz konkretny plan: co robimy, w jakiej kolejności i kiedy zobaczysz efekt.',
+		en: 'From the first conversation, you get a clear plan: what we do, in what order, and when you will see results.',
+	},
+	{
+		pl: 'Robię strony, które nie tylko dobrze wyglądają, ale też są czytelne i łatwe w użyciu.',
+		en: 'I create websites that not only look good, but also feel clear and easy to use.',
+	},
+	{
+		pl: 'Nie komplikuję. Tłumaczę jasno, co robimy, na jakim jesteśmy etapie i co będzie dalej.',
+		en: 'I keep things simple. You always know what we are doing, where the project stands, and what comes next.',
+	},
+	{
+		pl: 'Regularnie pokazuję postęp, więc nie musisz się domyślać, czy coś w ogóle się dzieje.',
+		en: 'I share progress regularly, so you are never left wondering if anything is moving.',
+	},
+	{
+		pl: 'Nie wrzucam każdej marki w ten sam szablon. Strona ma pasować do Ciebie, a nie do gotowca.',
+		en: 'I do not force every brand into the same template. The website should fit you, not the other way around.',
+	},
+	{
+		pl: 'Zależy mi na tym, żeby końcowy efekt był po prostu dobry: spójny, szybki i sensowny.',
+		en: 'What matters to me is a final result that feels solid, fast, and genuinely well made.',
+	},
+];
+
+export const signals: Localized[] = [
+	{ pl: 'NRBCK PORTFOLIO', en: 'NRBCK PORTFOLIO' },
+	{ pl: 'FREELANCE WEB DESIGN', en: 'FREELANCE WEB DESIGN' },
+	{ pl: 'FRONTEND + ASTRO', en: 'FRONTEND + ASTRO' },
+	{ pl: 'FROM IDEA TO LAUNCH', en: 'FROM IDEA TO LAUNCH' },
+	{ pl: 'CLEAR MESSAGING', en: 'CLEAR MESSAGING' },
+	{ pl: 'CLEAR FLOW', en: 'CLEAR FLOW' },
+	{ pl: 'STRONG TYPOGRAPHY', en: 'STRONG TYPOGRAPHY' },
+	{ pl: 'FAST ITERATION', en: 'FAST ITERATION' },
+	{ pl: 'DESIGN THAT CONVERTS', en: 'DESIGN THAT CONVERTS' },
+	{ pl: 'NO STIFF JARGON', en: 'NO STIFF JARGON' },
+	{ pl: 'CONTACT AND DELIVERY', en: 'CONTACT AND DELIVERY' },
+	{ pl: 'DEVELOPMENT READY', en: 'DEVELOPMENT READY' },
+	{ pl: 'LIVE DEPLOY MODE', en: 'LIVE DEPLOY MODE' },
+	{ pl: 'UI + FRONTEND SYSTEMS', en: 'UI + FRONTEND SYSTEMS' },
+];
+
+export const signalTrack = [...signals, ...signals];
+export const contactRecipient = 'norbick@gmail.com';
+export const contactAction = `https://formsubmit.co/${contactRecipient}`;
