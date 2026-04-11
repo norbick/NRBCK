@@ -127,23 +127,23 @@ export const contactRecipient = 'norbick@gmail.com';
 export const contactAction = `https://formsubmit.co/${contactRecipient}`;
 
 export const visualBreak = {
-	image: 'about/neon-grid-break.webp',
+	image: 'about/work-break-collage.webp',
 	kicker: {
-		pl: 'TRYB OPUS MAGNUM',
-		en: 'OPUS MAGNUM MODE',
+		pl: 'JAK PRACUJĘ',
+		en: 'HOW I WORK',
 	},
 	title: {
-		pl: 'Design, który ma wejść do głowy od pierwszej sekundy.',
-		en: 'Design that sticks from the very first second.',
+		pl: 'Od koncepcji do wdrożenia w jednym, spójnym procesie.',
+		en: 'From concept to launch in one cohesive process.',
 	},
 	blurb: {
-		pl: 'Ta strona ma być pokazem stylu i warsztatu: neon, ruch, mocna typografia i narracja, która prowadzi użytkownika krok po kroku.',
-		en: 'This website is meant to be a style-and-craft showcase: neon mood, motion, bold typography, and storytelling that guides people step by step.',
+		pl: 'Łączę UX, warstwę wizualną i frontend tak, żeby projekt był nie tylko efektowny, ale przede wszystkim czytelny i skuteczny.',
+		en: 'I combine UX, visual direction, and frontend so the final result is not only striking, but clear and effective.',
 	},
 	tags: [
-		{ pl: 'ESTETYKA RETRO-FUTURO', en: 'RETRO-FUTURE AESTHETICS' },
-		{ pl: 'MOCNY CHARACTER', en: 'STRONG CHARACTER' },
-		{ pl: 'NIEPOWTARZALNY KLIMAT', en: 'UNMISTAKABLE MOOD' },
+		{ pl: 'STRATEGIA I UX', en: 'STRATEGY AND UX' },
+		{ pl: 'KIERUNEK WIZUALNY', en: 'VISUAL DIRECTION' },
+		{ pl: 'FRONTEND PRODUKCYJNY', en: 'PRODUCTION FRONTEND' },
 	],
 };
 
@@ -152,21 +152,21 @@ export const aboutSection = {
 	portraitCardImage: 'about/nrbck-portrait-card.webp',
 	kicker: { pl: 'O MNIE', en: 'ABOUT ME' },
 	title: {
-		pl: 'Frontend, design i vibe. Jedna osoba, pełna odpowiedzialność.',
-		en: 'Frontend, design, and vibe. One person, full ownership.',
+		pl: 'Projektuję i wdrażam strony, które mają charakter i cel.',
+		en: 'I design and build websites with clear character and purpose.',
 	},
 	intro: {
-		pl: 'Lubię projekty, które mają charakter i zostają w głowie. Bez szablonowości, bez przypadkowych decyzji.',
-		en: 'I like projects with character that stay in memory. No template feel, no random decisions.',
+		pl: 'Najważniejsze jest dla mnie połączenie estetyki z funkcją: strona ma wyglądać dobrze i prowadzić użytkownika do działania.',
+		en: 'What matters most to me is combining aesthetics with function: a site should look strong and guide users to action.',
 	},
 	paragraphs: [
 		{
-			pl: 'Najlepiej pracuje mi się tam, gdzie design i kod idą razem od pierwszego szkicu. Dzięki temu finalny efekt jest spójny i naprawdę “siedzi”.',
-			en: 'I work best where design and code move together from the very first sketch. That is how the final result feels cohesive and truly polished.',
+			pl: 'Pracuję end-to-end, więc od briefu po deploy masz jedną osobę odpowiedzialną za całość procesu.',
+			en: 'I work end-to-end, so from brief to deploy you work with one person owning the full process.',
 		},
 		{
-			pl: 'Dbam o to, żeby strona nie tylko wyglądała mocno, ale też prowadziła użytkownika dokładnie tam, gdzie trzeba.',
-			en: 'I care that a website not only looks strong, but also guides users exactly where they need to go.',
+			pl: 'Lubię szybkie iteracje i konkretny feedback, bo to najszybsza droga do dopracowanego efektu.',
+			en: 'I prefer fast iterations and concrete feedback because that is the fastest path to a polished result.',
 		},
 	],
 	tags: [
@@ -176,8 +176,8 @@ export const aboutSection = {
 		{ pl: 'Dopracowany detal', en: 'Crafted detail' },
 	],
 	metrics: [
-		{ value: '01', label: { pl: 'osoba odpowiedzialna za całość', en: 'person owning the whole process' } },
-		{ value: '∞', label: { pl: 'iteracji do momentu “to jest to”', en: 'iterations until it truly clicks' } },
-		{ value: '24/7', label: { pl: 'obsesja na punkcie detali', en: 'detail obsession mode' } },
+		{ value: '1', label: { pl: 'osoba od briefu do wdrożenia', en: 'person from brief to launch' } },
+		{ value: '3', label: { pl: 'obszary: UX, UI, frontend', en: 'areas: UX, UI, frontend' } },
+		{ value: '0', label: { pl: 'pośredników w komunikacji', en: 'middle layers in communication' } },
 	] as Metric[],
 };
