@@ -16,6 +16,13 @@ npm run build
 npm run preview
 ```
 
+## Lint
+
+```bash
+npm run lint
+npm run lint:fix
+```
+
 ## Tests
 
 ```bash
