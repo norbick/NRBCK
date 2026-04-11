@@ -28,4 +28,5 @@ Default build values for Pages in this repo:
 ## Custom domain
 
 Yes, you can connect your own domain on GitHub Pages.
-When you are ready, we can add a `CNAME` file and switch `PUBLIC_BASE_PATH` to `/`.
+This repo already includes `public/CNAME` set to `nrbck.pl`.
+If needed, set `PUBLIC_SITE_URL=https://nrbck.pl` and `PUBLIC_BASE_PATH=/` in GitHub Actions variables.
