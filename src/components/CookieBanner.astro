@@ -21,12 +21,12 @@
 		const messages = {
 			pl: {
 				copy: 'Używam plików cookie do działania strony oraz, za Twoją zgodą, do anonimowej analityki. Niezbędne pliki cookie są zawsze aktywne.',
-				accept: 'Akceptuj analitykę',
+				accept: 'Akceptuj cookies',
 				reject: 'Tylko niezbędne',
 			},
 			en: {
 				copy: 'I use cookies to run the website and, with your consent, for anonymous analytics. Essential cookies are always active.',
-				accept: 'Accept analytics',
+				accept: 'Accept cookies',
 				reject: 'Essential only',
 			},
 		};
@@ -116,6 +116,10 @@
 </script>
 
 <style>
+	.cookie-banner[hidden] {
+		display: none !important;
+	}
+
 	.cookie-banner {
 		position: fixed;
 		left: 1rem;
