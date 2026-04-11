@@ -1,0 +1,55 @@
+---
+import type { Project } from '../../data/portfolio-content';
+
+interface Props {
+	projects: Project[];
+}
+
+const { projects } = Astro.props;
+---
+
+<article id="projects" class="panel panel-projects reveal reveal-2">
+	<div class="project-preview-bg" id="project-preview-bg" aria-hidden="true">
+		{projects.map((project) => (
+			<img
+				class="project-preview-frame"
+				data-preview-id={project.previewId}
+				src={project.previewImage}
+				alt=""
+				loading="lazy"
+				decoding="async"
+				fetchpriority="low"
+			/>
+		))}
+		<div class="project-preview-overlay"></div>
+	</div>
+
+	<div class="project-grid">
+		{projects.map((project) => (
+			<article class={`project-frame ghost-frame ${project.theme}`} data-preview-target={project.previewId}>
+				<p class="project-id">{project.id}</p>
+				<p class="project-role t-inline">
+					<span data-l10n="pl">{project.role.pl}</span>
+					<span data-l10n="en">{project.role.en}</span>
+				</p>
+				<h2 class="project-title">{project.name}</h2>
+				<p class="project-copy t-block">
+					<span data-l10n="pl">{project.blurb.pl}</span>
+					<span data-l10n="en">{project.blurb.en}</span>
+				</p>
+				<ul class="project-tags">
+					{project.tags.map((tag) => (
+						<li class="project-tag t-inline">
+							<span data-l10n="pl">{tag.pl}</span>
+							<span data-l10n="en">{tag.en}</span>
+						</li>
+					))}
+				</ul>
+				<a class="project-link t-inline" href={project.live} target="_blank" rel="noreferrer">
+					<span data-l10n="pl">{project.cta.pl}</span>
+					<span data-l10n="en">{project.cta.en}</span>
+				</a>
+			</article>
+		))}
+	</div>
+</article>

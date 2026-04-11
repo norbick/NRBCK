@@ -1,0 +1,20 @@
+---
+import type { Localized } from '../../data/portfolio-content';
+
+interface Props {
+	signalTrack: Localized[];
+}
+
+const { signalTrack } = Astro.props;
+---
+
+<aside class="global-signal" aria-label="Signal rail">
+	<div class="global-signal-track" aria-hidden="true">
+		{signalTrack.map((item) => (
+			<span class="signal-chip t-inline">
+				<span data-l10n="pl">{item.pl}</span>
+				<span data-l10n="en">{item.en}</span>
+			</span>
+		))}
+	</div>
+</aside>

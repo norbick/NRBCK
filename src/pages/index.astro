@@ -1,5 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import PortfolioChrome from '../components/portfolio/PortfolioChrome.astro';
+import HeroPanel from '../components/portfolio/HeroPanel.astro';
+import ProjectsPanel from '../components/portfolio/ProjectsPanel.astro';
+import ValuePanel from '../components/portfolio/ValuePanel.astro';
+import ContactPanel from '../components/portfolio/ContactPanel.astro';
+import SignalRail from '../components/portfolio/SignalRail.astro';
 import {
 	contactAction,
 	contactRecipient,
@@ -22,305 +28,21 @@ import '../styles/portfolio.css';
 			})();
 		</script>
 
-		<div class="orb orb-a" aria-hidden="true"></div>
-		<div class="orb orb-b" aria-hidden="true"></div>
-		<div class="scroll-brighten" aria-hidden="true"></div>
-		<div class="scanlines" aria-hidden="true"></div>
-		<div class="vignette" aria-hidden="true"></div>
-		<button class="music-toggle" id="music-toggle" type="button" aria-pressed="false">
-			<span class="music-led" aria-hidden="true"></span>
-			<span class="music-text music-off t-inline">
-				<span data-l10n="pl">WŁĄCZ MUZYKĘ</span>
-				<span data-l10n="en">TURN MUSIC ON</span>
-			</span>
-			<span class="music-text music-on t-inline">
-				<span data-l10n="pl">WYŁĄCZ MUZYKĘ</span>
-				<span data-l10n="en">TURN MUSIC OFF</span>
-			</span>
-		</button>
-		<div class="music-player" id="music-player" aria-hidden="true">
-			<div class="music-player-head">
-				<div class="music-marquee" aria-label="Track title">
-					<p class="music-player-track"><span>NEON HORIZON CRUISE</span></p>
-				</div>
-				<p class="music-player-author">NRBCK</p>
-			</div>
-			<div class="music-player-controls">
-				<button class="music-control music-mute" id="music-mute" type="button">MUTE</button>
-				<div class="music-meter">
-					<span class="music-meter-fill" id="music-meter-fill" aria-hidden="true"></span>
-					<input
-						class="music-slider"
-						id="music-slider"
-						type="range"
-						min="0"
-						max="100"
-						value="50"
-						step="1"
-						aria-label="Volume slider"
-					/>
-				</div>
-			</div>
-			<p class="music-level" id="music-level">VOLUME 50%</p>
-		</div>
-
-		<div class="scroll-hint" id="scroll-hint" aria-hidden="true">
-			<svg class="hint-ring" viewBox="0 0 180 180" aria-hidden="true">
-				<defs>
-					<path id="hint-ring-path" d="M 90,90 m -64,0 a 64,64 0 1,1 128,0 a 64,64 0 1,1 -128,0" />
-				</defs>
-				<text>
-					<textPath href="#hint-ring-path">SCROLL TO EXPLORE • SCROLL TO EXPLORE •</textPath>
-				</text>
-			</svg>
-			<span class="hint-core">
-				<span class="wheel"></span>
-				<span class="arrow">→</span>
-			</span>
-		</div>
+		<PortfolioChrome />
 
 		<section class="rail" id="horizontal-rail">
-			<article class="panel panel-hero reveal reveal-1">
-				<h1 class="headline">
-					<span class="headline-line">
-						<span class="headline-muted t-inline">
-							<span data-l10n="pl">FREELANCE</span>
-							<span data-l10n="en">FREELANCE</span>
-						</span>
-						<span class="glitch-line line-top" data-l10n="pl" data-text="WEB DESIGNER">WEB DESIGNER</span>
-						<span class="glitch-line line-top" data-l10n="en" data-text="WEB DESIGNER">WEB DESIGNER</span>
-					</span>
-					<span class="headline-line">
-						<span class="headline-muted amp">&amp;</span>
-						<span class="glitch-line line-bottom" data-l10n="pl" data-text="FRONTEND DEVELOPER">FRONTEND DEVELOPER</span>
-						<span class="glitch-line line-bottom" data-l10n="en" data-text="FRONTEND DEVELOPER">FRONTEND DEVELOPER</span>
-					</span>
-				</h1>
-
-				<div class="hero-logo-void" aria-hidden="true">
-					<div class="logo-stage" id="nrbck-logo-stage">
-						<div class="logo-core">
-							<span class="logo-depth depth-1">NRBCK</span>
-							<span class="logo-depth depth-2">NRBCK</span>
-							<span class="logo-depth depth-3">NRBCK</span>
-							<span class="logo-depth depth-4">NRBCK</span>
-							<span class="logo-depth depth-5">NRBCK</span>
-							<span class="logo-face">NRBCK</span>
-						</div>
-						<span class="logo-orbit orbit-a"></span>
-						<span class="logo-orbit orbit-b"></span>
-						<span class="logo-orbit orbit-c"></span>
-						<span class="logo-grid"></span>
-						<span class="logo-flare flare-a"></span>
-						<span class="logo-flare flare-b"></span>
-					</div>
-				</div>
-
-				<div class="hero-bottom">
-					<p class="t-block hero-copy">
-						<span data-l10n="pl">
-							Tworzę <span class="hero-spark">strony internetowe, motywy WordPress i aplikacje webowe</span>, które dobrze wyglądają, szybko działają i jasno pokazują, co masz do zaoferowania.
-						</span>
-						<span data-l10n="en">
-							I build <span class="hero-spark">websites, WordPress themes, and web apps</span> that look good, run fast, and clearly show what you offer.
-						</span>
-					</p>
-					<p class="t-block hero-copy">
-						<span data-l10n="pl">
-							Projektuję i wdrażam całość tak, żeby strona była <span class="hero-spark">prosta w odbiorze i wygodna w użyciu</span> i pomagała ludziom szybko zrobić kolejny krok.
-						</span>
-						<span data-l10n="en">
-							I design and develop the whole thing so it feels <span class="hero-spark">simple and smooth to use</span> and helps people take the next step without confusion.
-						</span>
-					</p>
-				</div>
-			</article>
-
-			<article id="projects" class="panel panel-projects reveal reveal-2">
-				<div class="project-preview-bg" id="project-preview-bg" aria-hidden="true">
-					{projects.map((project) => (
-						<img
-							class="project-preview-frame"
-							data-preview-id={project.previewId}
-							src={project.previewImage}
-							alt=""
-							loading="lazy"
-							decoding="async"
-							fetchpriority="low"
-						/>
-					))}
-					<div class="project-preview-overlay"></div>
-				</div>
-
-				<div class="project-grid">
-					{projects.map((project) => (
-						<article class={`project-frame ghost-frame ${project.theme}`} data-preview-target={project.previewId}>
-							<p class="project-id">{project.id}</p>
-							<p class="project-role t-inline">
-								<span data-l10n="pl">{project.role.pl}</span>
-								<span data-l10n="en">{project.role.en}</span>
-							</p>
-							<h2 class="project-title">{project.name}</h2>
-							<p class="project-copy t-block">
-								<span data-l10n="pl">{project.blurb.pl}</span>
-								<span data-l10n="en">{project.blurb.en}</span>
-							</p>
-							<ul class="project-tags">
-								{project.tags.map((tag) => (
-									<li class="project-tag t-inline">
-										<span data-l10n="pl">{tag.pl}</span>
-										<span data-l10n="en">{tag.en}</span>
-									</li>
-								))}
-							</ul>
-							<a class="project-link t-inline" href={project.live} target="_blank" rel="noreferrer">
-								<span data-l10n="pl">{project.cta.pl}</span>
-								<span data-l10n="en">{project.cta.en}</span>
-							</a>
-						</article>
-					))}
-				</div>
-			</article>
-
-			<article class="panel panel-value reveal reveal-3">
-				<div class="value-shell">
-					<div class="value-intro ghost-frame">
-						<p class="value-kicker t-inline">
-							<span data-l10n="pl">Dlaczego warto</span>
-							<span data-l10n="en">Why me</span>
-						</p>
-						<h3 class="value-title t-block">
-							<span data-l10n="pl">Jedna osoba. Mniej zamieszania. Lepszy efekt.</span>
-							<span data-l10n="en">One person. Less back and forth. Better end result.</span>
-						</h3>
-						<p class="value-copy t-block">
-							<span data-l10n="pl">
-								Pracujesz bezpośrednio ze mną, więc nic nie ginie między pomysłem, projektem i wdrożeniem.
-							</span>
-							<span data-l10n="en">
-								You work directly with me, so nothing gets lost between the idea, the design, and the build.
-							</span>
-						</p>
-					</div>
-
-					<div class="selling-grid">
-						{sellingPoints.map((point) => (
-							<article class="selling-card ghost-frame">
-								<p class="selling-copy t-block">
-									<span data-l10n="pl">{point.pl}</span>
-									<span data-l10n="en">{point.en}</span>
-								</p>
-							</article>
-						))}
-					</div>
-				</div>
-			</article>
-
-			<article class="panel panel-contact reveal reveal-4">
-				<div class="contact-shell">
-					<div class="contact-intro ghost-frame">
-						<p class="contact-kicker t-inline">
-							<span data-l10n="pl">Kontakt</span>
-							<span data-l10n="en">Contact</span>
-						</p>
-						<h3 class="contact-title t-block">
-							<span data-l10n="pl">Masz pomysł na stronę, motyw WordPress albo aplikację webową? Napisz, czego potrzebujesz.</span>
-							<span data-l10n="en">Have an idea for a website, WordPress theme, or web app? Tell me what you need.</span>
-						</h3>
-						<p class="contact-copy t-block">
-							<span data-l10n="pl">Formularz wysyła wiadomość bezpośrednio na norbick@gmail.com.</span>
-							<span data-l10n="en">This form sends messages directly to norbick@gmail.com.</span>
-						</p>
-					</div>
-
-					<form
-						class="contact-form ghost-frame"
-						id="contact-form"
-						method="POST"
-						action={contactAction}
-						target="contact-submit-frame"
-						novalidate
-						data-recipient={contactRecipient}
-					>
-						<input class="contact-honeypot" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
-						<input type="hidden" name="_captcha" value="false" />
-						<input type="hidden" name="_template" value="table" />
-						<input type="hidden" name="_subject" value="Nowe zapytanie z nrbck.pl" data-contact-subject />
-						<input type="hidden" name="_next" value="https://nrbck.pl/" />
-						<input type="hidden" name="timeline_label" value="" data-timeline-label />
-
-						<label class="field">
-							<span class="field-label t-inline">
-								<span data-l10n="pl">Imię</span>
-								<span data-l10n="en">Name</span>
-							</span>
-							<input type="text" name="name" required autocomplete="name" data-ph-pl="Jak masz na imię?" data-ph-en="What's your name?" />
-						</label>
-
-						<label class="field">
-							<span class="field-label t-inline">
-								<span data-l10n="pl">E-mail</span>
-								<span data-l10n="en">Email</span>
-							</span>
-							<input type="email" name="email" required autocomplete="email" data-ph-pl="Na jaki adres mam odpisać?" data-ph-en="Where should I reply?" />
-						</label>
-
-						<label class="field">
-							<span class="field-label t-inline">
-								<span data-l10n="pl">Co ma robić Twoja strona?</span>
-								<span data-l10n="en">What should your website do?</span>
-							</span>
-							<textarea name="message" rows="4" required data-ph-pl="Np. chcę więcej zapytań od klientów" data-ph-en="For example: I want more leads from my website"></textarea>
-						</label>
-
-						<label class="field">
-							<span class="field-label t-inline">
-								<span data-l10n="pl">Kiedy chcesz ruszyć?</span>
-								<span data-l10n="en">When do you want to start?</span>
-							</span>
-							<select name="timeline" required>
-								<option value="" selected disabled data-label-pl="Wybierz termin" data-label-en="Select timeline">Select timeline</option>
-								<option value="asap" data-label-pl="Jak najszybciej" data-label-en="ASAP">ASAP</option>
-								<option value="this-month" data-label-pl="W tym miesiącu" data-label-en="This month">This month</option>
-								<option value="next-month" data-label-pl="W przyszłym miesiącu" data-label-en="Next month">Next month</option>
-							</select>
-						</label>
-
-						<button class="contact-submit t-inline" type="submit">
-							<span data-l10n="pl">Wyślij zapytanie</span>
-							<span data-l10n="en">Send inquiry</span>
-						</button>
-
-						<p class="contact-status" id="contact-status" aria-live="polite"></p>
-					</form>
-					<iframe
-						class="contact-submit-frame"
-						id="contact-submit-frame"
-						name="contact-submit-frame"
-						title="Form submission transport"
-						aria-hidden="true"
-						tabindex="-1"
-					></iframe>
-				</div>
-			</article>
+			<HeroPanel />
+			<ProjectsPanel projects={projects} />
+			<ValuePanel sellingPoints={sellingPoints} />
+			<ContactPanel contactAction={contactAction} contactRecipient={contactRecipient} />
 		</section>
 
-		<aside class="global-signal" aria-label="Signal rail">
-			<div class="global-signal-track" aria-hidden="true">
-				{signalTrack.map((item) => (
-					<span class="signal-chip t-inline">
-						<span data-l10n="pl">{item.pl}</span>
-						<span data-l10n="en">{item.en}</span>
-					</span>
-				))}
-			</div>
-		</aside>
+		<SignalRail signalTrack={signalTrack} />
 	</main>
 
+	<script>
+		import { initPortfolioPage } from '../scripts/portfolio-page.js';
 
-		<script>
-			import { initPortfolioPage } from '../scripts/portfolio-page.js';
-
-			initPortfolioPage();
-		</script>
+		initPortfolioPage();
+	</script>
 </Layout>

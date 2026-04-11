@@ -1,0 +1,43 @@
+---
+import type { Localized } from '../../data/portfolio-content';
+
+interface Props {
+	sellingPoints: Localized[];
+}
+
+const { sellingPoints } = Astro.props;
+---
+
+<article class="panel panel-value reveal reveal-3">
+	<div class="value-shell">
+		<div class="value-intro ghost-frame">
+			<p class="value-kicker t-inline">
+				<span data-l10n="pl">Dlaczego warto</span>
+				<span data-l10n="en">Why me</span>
+			</p>
+			<h3 class="value-title t-block">
+				<span data-l10n="pl">Jedna osoba. Mniej zamieszania. Lepszy efekt.</span>
+				<span data-l10n="en">One person. Less back and forth. Better end result.</span>
+			</h3>
+			<p class="value-copy t-block">
+				<span data-l10n="pl">
+					Pracujesz bezpośrednio ze mną, więc nic nie ginie między pomysłem, projektem i wdrożeniem.
+				</span>
+				<span data-l10n="en">
+					You work directly with me, so nothing gets lost between the idea, the design, and the build.
+				</span>
+			</p>
+		</div>
+
+		<div class="selling-grid">
+			{sellingPoints.map((point) => (
+				<article class="selling-card ghost-frame">
+					<p class="selling-copy t-block">
+						<span data-l10n="pl">{point.pl}</span>
+						<span data-l10n="en">{point.en}</span>
+					</p>
+				</article>
+			))}
+		</div>
+	</div>
+</article>

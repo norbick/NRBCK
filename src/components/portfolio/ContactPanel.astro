@@ -1,0 +1,96 @@
+---
+interface Props {
+	contactAction: string;
+	contactRecipient: string;
+}
+
+const { contactAction, contactRecipient } = Astro.props;
+---
+
+<article class="panel panel-contact reveal reveal-4">
+	<div class="contact-shell">
+		<div class="contact-intro ghost-frame">
+			<p class="contact-kicker t-inline">
+				<span data-l10n="pl">Kontakt</span>
+				<span data-l10n="en">Contact</span>
+			</p>
+			<h3 class="contact-title t-block">
+				<span data-l10n="pl">Masz pomysł na stronę, motyw WordPress albo aplikację webową? Napisz, czego potrzebujesz.</span>
+				<span data-l10n="en">Have an idea for a website, WordPress theme, or web app? Tell me what you need.</span>
+			</h3>
+			<p class="contact-copy t-block">
+				<span data-l10n="pl">Formularz wysyła wiadomość bezpośrednio na norbick@gmail.com.</span>
+				<span data-l10n="en">This form sends messages directly to norbick@gmail.com.</span>
+			</p>
+		</div>
+
+		<form
+			class="contact-form ghost-frame"
+			id="contact-form"
+			method="POST"
+			action={contactAction}
+			target="contact-submit-frame"
+			novalidate
+			data-recipient={contactRecipient}
+		>
+			<input class="contact-honeypot" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+			<input type="hidden" name="_captcha" value="false" />
+			<input type="hidden" name="_template" value="table" />
+			<input type="hidden" name="_subject" value="Nowe zapytanie z nrbck.pl" data-contact-subject />
+			<input type="hidden" name="_next" value="https://nrbck.pl/" />
+			<input type="hidden" name="timeline_label" value="" data-timeline-label />
+
+			<label class="field">
+				<span class="field-label t-inline">
+					<span data-l10n="pl">Imię</span>
+					<span data-l10n="en">Name</span>
+				</span>
+				<input type="text" name="name" required autocomplete="name" data-ph-pl="Jak masz na imię?" data-ph-en="What's your name?" />
+			</label>
+
+			<label class="field">
+				<span class="field-label t-inline">
+					<span data-l10n="pl">E-mail</span>
+					<span data-l10n="en">Email</span>
+				</span>
+				<input type="email" name="email" required autocomplete="email" data-ph-pl="Na jaki adres mam odpisać?" data-ph-en="Where should I reply?" />
+			</label>
+
+			<label class="field">
+				<span class="field-label t-inline">
+					<span data-l10n="pl">Co ma robić Twoja strona?</span>
+					<span data-l10n="en">What should your website do?</span>
+				</span>
+				<textarea name="message" rows="4" required data-ph-pl="Np. chcę więcej zapytań od klientów" data-ph-en="For example: I want more leads from my website"></textarea>
+			</label>
+
+			<label class="field">
+				<span class="field-label t-inline">
+					<span data-l10n="pl">Kiedy chcesz ruszyć?</span>
+					<span data-l10n="en">When do you want to start?</span>
+				</span>
+				<select name="timeline" required>
+					<option value="" selected disabled data-label-pl="Wybierz termin" data-label-en="Select timeline">Select timeline</option>
+					<option value="asap" data-label-pl="Jak najszybciej" data-label-en="ASAP">ASAP</option>
+					<option value="this-month" data-label-pl="W tym miesiącu" data-label-en="This month">This month</option>
+					<option value="next-month" data-label-pl="W przyszłym miesiącu" data-label-en="Next month">Next month</option>
+				</select>
+			</label>
+
+			<button class="contact-submit t-inline" type="submit">
+				<span data-l10n="pl">Wyślij zapytanie</span>
+				<span data-l10n="en">Send inquiry</span>
+			</button>
+
+			<p class="contact-status" id="contact-status" aria-live="polite"></p>
+		</form>
+		<iframe
+			class="contact-submit-frame"
+			id="contact-submit-frame"
+			name="contact-submit-frame"
+			title="Form submission transport"
+			aria-hidden="true"
+			tabindex="-1"
+		></iframe>
+	</div>
+</article>
