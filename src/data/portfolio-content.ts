@@ -34,7 +34,7 @@ export const projects: Project[] = [
 		tags: [
 			{ pl: 'Oferta usług', en: 'Service offer' },
 			{ pl: 'Realizacje eventów', en: 'Event case studies' },
-			{ pl: 'Kontakt leadowy', en: 'Lead-focused contact' },
+			{ pl: 'Kontakt dla klientów', en: 'Client contact' },
 		],
 		cta: { pl: 'Otwórz m2-events.pl', en: 'Open m2-events.pl' },
 	},
@@ -47,8 +47,8 @@ export const projects: Project[] = [
 		theme: 'theme-orange',
 		role: { pl: 'Aplikacja webowa / PWA', en: 'Web app / PWA product' },
 		blurb: {
-			pl: 'Interaktywna aplikacja do śledzenia sesji pracy, czasu i progresu. Projekt skupiony na szybkim flow, statystykach i mobilnym UX.',
-			en: 'An interactive app for tracking work sessions, time, and progress. Designed around fast flow, clear stats, and mobile UX.',
+			pl: 'Interaktywna aplikacja do śledzenia sesji pracy, czasu i progresu. Projekt skupiony na płynnym działaniu, statystykach i mobilnym UX.',
+			en: 'An interactive app for tracking work sessions, time, and progress. Designed for smooth usage, clear stats, and mobile UX.',
 		},
 		tags: [
 			{ pl: 'Timer i sesje', en: 'Timer and sessions' },
@@ -72,7 +72,7 @@ export const projects: Project[] = [
 		tags: [
 			{ pl: 'Astro', en: 'Astro' },
 			{ pl: 'Motion UI', en: 'Motion UI' },
-			{ pl: 'Brand showcase', en: 'Brand showcase' },
+			{ pl: 'Portfolio projektu', en: 'Project showcase' },
 		],
 		cta: { pl: 'Otwórz tę stronę', en: 'Open this page' },
 	},
@@ -106,20 +106,20 @@ export const sellingPoints: Localized[] = [
 ];
 
 export const signals: Localized[] = [
-	{ pl: 'NRBCK PORTFOLIO', en: 'NRBCK PORTFOLIO' },
-	{ pl: 'FREELANCE WEB DESIGN', en: 'FREELANCE WEB DESIGN' },
-	{ pl: 'FRONTEND + ASTRO', en: 'FRONTEND + ASTRO' },
-	{ pl: 'FROM IDEA TO LAUNCH', en: 'FROM IDEA TO LAUNCH' },
-	{ pl: 'CLEAR MESSAGING', en: 'CLEAR MESSAGING' },
-	{ pl: 'CLEAR FLOW', en: 'CLEAR FLOW' },
-	{ pl: 'STRONG TYPOGRAPHY', en: 'STRONG TYPOGRAPHY' },
-	{ pl: 'FAST ITERATION', en: 'FAST ITERATION' },
-	{ pl: 'DESIGN THAT CONVERTS', en: 'DESIGN THAT CONVERTS' },
-	{ pl: 'NO STIFF JARGON', en: 'NO STIFF JARGON' },
-	{ pl: 'CONTACT AND DELIVERY', en: 'CONTACT AND DELIVERY' },
-	{ pl: 'DEVELOPMENT READY', en: 'DEVELOPMENT READY' },
-	{ pl: 'LIVE DEPLOY MODE', en: 'LIVE DEPLOY MODE' },
-	{ pl: 'UI + FRONTEND SYSTEMS', en: 'UI + FRONTEND SYSTEMS' },
+	{ pl: 'PORTFOLIO NRBCK', en: 'NRBCK PORTFOLIO' },
+	{ pl: 'STRONY WWW', en: 'WEBSITES' },
+	{ pl: 'APLIKACJE WEBOWE', en: 'WEB APPS' },
+	{ pl: 'WORDPRESS', en: 'WORDPRESS' },
+	{ pl: 'UX I UI', en: 'UX AND UI' },
+	{ pl: 'FRONTEND', en: 'FRONTEND' },
+	{ pl: 'ASTRO', en: 'ASTRO' },
+	{ pl: 'SZYBKIE WDROŻENIA', en: 'FAST DELIVERY' },
+	{ pl: 'JASNA KOMUNIKACJA', en: 'CLEAR COMMUNICATION' },
+	{ pl: 'PROCES KROK PO KROKU', en: 'STEP-BY-STEP PROCESS' },
+	{ pl: 'OD BRIEFU DO STARTU', en: 'FROM BRIEF TO LAUNCH' },
+	{ pl: 'KONKRETNE UWAGI', en: 'CLEAR FEEDBACK' },
+	{ pl: 'DOPRACOWANY DETAL', en: 'POLISHED DETAILS' },
+	{ pl: 'WSPÓŁPRACA 1:1', en: '1:1 COLLABORATION' },
 ];
 
 export const signalTrack = [...signals, ...signals];
@@ -143,7 +143,7 @@ export const visualBreak = {
 	tags: [
 		{ pl: 'STRATEGIA I UX', en: 'STRATEGY AND UX' },
 		{ pl: 'KIERUNEK WIZUALNY', en: 'VISUAL DIRECTION' },
-		{ pl: 'FRONTEND PRODUKCYJNY', en: 'PRODUCTION FRONTEND' },
+		{ pl: 'WDROŻENIE FRONTENDU', en: 'FRONTEND IMPLEMENTATION' },
 	],
 };
 
@@ -161,23 +161,23 @@ export const aboutSection = {
 	},
 	paragraphs: [
 		{
-			pl: 'Pracuję end-to-end, więc od briefu po deploy masz jedną osobę odpowiedzialną za całość procesu.',
-			en: 'I work end-to-end, so from brief to deploy you work with one person owning the full process.',
+			pl: 'Prowadzę projekt od briefu do uruchomienia, więc za całość procesu odpowiada jedna osoba.',
+			en: 'I run the project from brief to launch, so one person stays responsible for the whole process.',
 		},
 		{
-			pl: 'Lubię szybkie iteracje i konkretny feedback, bo to najszybsza droga do dopracowanego efektu.',
-			en: 'I prefer fast iterations and concrete feedback because that is the fastest path to a polished result.',
+			pl: 'Lubię szybkie iteracje i jasne uwagi, bo to najszybsza droga do dopracowanego efektu.',
+			en: 'I prefer quick iterations and clear feedback because that is the fastest path to a polished result.',
 		},
 	],
 	tags: [
 		{ pl: 'Kierunek kreatywny', en: 'Creative direction' },
 		{ pl: 'Web design i UI', en: 'Web design and UI' },
-		{ pl: 'Frontend wdrożeniowy', en: 'Production frontend' },
+		{ pl: 'Wdrożenie frontendu', en: 'Frontend implementation' },
 		{ pl: 'Dopracowany detal', en: 'Crafted detail' },
 	],
 	metrics: [
 		{ value: '1', label: { pl: 'osoba od briefu do wdrożenia', en: 'person from brief to launch' } },
-		{ value: '3', label: { pl: 'obszary: UX, UI, frontend', en: 'areas: UX, UI, frontend' } },
+		{ value: '3', label: { pl: 'obszary: UX, UI, wdrożenie', en: 'areas: UX, UI, implementation' } },
 		{ value: '0', label: { pl: 'pośredników w komunikacji', en: 'middle layers in communication' } },
 	] as Metric[],
 };
