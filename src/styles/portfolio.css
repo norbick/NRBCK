@@ -1615,14 +1615,21 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.48rem;
+		align-items: center;
 	}
 
 	.about-tag {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
 		padding: 0.3rem 0.56rem;
+		min-height: 1.62rem;
 		border-radius: 999px;
 		font-size: 0.66rem;
+		line-height: 1;
 		letter-spacing: 0.07em;
 		text-transform: uppercase;
+		white-space: nowrap;
 		color: rgb(236 230 255 / 0.95);
 		background: linear-gradient(120deg, rgb(111 245 255 / 0.2), rgb(255 105 210 / 0.18));
 		box-shadow: inset 0 0 0 1px rgb(196 170 255 / 0.22);
