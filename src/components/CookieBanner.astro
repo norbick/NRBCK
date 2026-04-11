@@ -1,0 +1,213 @@
+<aside
+	id="cookie-banner"
+	class="cookie-banner"
+	role="dialog"
+	aria-live="polite"
+	aria-label="Cookie consent"
+	hidden
+>
+	<p id="cookie-banner-copy" class="cookie-banner-copy"></p>
+	<div class="cookie-banner-actions">
+		<button id="cookie-reject" class="cookie-btn cookie-btn-ghost" type="button"></button>
+		<button id="cookie-accept" class="cookie-btn cookie-btn-primary" type="button"></button>
+	</div>
+</aside>
+
+<script is:inline>
+	(() => {
+		const STORAGE_KEY = 'nrbck_cookie_consent_v1';
+		const COOKIE_EVENT = 'nrbck:cookie-consent';
+
+		const messages = {
+			pl: {
+				copy: 'Uzywam cookie do dzialania strony oraz, za Twoja zgoda, do anonimowej analityki. Niezbedne cookies sa zawsze aktywne.',
+				accept: 'Akceptuj analityke',
+				reject: 'Tylko niezbedne',
+			},
+			en: {
+				copy: 'I use cookies to run the website and, with your consent, for anonymous analytics. Essential cookies are always active.',
+				accept: 'Accept analytics',
+				reject: 'Essential only',
+			},
+		};
+
+		const root = document.documentElement;
+		const banner = document.getElementById('cookie-banner');
+		const copy = document.getElementById('cookie-banner-copy');
+		const accept = document.getElementById('cookie-accept');
+		const reject = document.getElementById('cookie-reject');
+
+		if (!(banner instanceof HTMLElement) || !(copy instanceof HTMLElement)) return;
+
+		const getLanguage = () => {
+			if (root.classList.contains('lang-pl')) return 'pl';
+			if (root.classList.contains('lang-en')) return 'en';
+			const lang = String(root.lang || navigator.language || 'pl').toLowerCase();
+			return lang.startsWith('pl') ? 'pl' : 'en';
+		};
+
+		const normalizeConsent = (value) => (value === 'accepted' || value === 'rejected' ? value : null);
+
+		const readConsent = () => {
+			try {
+				return normalizeConsent(localStorage.getItem(STORAGE_KEY));
+			} catch {
+				return null;
+			}
+		};
+
+		const saveConsent = (value) => {
+			try {
+				localStorage.setItem(STORAGE_KEY, value);
+			} catch {}
+		};
+
+		const updateText = () => {
+			const lang = getLanguage();
+			const content = messages[lang];
+			copy.textContent = content.copy;
+			if (accept instanceof HTMLButtonElement) accept.textContent = content.accept;
+			if (reject instanceof HTMLButtonElement) reject.textContent = content.reject;
+		};
+
+		const emitConsent = (status) => {
+			const analytics = status === 'accepted';
+			window.dispatchEvent(new CustomEvent(COOKIE_EVENT, { detail: { status, analytics } }));
+			window.nrbckCookieConsent = {
+				status,
+				analytics,
+				accepted: analytics,
+			};
+		};
+
+		const applyConsent = (status) => {
+			if (!status) {
+				root.dataset.cookieConsent = 'unset';
+				banner.hidden = false;
+				emitConsent('unset');
+				return;
+			}
+
+			root.dataset.cookieConsent = status;
+			banner.hidden = true;
+			emitConsent(status);
+		};
+
+		updateText();
+		applyConsent(readConsent());
+
+		if (accept instanceof HTMLButtonElement) {
+			accept.addEventListener('click', () => {
+				saveConsent('accepted');
+				applyConsent('accepted');
+			});
+		}
+
+		if (reject instanceof HTMLButtonElement) {
+			reject.addEventListener('click', () => {
+				saveConsent('rejected');
+				applyConsent('rejected');
+			});
+		}
+
+		const observer = new MutationObserver(() => updateText());
+		observer.observe(root, { attributes: true, attributeFilter: ['class', 'lang'] });
+	})();
+</script>
+
+<style>
+	.cookie-banner {
+		position: fixed;
+		left: 1rem;
+		right: 1rem;
+		bottom: 1rem;
+		z-index: 60;
+		display: grid;
+		gap: 0.7rem;
+		padding: 0.88rem 0.92rem;
+		border-radius: 14px;
+		border: 1px solid rgb(182 160 255 / 0.28);
+		background:
+			linear-gradient(145deg, rgb(14 12 34 / 0.95), rgb(8 19 44 / 0.92)),
+			repeating-linear-gradient(
+				to bottom,
+				rgb(176 205 255 / 0.06) 0,
+				rgb(176 205 255 / 0.06) 1px,
+				rgb(0 0 0 / 0) 1px,
+				rgb(0 0 0 / 0) 4px
+			);
+		box-shadow: 0 18px 36px rgb(0 0 0 / 0.45), inset 0 0 0 1px rgb(99 248 255 / 0.08);
+		backdrop-filter: blur(8px);
+	}
+
+	.cookie-banner-copy {
+		margin: 0;
+		font-family: 'Sora', 'Trebuchet MS', sans-serif;
+		font-size: 0.84rem;
+		line-height: 1.45;
+		color: rgb(237 232 255 / 0.92);
+	}
+
+	.cookie-banner-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.cookie-btn {
+		appearance: none;
+		border: 1px solid transparent;
+		border-radius: 999px;
+		padding: 0.5rem 0.78rem;
+		font-family: 'IBM Plex Mono', 'Consolas', monospace;
+		font-size: 0.68rem;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		cursor: pointer;
+		transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+	}
+
+	.cookie-btn:hover {
+		transform: translateY(-1px);
+	}
+
+	.cookie-btn:focus-visible {
+		outline: 2px solid rgb(117 227 255 / 0.9);
+		outline-offset: 2px;
+	}
+
+	.cookie-btn-ghost {
+		color: rgb(219 228 255 / 0.92);
+		border-color: rgb(188 206 255 / 0.34);
+		background: rgb(255 255 255 / 0.06);
+	}
+
+	.cookie-btn-primary {
+		color: #fff;
+		background: linear-gradient(128deg, rgb(255 109 206 / 0.95), rgb(102 232 255 / 0.92));
+		box-shadow: 0 10px 20px rgb(96 224 255 / 0.25);
+	}
+
+	@media (min-width: 860px) {
+		.cookie-banner {
+			left: 50%;
+			right: auto;
+			width: min(820px, calc(100vw - 2rem));
+			transform: translateX(-50%);
+			grid-template-columns: minmax(0, 1fr) auto;
+			align-items: center;
+		}
+
+		.cookie-banner-actions {
+			justify-content: flex-end;
+		}
+	}
+
+	@media (max-width: 620px) {
+		.cookie-btn {
+			flex: 1 1 auto;
+			justify-content: center;
+			text-align: center;
+		}
+	}
+</style>
