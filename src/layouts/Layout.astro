@@ -11,6 +11,7 @@ const {
 	description = 'Portfolio projektów: m2_stage i LooLoot.',
 } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
+const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 
 <!doctype html>
@@ -28,6 +29,41 @@ const baseUrl = import.meta.env.BASE_URL;
 	<body>
 		<slot />
 		<CookieBanner />
+		{
+			gaId && (
+				<script is:inline define:vars={{ gaId }}>
+					(() => {
+						const CONSENT_EVENT = 'nrbck:cookie-consent';
+						let initialized = false;
+
+						const initAnalytics = () => {
+							if (initialized) return;
+							initialized = true;
+
+							window.dataLayer = window.dataLayer || [];
+							window.gtag = window.gtag || function gtag() {
+								window.dataLayer.push(arguments);
+							};
+
+							const tag = document.createElement('script');
+							tag.async = true;
+							tag.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+							document.head.appendChild(tag);
+
+							window.gtag('js', new Date());
+							window.gtag('config', gaId, { anonymize_ip: true });
+						};
+
+						const maybeInitAnalytics = (state) => {
+							if (state && state.analytics === true) initAnalytics();
+						};
+
+						maybeInitAnalytics(window.nrbckCookieConsent);
+						window.addEventListener(CONSENT_EVENT, (event) => maybeInitAnalytics(event.detail));
+					})();
+				</script>
+			)
+		}
 	</body>
 </html>
 

@@ -37,6 +37,7 @@ On every push to `main`, it builds and deploys the site to GitHub Pages.
 Default build values for Pages in this repo:
 - `PUBLIC_SITE_URL=https://nrbck.pl`
 - `PUBLIC_BASE_PATH=/`
+- `PUBLIC_GA_ID=G-48TYZZ9CN4`
 
 ## Custom domain
 
