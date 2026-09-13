@@ -1,70 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import AboutPanel from '../components/portfolio/AboutPanel.astro';
-import PortfolioChrome from '../components/portfolio/PortfolioChrome.astro';
-import HeroPanel from '../components/portfolio/HeroPanel.astro';
-import ProjectsPanel from '../components/portfolio/ProjectsPanel.astro';
-import VisualBreakPanel from '../components/portfolio/VisualBreakPanel.astro';
-import ValuePanel from '../components/portfolio/ValuePanel.astro';
-import ContactPanel from '../components/portfolio/ContactPanel.astro';
-import SignalRail from '../components/portfolio/SignalRail.astro';
-import {
-	aboutSection,
-	contactAction,
-	contactRecipient,
-	projects,
-	sellingPoints,
-	signalTrack,
-	visualBreak,
-} from '../data/portfolio-content';
 import '../styles/portfolio.css';
 ---
 
-<Layout title="NRBCK | Portfolio" description="Portfolio NRBCK: design i frontend.">
-	<main class="shell">
-		<!-- Language is selected client-side so the static build can serve one page. -->
-		<script is:inline>
-			(() => {
-				const langs = navigator.languages?.length ? navigator.languages : [navigator.language || 'en'];
-				const isPolish = langs.some((lang) => String(lang).toLowerCase().startsWith('pl'));
-				const root = document.documentElement;
-				root.classList.add(isPolish ? 'lang-pl' : 'lang-en');
-				root.lang = isPolish ? 'pl' : 'en';
-			})();
-		</script>
-
-		<PortfolioChrome />
-
-		<section class="rail" id="horizontal-rail">
-			<HeroPanel />
-			<ProjectsPanel projects={projects} />
-			<VisualBreakPanel
-				image={visualBreak.image}
-				kicker={visualBreak.kicker}
-				title={visualBreak.title}
-				blurb={visualBreak.blurb}
-				tags={visualBreak.tags}
-			/>
-			<ValuePanel sellingPoints={sellingPoints} />
-			<ContactPanel contactAction={contactAction} contactRecipient={contactRecipient} />
-			<AboutPanel
-				portraitImage={aboutSection.portraitImage}
-				portraitCardImage={aboutSection.portraitCardImage}
-				kicker={aboutSection.kicker}
-				title={aboutSection.title}
-				intro={aboutSection.intro}
-				paragraphs={aboutSection.paragraphs}
-				tags={aboutSection.tags}
-				metrics={aboutSection.metrics}
-			/>
+<Layout title="NRBCK | Under Construction" description="Strona NRBCK jest w przebudowie.">
+	<main class="construction-page" aria-labelledby="page-title">
+		<section class="construction-panel">
+			<p class="eyebrow">NRBCK</p>
+			<h1 id="page-title">Strona w budowie</h1>
+			<p class="lead">
+				Przebudowuję portfolio. Wrócę tu z prostszą, świeższą wersją.
+			</p>
+			<a class="contact-link" href="mailto:norbick@gmail.com">norbick@gmail.com</a>
 		</section>
-
-		<SignalRail signalTrack={signalTrack} />
 	</main>
-
-	<script>
-		import { initPortfolioPage } from '../scripts/portfolio-page.js';
-
-		initPortfolioPage();
-	</script>
 </Layout>

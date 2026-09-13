@@ -1,78 +1,29 @@
-﻿---
-import CookieBanner from '../components/CookieBanner.astro';
-
+---
 interface Props {
 	title?: string;
 	description?: string;
 }
 
 const {
-	title = 'NRBCK | Portfolio',
-	description = 'Portfolio projektów: m2_stage i LooLoot.',
+	title = 'NRBCK',
+	description = 'NRBCK website.',
 } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
-const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 
 <!doctype html>
 <html lang="pl">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href={`${baseUrl}nrbck-favicon.svg?v=4`} />
 		<link rel="shortcut icon" type="image/svg+xml" href={`${baseUrl}nrbck-favicon.svg?v=4`} />
 		<meta name="description" content={description} />
-		<meta name="theme-color" content="#070012" />
+		<meta name="theme-color" content="#08090d" />
 		<meta name="generator" content={Astro.generator} />
-		<meta name="nrbck-deploy-check" content="repo-flow-2026-09-13" />
 		<title>{title}</title>
 	</head>
 	<body>
 		<slot />
-		<CookieBanner />
-		{
-			gaId && (
-				<script is:inline define:vars={{ gaId }}>
-					(() => {
-						const CONSENT_EVENT = 'nrbck:cookie-consent';
-						let initialized = false;
-
-						const initAnalytics = () => {
-							if (initialized) return;
-							initialized = true;
-
-							window.dataLayer = window.dataLayer || [];
-							window.gtag = window.gtag || function gtag() {
-								window.dataLayer.push(arguments);
-							};
-
-							const tag = document.createElement('script');
-							tag.async = true;
-							tag.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
-							document.head.appendChild(tag);
-
-							window.gtag('js', new Date());
-							window.gtag('config', gaId, { anonymize_ip: true });
-						};
-
-						const maybeInitAnalytics = (state) => {
-							if (state && state.analytics === true) initAnalytics();
-						};
-
-						maybeInitAnalytics(window.nrbckCookieConsent);
-						window.addEventListener(CONSENT_EVENT, (event) => maybeInitAnalytics(event.detail));
-					})();
-				</script>
-			)
-		}
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		min-height: 100%;
-	}
-</style>
