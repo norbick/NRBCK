@@ -22,6 +22,7 @@ import '../styles/portfolio.css';
 
 <Layout title="NRBCK | Portfolio" description="Portfolio NRBCK: design i frontend.">
 	<main class="shell">
+		<!-- Language is selected client-side so the static build can serve one page. -->
 		<script is:inline>
 			(() => {
 				const langs = navigator.languages?.length ? navigator.languages : [navigator.language || 'en'];
