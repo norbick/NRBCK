@@ -1,0 +1,8 @@
+# This repository contains the NRBCK website only.
+# Local desktop and OBS projects stay on disk, outside version control.
+/system-tuning/
+/obs-minecraft-pack/
+/obs-minimal-pack/
+/obs-proposals/
+/obs-ultra-pack/
+/obs-preview.html
