@@ -29,6 +29,9 @@ jobs:
         run: |
           mkdir _site
           cp index.html _site/index.html
+          cp server-config.js _site/server-config.js
+          cp CNAME _site/CNAME
+          cp .nojekyll _site/.nojekyll
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

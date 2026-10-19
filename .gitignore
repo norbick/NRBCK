@@ -6,3 +6,8 @@
 /obs-proposals/
 /obs-ultra-pack/
 /obs-preview.html
+
+# Local build output left from earlier versions of the site.
+node_modules/
+.astro/
+dist/
