@@ -3,373 +3,191 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="theme-color" content="#0a120c" />
-		<meta
-			name="description"
-			content="Interaktywna mapa świata Minecraft — zobacz świat serwera, zanim do niego wejdziesz."
-		/>
-		<title>Mapa serwera Minecraft</title>
+		<meta name="theme-color" content="#101510" />
+		<meta name="description" content="Interaktywna mapa 3D serwera Minecraft." />
+		<title>Mapa 3D serwera Minecraft</title>
 		<script src="./server-config.js"></script>
 		<style>
 			:root {
 				color-scheme: dark;
-				--ink: #eaf6df;
-				--muted: #9aac99;
-				--soft: #c9d8c1;
-				--ground: #08100a;
-				--surface: rgb(15 29 18 / 0.84);
-				--line: rgb(202 240 168 / 0.16);
-				--line-strong: rgb(202 240 168 / 0.33);
-				--lime: #b9ef72;
-				--lime-bright: #d9ff9e;
-				--sky: #75d7d0;
-				--ember: #ffbd6c;
-				--shadow: 0 20px 70px rgb(0 0 0 / 0.42);
-				font-family:
-					Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+				font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+				background: #101510;
+				color: #f4f7ef;
 			}
 
 			* { box-sizing: border-box; }
-			html { scroll-behavior: smooth; }
+
 			body {
 				min-width: 320px;
+				min-height: 100vh;
 				margin: 0;
-				overflow-x: clip;
-				color: var(--ink);
-				background:
-					radial-gradient(70rem 46rem at 8% -8%, rgb(119 213 120 / 0.2), transparent 65%),
-					radial-gradient(54rem 42rem at 100% 16%, rgb(76 183 193 / 0.14), transparent 68%),
-					linear-gradient(160deg, #09110b 0%, #070d09 42%, #101308 100%);
-				font-size: 16px;
-				line-height: 1.5;
+				background: #101510;
 			}
-			body::before, body::after {
-				position: fixed;
-				z-index: -1;
+
+			.map-page {
+				position: relative;
+				min-height: 100vh;
+				min-height: 100dvh;
+				overflow: hidden;
+				background: #101510;
+			}
+
+			.map-frame {
+				position: absolute;
 				inset: 0;
-				content: "";
-				pointer-events: none;
+				width: 100%;
+				height: 100%;
+				border: 0;
+				background: #101510;
 			}
-			body::before {
-				opacity: 0.26;
-				background-image:
-					linear-gradient(rgb(202 240 168 / 0.075) 1px, transparent 1px),
-					linear-gradient(90deg, rgb(202 240 168 / 0.075) 1px, transparent 1px);
-				background-size: 32px 32px;
-				mask-image: linear-gradient(to bottom, #000, transparent 78%);
-			}
-			body::after { background: radial-gradient(ellipse at center, transparent 28%, rgb(0 0 0 / 0.34) 100%); }
-			a { color: inherit; }
-			button, input { font: inherit; }
-			button { cursor: pointer; }
 
-			.skip-link {
-				position: fixed;
-				z-index: 20;
-				top: 0.7rem;
-				left: 0.7rem;
-				padding: 0.7rem 0.9rem;
-				border-radius: 0.55rem;
-				background: var(--lime-bright);
-				color: #10170b;
-				transform: translateY(-150%);
-				transition: transform 160ms ease;
-			}
-			.skip-link:focus { transform: translateY(0); }
-
-			.site-header {
-				position: sticky;
-				z-index: 10;
+			.topbar {
+				position: absolute;
+				z-index: 2;
 				top: 0;
-				border-bottom: 1px solid var(--line);
-				background: rgb(8 16 10 / 0.72);
-				backdrop-filter: blur(16px);
-			}
-			.nav-shell, .shell { width: min(1160px, calc(100% - 2rem)); margin: 0 auto; }
-			.nav-shell {
+				right: 0;
+				left: 0;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
 				gap: 1rem;
-				min-height: 4.5rem;
+				padding: 0.85rem 1rem;
+				border-bottom: 1px solid rgb(255 255 255 / 0.14);
+				background: rgb(10 15 10 / 0.78);
+				backdrop-filter: blur(12px);
 			}
-			.brand {
-				display: inline-flex;
-				align-items: center;
-				gap: 0.7rem;
-				min-width: 0;
-				color: var(--ink);
-				font-weight: 800;
-				letter-spacing: -0.025em;
-				text-decoration: none;
-			}
-			.brand-mark {
-				display: grid;
-				width: 2rem;
-				height: 2rem;
-				flex: 0 0 auto;
-				place-items: center;
-				border: 1px solid rgb(216 255 161 / 0.55);
-				background: linear-gradient(135deg, rgb(190 238 116 / 0.32), rgb(58 162 129 / 0.15)), #102312;
-				box-shadow: inset 0 0 0 4px rgb(7 16 9 / 0.5);
-			}
-			.brand-mark svg { width: 1.2rem; height: 1.2rem; fill: var(--lime-bright); }
-			.brand-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-			.nav-links { display: flex; align-items: center; gap: 0.2rem; font-size: 0.88rem; font-weight: 650; }
-			.nav-links a { padding: 0.55rem 0.72rem; border-radius: 0.45rem; color: var(--soft); text-decoration: none; }
-			.nav-links a:hover, .nav-links a:focus-visible { color: var(--lime-bright); background: rgb(185 239 114 / 0.1); }
 
-			.hero {
-				display: grid;
-				grid-template-columns: minmax(0, 1.12fr) minmax(18rem, 0.88fr);
-				gap: clamp(2rem, 5vw, 5.25rem);
-				align-items: center;
-				padding: clamp(4.5rem, 10vw, 8.75rem) 0 clamp(4rem, 9vw, 7rem);
-			}
-			.kicker, .section-label {
-				display: flex;
+			.brand,
+			.open-map {
+				display: inline-flex;
 				align-items: center;
 				gap: 0.55rem;
-				margin: 0 0 1.1rem;
-				color: var(--lime);
-				font-size: 0.75rem;
-				font-weight: 800;
-				letter-spacing: 0.14em;
-				text-transform: uppercase;
-			}
-			.kicker::before, .section-label::before { width: 1.65rem; height: 1px; background: currentColor; content: ""; }
-			h1, h2, p { margin-top: 0; }
-			h1 { max-width: 10ch; margin-bottom: 1.35rem; font-size: clamp(3.35rem, 8.5vw, 7rem); line-height: 0.9; letter-spacing: -0.075em; }
-			h1 span { display: block; color: var(--lime-bright); }
-			.hero-copy { max-width: 56ch; margin-bottom: 2rem; color: var(--soft); font-size: clamp(1.03rem, 1.4vw, 1.15rem); }
-			.hero-actions, .server-actions { display: flex; flex-wrap: wrap; gap: 0.72rem; }
-			.button {
-				display: inline-flex;
-				align-items: center;
-				justify-content: center;
-				gap: 0.56rem;
-				min-height: 3rem;
-				padding: 0.72rem 1rem;
-				border: 1px solid transparent;
-				border-radius: 0.6rem;
+				min-width: 0;
 				font-size: 0.9rem;
-				font-weight: 800;
-				letter-spacing: 0.01em;
-				text-decoration: none;
-				transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+				font-weight: 750;
 			}
-			.button:hover, .button:focus-visible { transform: translateY(-2px); }
-			.button-primary { background: var(--lime-bright); color: #10170b; box-shadow: 0 12px 34px rgb(166 238 91 / 0.2); }
-			.button-primary:hover, .button-primary:focus-visible { background: #ecffc7; }
-			.button-secondary { border-color: var(--line-strong); background: rgb(15 31 17 / 0.64); color: var(--ink); }
-			.button-secondary:hover, .button-secondary:focus-visible { border-color: var(--lime); background: rgb(185 239 114 / 0.11); }
-			.button svg { width: 1.05rem; height: 1.05rem; fill: none; stroke: currentColor; stroke-width: 1.8; }
 
-			.world-card {
-				position: relative;
-				overflow: hidden;
-				min-height: 28rem;
-				border: 1px solid var(--line-strong);
-				background: linear-gradient(150deg, rgb(167 240 127 / 0.13), transparent 42%), linear-gradient(180deg, rgb(17 41 28 / 0.88), rgb(9 17 11 / 0.94));
-				box-shadow: var(--shadow);
+			.brand::before {
+				width: 0.72rem;
+				height: 0.72rem;
+				flex: 0 0 auto;
+				background: #b8ef70;
+				box-shadow: 0 0 0 4px rgb(184 239 112 / 0.15);
+				content: "";
 			}
-			.world-card::before {
+
+			.brand-name {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.open-map {
+				padding: 0.5rem 0.7rem;
+				border: 1px solid rgb(255 255 255 / 0.21);
+				border-radius: 0.38rem;
+				color: inherit;
+				text-decoration: none;
+			}
+
+			.open-map[hidden] { display: none; }
+
+			.open-map:hover,
+			.open-map:focus-visible {
+				border-color: #b8ef70;
+				background: rgb(184 239 112 / 0.1);
+			}
+
+			.empty-state {
 				position: absolute;
 				inset: 0;
-				opacity: 0.8;
-				background-image: linear-gradient(90deg, rgb(232 255 191 / 0.12) 1px, transparent 1px), linear-gradient(rgb(232 255 191 / 0.12) 1px, transparent 1px);
-				background-size: 42px 42px;
-				content: "";
+				display: grid;
+				place-items: center;
+				padding: 5.5rem 1.25rem 1.25rem;
+				background:
+					radial-gradient(circle at 50% 44%, rgb(80 132 72 / 0.22), transparent 30rem),
+					linear-gradient(135deg, #101b11, #0a0f0a);
 			}
-			.world-card::after {
-				position: absolute;
-				inset: auto -10% -30% -10%;
-				height: 66%;
-				background: linear-gradient(144deg, transparent 0 26%, rgb(91 161 78 / 0.65) 26% 40%, transparent 40% 55%, rgb(50 111 72 / 0.78) 55% 68%, transparent 68%), linear-gradient(34deg, transparent 0 17%, rgb(156 200 94 / 0.65) 17% 30%, transparent 30% 52%, rgb(70 132 75 / 0.74) 52% 68%, transparent 68%);
-				clip-path: polygon(0 22%, 12% 7%, 27% 26%, 43% 0, 61% 25%, 78% 9%, 100% 33%, 100% 100%, 0 100%);
-				content: "";
+
+			.empty-card {
+				width: min(100%, 30rem);
+				padding: clamp(1.5rem, 5vw, 2.75rem);
+				border: 1px solid rgb(184 239 112 / 0.28);
+				background: rgb(12 20 12 / 0.84);
+				box-shadow: 0 20px 70px rgb(0 0 0 / 0.36);
+				text-align: center;
 			}
-			.world-card-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; height: 100%; min-height: inherit; padding: 1.2rem; }
-			.map-chip, .world-location, .map-status { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.46rem 0.62rem; border: 1px solid rgb(221 255 190 / 0.2); background: rgb(7 15 9 / 0.58); backdrop-filter: blur(8px); color: var(--soft); font-size: 0.76rem; font-weight: 750; }
-			.map-chip::before, .map-status::before { width: 0.48rem; height: 0.48rem; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 4px rgb(185 239 114 / 0.11); content: ""; }
-			.map-status.is-pending::before { background: var(--ember); box-shadow: 0 0 0 4px rgb(255 189 108 / 0.11); }
-			.world-location { margin: 0; color: var(--lime-bright); }
-			.world-location strong { font-size: 1.1rem; }
 
-			.info-strip { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); background: rgb(11 22 13 / 0.68); box-shadow: 0 14px 36px rgb(0 0 0 / 0.18); }
-			.info-item { min-width: 0; padding: 1.15rem 1.2rem; }
-			.info-item + .info-item { border-left: 1px solid var(--line); }
-			.info-label { display: block; margin-bottom: 0.28rem; color: var(--muted); font-size: 0.7rem; font-weight: 750; letter-spacing: 0.12em; text-transform: uppercase; }
-			.info-value { display: block; overflow: hidden; color: var(--ink); font-weight: 720; text-overflow: ellipsis; white-space: nowrap; }
-
-			.map-section { padding: clamp(5rem, 10vw, 8.5rem) 0; }
-			.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.5rem; }
-			h2 { max-width: 13ch; margin-bottom: 0; font-size: clamp(2.2rem, 5vw, 4.5rem); line-height: 0.95; letter-spacing: -0.06em; }
-			.section-intro { max-width: 41ch; margin-bottom: 0.25rem; color: var(--muted); }
-			.map-shell { position: relative; overflow: hidden; min-height: min(69vw, 43rem); border: 1px solid var(--line-strong); background: #080f09; box-shadow: var(--shadow); }
-			.map-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #08110b; }
-			.map-toolbar { position: absolute; z-index: 2; top: 1rem; right: 1rem; left: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; pointer-events: none; }
-			.map-toolbar > * { pointer-events: auto; }
-			.map-status { margin: 0; }
-			.map-open { display: none; min-height: 2.45rem; padding: 0.56rem 0.76rem; }
-			.map-shell.has-map .map-open { display: inline-flex; }
-			.map-placeholder { position: absolute; inset: 0; display: grid; place-items: center; padding: 1.5rem; background: radial-gradient(circle at 50% 46%, rgb(170 235 101 / 0.13), transparent 27rem), linear-gradient(135deg, rgb(106 196 120 / 0.06) 25%, transparent 25%) 0 0 / 34px 34px, linear-gradient(225deg, rgb(106 196 120 / 0.06) 25%, transparent 25%) 0 0 / 34px 34px, #08110a; }
-			.map-placeholder-card { width: min(100%, 34rem); padding: clamp(1.4rem, 4vw, 2.5rem); border: 1px solid var(--line-strong); background: rgb(11 25 14 / 0.83); box-shadow: 0 24px 70px rgb(0 0 0 / 0.35); text-align: center; }
-			.placeholder-icon { display: grid; width: 3.3rem; height: 3.3rem; margin: 0 auto 1.25rem; place-items: center; border: 1px solid rgb(211 255 164 / 0.48); background: rgb(185 239 114 / 0.1); color: var(--lime-bright); }
-			.placeholder-icon svg { width: 1.6rem; height: 1.6rem; fill: none; stroke: currentColor; stroke-width: 1.6; }
-			.map-placeholder h3 { margin: 0 0 0.65rem; font-size: clamp(1.4rem, 3vw, 2rem); letter-spacing: -0.04em; }
-			.map-placeholder p { max-width: 47ch; margin: 0 auto; color: var(--muted); }
-			.map-placeholder code { padding: 0.12em 0.34em; border: 1px solid rgb(202 240 168 / 0.17); background: rgb(0 0 0 / 0.2); color: var(--lime-bright); font-size: 0.9em; }
-			.map-shell.has-map .map-placeholder { display: none; }
-
-			.connect-section { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1px; margin-bottom: clamp(5rem, 9vw, 8rem); border: 1px solid var(--line); background: var(--line); box-shadow: 0 14px 38px rgb(0 0 0 / 0.15); }
-			.connect-copy, .connect-card { padding: clamp(1.4rem, 4vw, 3rem); background: rgb(11 23 13 / 0.84); }
-			.connect-copy h2 { max-width: 12ch; margin-bottom: 1.1rem; font-size: clamp(2rem, 4vw, 3.5rem); }
-			.connect-copy p:not(.section-label) { max-width: 52ch; margin-bottom: 0; color: var(--muted); }
-			.connect-card { display: flex; flex-direction: column; justify-content: center; }
-			.address-label { margin: 0 0 0.56rem; color: var(--muted); font-size: 0.75rem; font-weight: 750; letter-spacing: 0.12em; text-transform: uppercase; }
-			.server-address { overflow-wrap: anywhere; margin: 0 0 1.25rem; color: var(--lime-bright); font-family: "Courier New", ui-monospace, monospace; font-size: clamp(1.2rem, 2.6vw, 2rem); font-weight: 700; letter-spacing: -0.045em; }
-			.server-actions .button[hidden] { display: none; }
-			.setup-note { margin: 1rem 0 0; color: var(--muted); font-size: 0.87rem; }
-			.site-footer { border-top: 1px solid var(--line); }
-			.footer-shell { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 6.25rem; color: var(--muted); font-size: 0.86rem; }
-			.footer-shell p { margin: 0; }
-			.footer-status { display: inline-flex; align-items: center; gap: 0.5rem; }
-			.footer-status::before { width: 0.46rem; height: 0.46rem; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 4px rgb(185 239 114 / 0.1); content: ""; }
-			[hidden] { display: none !important; }
-
-			@media (max-width: 760px) {
-				.nav-links { display: none; }
-				.hero { grid-template-columns: 1fr; padding-top: 4.25rem; }
-				.hero > *, .section-heading > *, .connect-section > * { min-width: 0; }
-				.world-card { min-height: 22rem; }
-				.info-strip { grid-template-columns: 1fr; }
-				.info-item + .info-item { border-top: 1px solid var(--line); border-left: 0; }
-				.section-heading { align-items: start; flex-direction: column; }
-				.map-shell { min-height: 34rem; }
-				.map-toolbar { align-items: flex-end; }
-				.map-open { font-size: 0; }
-				.map-open svg { margin: 0; }
-				.connect-section { grid-template-columns: 1fr; }
-				.footer-shell { align-items: flex-start; flex-direction: column; justify-content: center; padding: 1.2rem 0; }
+			.empty-card h1 {
+				margin: 0 0 0.75rem;
+				font-size: clamp(1.6rem, 5vw, 2.3rem);
+				line-height: 1.05;
+				letter-spacing: -0.045em;
 			}
-			@media (prefers-reduced-motion: reduce) {
-				html { scroll-behavior: auto; }
-				*, *::before, *::after { transition-duration: 0.01ms !important; }
+
+			.empty-card p {
+				margin: 0;
+				color: #bdc5b8;
+			}
+
+			.empty-card code {
+				padding: 0.08em 0.28em;
+				border-radius: 0.2rem;
+				background: rgb(255 255 255 / 0.08);
+				color: #dfffad;
+			}
+
+			.map-page.is-ready .empty-state { display: none; }
+
+			@media (max-width: 480px) {
+				.topbar { padding: 0.72rem 0.8rem; }
+				.open-map { padding: 0.45rem 0.55rem; font-size: 0.8rem; }
 			}
 		</style>
 	</head>
 	<body>
-		<a class="skip-link" href="#mapa">Przejdź do mapy</a>
-		<header class="site-header">
-			<nav class="nav-shell" aria-label="Główna nawigacja">
-				<a class="brand" href="#start" aria-label="Strona główna">
-					<span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z" /></svg></span>
-					<span class="brand-name" data-server-name>Minecraft Server</span>
-				</a>
-				<div class="nav-links"><a href="#mapa" class="nav-map-link">Mapa świata</a><a href="#dolacz">Dołącz</a></div>
-			</nav>
-		</header>
+		<main class="map-page" id="map-page">
+			<iframe
+				class="map-frame"
+				id="map-frame"
+				title="Interaktywna mapa 3D serwera Minecraft"
+				loading="eager"
+				referrerpolicy="strict-origin-when-cross-origin"
+				allowfullscreen
+			></iframe>
 
-		<main id="start">
-			<div class="shell">
-				<section class="hero" aria-labelledby="hero-title">
-					<div>
-						<p class="kicker" data-kicker>Witaj w świecie</p>
-						<h1 id="hero-title">Odkryj <span data-server-name>Minecraft Server</span></h1>
-						<p class="hero-copy" data-hero-copy>Zobacz świat z góry, znajdź swoje miejsce i wskocz do gry. Interaktywna mapa jest zawsze pod ręką.</p>
-						<div class="hero-actions">
-							<a class="button button-primary" href="#mapa">Otwórz mapę <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h13m-5-5 5 5-5 5" /></svg></a>
-							<a class="button button-secondary" href="#dolacz">Jak dołączyć</a>
-						</div>
-					</div>
-					<aside class="world-card" aria-label="Podgląd świata"><div class="world-card-content"><span class="map-chip" data-map-provider>Mapa świata</span><p class="world-location"><strong>01</strong> / świat czeka</p></div></aside>
-				</section>
+			<header class="topbar">
+				<span class="brand"><span class="brand-name" id="server-name">Mapa 3D</span></span>
+				<a class="open-map" id="open-map" href="#" target="_blank" rel="noopener noreferrer" hidden>Otwórz osobno ↗</a>
+			</header>
 
-				<section class="info-strip" aria-label="Informacje o serwerze">
-					<div class="info-item"><span class="info-label">Mapa</span><span class="info-value" data-map-label>Interaktywna mapa świata</span></div>
-					<div class="info-item"><span class="info-label">Dostęp</span><span class="info-value" data-map-access>Konfiguracja w toku</span></div>
-					<div class="info-item"><span class="info-label">Adres serwera</span><span class="info-value" data-address-summary>Dodaj adres w konfiguracji</span></div>
-				</section>
-
-				<section class="map-section" id="mapa" aria-labelledby="map-title">
-					<div class="section-heading"><div><p class="section-label">Mapa świata</p><h2 id="map-title">Zobacz, co powstaje.</h2></div><p class="section-intro" data-map-intro>Przybliż, oddal i eksploruj świat bez wychodzenia ze strony.</p></div>
-					<div class="map-shell" id="map-shell">
-						<iframe class="map-frame" id="map-frame" title="Interaktywna mapa serwera Minecraft" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-						<div class="map-toolbar">
-							<p class="map-status is-pending" id="map-status">Mapa oczekuje na adres</p>
-							<a class="button button-secondary map-open" id="map-open" href="#" target="_blank" rel="noopener noreferrer">Otwórz osobno <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v6m0-6-9 9M20 14v5H5V4h5" /></svg></a>
-						</div>
-						<div class="map-placeholder" id="map-placeholder"><div class="map-placeholder-card"><div class="placeholder-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m4 6 8-3 8 3-8 3zm0 0v12l8 3m8-15v12l-8 3m0-12v12" /></svg></div><h3>Mapa jest gotowa do podłączenia</h3><p>Dodaj publiczny adres BlueMap, Pl3xMap lub Dynmap w pliku <code>server-config.js</code>, a pojawi się tutaj automatycznie.</p></div></div>
-					</div>
-				</section>
-
-				<section class="connect-section" id="dolacz" aria-labelledby="join-title">
-					<div class="connect-copy"><p class="section-label">Dołącz do świata</p><h2 id="join-title">Twój kolejny spawn jest o krok stąd.</h2><p data-join-copy>Skopiuj adres serwera, uruchom Minecraft i zacznij swoją historię.</p></div>
-					<div class="connect-card"><p class="address-label">Adres serwera</p><p class="server-address" id="server-address">Dodaj adres serwera</p><div class="server-actions"><button class="button button-primary" id="copy-address" type="button" hidden>Skopiuj adres <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 8h10v11H9zM5 5h10v3M5 5v11h4" /></svg></button><a class="button button-secondary" id="discord-link" href="#" target="_blank" rel="noopener noreferrer" hidden>Discord</a></div><p class="setup-note" id="setup-note">Adres dodasz w pliku konfiguracji strony.</p></div>
-				</section>
-			</div>
+			<section class="empty-state" id="empty-state" aria-labelledby="empty-title">
+				<div class="empty-card">
+					<h1 id="empty-title">Mapa 3D czeka na podłączenie</h1>
+					<p>Wystarczy wpisać adres BlueMap w <code>server-config.js</code>. Potem cała ta strona będzie mapą.</p>
+				</div>
+			</section>
 		</main>
-
-		<footer class="site-footer"><div class="shell footer-shell"><p>© <span id="year"></span> <span data-server-name>Minecraft Server</span></p><p class="footer-status" id="footer-status">Strona mapy jest gotowa</p></div></footer>
 
 		<script>
 			(() => {
-				const defaults = {
-					serverName: 'Minecraft Server', serverAddress: '', mapUrl: '', mapLabel: 'Interaktywna mapa świata', mapProvider: 'Mapa świata', mapAccess: 'Konfiguracja w toku', heroKicker: 'Witaj w świecie',
-					heroCopy: 'Zobacz świat z góry, znajdź swoje miejsce i wskocz do gry. Interaktywna mapa jest zawsze pod ręką.',
-					mapIntro: 'Przybliż, oddal i eksploruj świat bez wychodzenia ze strony.', joinCopy: 'Skopiuj adres serwera, uruchom Minecraft i zacznij swoją historię.', discordUrl: '',
-				};
-				const config = { ...defaults, ...(window.SERVER_MAP_CONFIG || {}) };
-				const text = (selector, value) => document.querySelectorAll(selector).forEach((element) => { element.textContent = value; });
-				const safeUrl = (value) => {
-					if (typeof value !== 'string' || !value.trim()) return '';
-					try { const url = new URL(value.trim()); return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : ''; } catch { return ''; }
-				};
-				text('[data-server-name]', config.serverName);
-				text('[data-kicker]', config.heroKicker);
-				text('[data-hero-copy]', config.heroCopy);
-				text('[data-map-label]', config.mapLabel);
-				text('[data-map-provider]', config.mapProvider);
-				text('[data-map-access]', config.mapAccess);
-				text('[data-map-intro]', config.mapIntro);
-				text('[data-join-copy]', config.joinCopy);
-				document.title = `${config.serverName} — mapa świata`;
-				document.getElementById('year').textContent = new Date().getFullYear();
+				const config = window.SERVER_MAP_CONFIG || {};
+				const serverName = String(config.serverName || 'Mapa 3D serwera Minecraft').trim();
+				const mapUrl = String(config.mapUrl || '').trim();
+				document.title = `${serverName} — mapa 3D`;
+				document.getElementById('server-name').textContent = serverName;
 
-				const address = String(config.serverAddress || '').trim();
-				const addressElement = document.getElementById('server-address');
-				const copyButton = document.getElementById('copy-address');
-				const setupNote = document.getElementById('setup-note');
-				if (address) {
-					addressElement.textContent = address;
-					text('[data-address-summary]', address);
-					copyButton.hidden = false;
-					setupNote.hidden = true;
-					copyButton.addEventListener('click', async () => {
-						try {
-							await navigator.clipboard.writeText(address);
-							copyButton.firstChild.textContent = 'Skopiowano ';
-							setTimeout(() => (copyButton.firstChild.textContent = 'Skopiuj adres '), 1800);
-						} catch { window.prompt('Skopiuj adres serwera:', address); }
-					});
-				}
+				if (!mapUrl) return;
 
-				const discordUrl = safeUrl(config.discordUrl);
-				if (discordUrl) { const discordLink = document.getElementById('discord-link'); discordLink.href = discordUrl; discordLink.hidden = false; }
-
-				const mapUrl = safeUrl(config.mapUrl);
-				if (mapUrl) {
-					const mapShell = document.getElementById('map-shell');
-					const mapFrame = document.getElementById('map-frame');
-					const mapOpen = document.getElementById('map-open');
-					mapFrame.src = mapUrl;
-					mapOpen.href = mapUrl;
-					mapShell.classList.add('has-map');
-					const mapStatus = document.getElementById('map-status');
-					mapStatus.textContent = 'Mapa interaktywna';
-					mapStatus.classList.remove('is-pending');
-					document.getElementById('footer-status').textContent = 'Mapa jest podłączona';
+				try {
+					const url = new URL(mapUrl);
+					if (!['https:', 'http:'].includes(url.protocol)) return;
+					document.getElementById('map-frame').src = url.href;
+					document.getElementById('open-map').href = url.href;
+					document.getElementById('open-map').hidden = false;
+					document.getElementById('map-page').classList.add('is-ready');
+				} catch {
+					// A blank state is safer than embedding an invalid address.
 				}
 			})();
 		</script>
