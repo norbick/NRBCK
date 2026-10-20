@@ -20,13 +20,13 @@ try {
         exit 0
     }
 
-    git fetch origin main
+    git fetch --quiet origin main
     if ($LASTEXITCODE -ne 0) { throw 'Could not fetch origin/main.' }
 
     $ahead = [int](git rev-list --count 'origin/main..HEAD')
     $behind = [int](git rev-list --count 'HEAD..origin/main')
     if ($ahead -gt 0 -and $behind -eq 0) {
-        git push origin main
+        git push --quiet origin main
         if ($LASTEXITCODE -ne 0) { throw 'Could not push the previous BlueMap snapshot.' }
     } elseif ($behind -gt 0) {
         git pull --ff-only origin main
@@ -35,7 +35,7 @@ try {
 
     # Exit codes below 8 mean robocopy completed successfully, including when
     # there was nothing new to copy.
-    robocopy $blueMapWebRoot $mapTarget /MIR /FFT /Z /R:2 /W:2 /NP /NFL /NDL
+    robocopy $blueMapWebRoot $mapTarget /MIR /FFT /Z /R:2 /W:2 /NP /NFL /NDL | Out-Null
     if ($LASTEXITCODE -ge 8) { throw "BlueMap mirror failed (robocopy exit code $LASTEXITCODE)." }
 
     git add -- map
@@ -45,10 +45,10 @@ try {
         exit 0
     }
 
-    git commit --only --message 'Update BlueMap snapshot' -- map
+    git commit --quiet --only --message 'Update BlueMap snapshot' -- map
     if ($LASTEXITCODE -ne 0) { throw 'Could not commit the BlueMap snapshot.' }
 
-    git push origin main
+    git push --quiet origin main
     if ($LASTEXITCODE -ne 0) { throw 'Could not push the BlueMap snapshot.' }
 
     Write-Output 'BlueMap snapshot deployed to main.'
