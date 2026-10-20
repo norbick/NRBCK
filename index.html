@@ -180,7 +180,7 @@
 				if (!mapUrl) return;
 
 				try {
-					const url = new URL(mapUrl);
+					const url = new URL(mapUrl, window.location.href);
 					if (!['https:', 'http:'].includes(url.protocol)) return;
 					document.getElementById('map-frame').src = url.href;
 					document.getElementById('open-map').href = url.href;

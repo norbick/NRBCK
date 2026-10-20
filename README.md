@@ -1,14 +1,12 @@
-# Prosta mapa 3D Minecraft
+# Mapa 3D NRBCK
 
-Strona to pełnoekranowa mapa 3D. W `server-config.js` wpisz tylko nazwę serwera i publiczny URL BlueMap:
+`nrbck.pl` displays a fullscreen BlueMap of the Minecraft world. The generated
+map is stored in `map/` and is published with every push to `main`.
 
-```js
-window.SERVER_MAP_CONFIG = {
-  serverName: 'Nazwa serwera',
-  mapUrl: 'https://map.twojadomena.pl',
-};
-```
+`scripts/sync-bluemap.ps1` mirrors the current BlueMap output from the local
+Minecraft server, commits it only when it changed, and pushes it to `main`.
+The scheduled task named `NRBCK BlueMap deploy` runs that script every 30
+minutes, so GitHub Pages redeploys the map automatically.
 
-Każdy push do `main` automatycznie publikuje stronę na `https://nrbck.pl/`.
-
-GitHub Pages wyświetla mapę, ale jej nie tworzy. BlueMap musi działać osobno na serwerze Minecraft i być dostępny przez HTTPS. Nie zapisuj haseł, tokenów ani RCON w `server-config.js`.
+The public configuration in `server-config.js` must never contain passwords,
+tokens, or RCON details.

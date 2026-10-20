@@ -32,6 +32,7 @@ jobs:
           cp server-config.js _site/server-config.js
           cp CNAME _site/CNAME
           cp .nojekyll _site/.nojekyll
+          cp -R map _site/map
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

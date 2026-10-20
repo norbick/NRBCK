@@ -3,7 +3,7 @@
  * RCON ani danych panelu serwera — ten plik jest widoczny dla odwiedzających.
  */
 window.SERVER_MAP_CONFIG = {
-	serverName: 'Minecraft Server',
-	// Przykład: 'https://map.nrbck.pl'
-	mapUrl: '',
+	serverName: 'NRBCK',
+	// BlueMap is published together with this site.
+	mapUrl: '/map/',
 };
