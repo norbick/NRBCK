@@ -1,0 +1,2 @@
+# BlueMap output is generated binary data; do not rewrite it on Windows checkout.
+map/** -text
